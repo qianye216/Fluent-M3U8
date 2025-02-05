@@ -1,0 +1,35 @@
+# coding:utf-8
+from enum import Enum
+
+from PySide6.QtCore import Qt, Signal, Property, QObject
+from PySide6.QtGui import QPixmap, QPainter, QColor
+from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout
+
+
+class M3U8DLCommand(Enum):
+    """ M3U8DL command options """
+
+    SAVE_DIR = "--save-dir"
+    SAVE_NAME = "--save-name"
+    THREAD_COUNT = "--thread-count"
+    DOWNLOAD_RETRY_COUNT = "--download-retry-count"
+    HTTP_REQUEST_TIMEOUT = "--http-request-timeout"
+    BINARY_MERGE = "--binary-merge"
+    DEL_AFTER_DONE = "--del-after-done"
+    APPEND_URL_PARAMS = "--append-url-params"
+
+    def command(self, value=None):
+        if not value:
+            return self.value
+
+        if isinstance(value, list):
+            return f"{self.value}={','.join(value)}"
+
+        value = str(value)
+        return f'{self.value}="{value}"' if value.find(" ") >= 0 else f'{self.value}={value}'
+
+
+class M3U8DLService(QObject):
+
+    def __init__(self, parent=None):
+        super().__init__(parent=parent)

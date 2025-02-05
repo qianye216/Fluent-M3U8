@@ -2,79 +2,148 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_HK" sourcelanguage="en">
 <context>
-    <name>BasicConfigCard</name>
+    <name>AdvanceConfigCard</name>
     <message>
-        <location filename="../../components/config_card.py" line="19"/>
-        <source>Basic settings</source>
+        <location filename="../../components/config_card.py" line="125"/>
+        <source>Advance Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="23"/>
+        <location filename="../../components/config_card.py" line="148"/>
+        <source>Header</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="149"/>
+        <source>Set custom headers for HTTP requests</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="154"/>
+        <source>Request Timeout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="155"/>
+        <source>Set timeout for HTTP requests (in seconds)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="161"/>
+        <source>Binary Merge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="162"/>
+        <source>Merge ts files directly through binary copy connections</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="167"/>
+        <source>Delete After Done</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="168"/>
+        <source>Delete temporary files after downloading is complete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="174"/>
+        <source>Append URL Params</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="175"/>
+        <source>Adding the Params of the input URL to the shard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="181"/>
+        <location filename="../../components/config_card.py" line="186"/>
+        <source>Off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="186"/>
+        <source>On</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BasicConfigCard</name>
+    <message>
+        <location filename="../../components/config_card.py" line="20"/>
+        <source>Basic Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="24"/>
         <source>Choose</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="29"/>
+        <location filename="../../components/config_card.py" line="30"/>
         <source>Click the download button to start downloading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="31"/>
+        <location filename="../../components/config_card.py" line="32"/>
         <source>Download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="50"/>
+        <location filename="../../components/config_card.py" line="51"/>
         <source>Please enter the url of m3u8 file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="51"/>
+        <location filename="../../components/config_card.py" line="52"/>
         <source>Please enter the name of downloaded file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="66"/>
+        <location filename="../../components/config_card.py" line="67"/>
         <source>Download URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="67"/>
+        <location filename="../../components/config_card.py" line="68"/>
         <source>The URL of m3u8 file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="72"/>
+        <location filename="../../components/config_card.py" line="73"/>
         <source>File Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="73"/>
+        <location filename="../../components/config_card.py" line="74"/>
         <source>The name of downloaded file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="78"/>
+        <location filename="../../components/config_card.py" line="79"/>
         <source>Save Folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="84"/>
+        <location filename="../../components/config_card.py" line="85"/>
         <source>Download Threads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="85"/>
+        <location filename="../../components/config_card.py" line="86"/>
         <source>Set the number of concurrent download threads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="90"/>
+        <location filename="../../components/config_card.py" line="91"/>
         <source>Retry Count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="92"/>
+        <location filename="../../components/config_card.py" line="93"/>
         <source>Set the retry count for each shard download exception</source>
         <translation type="unfinished"></translation>
     </message>

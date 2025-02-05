@@ -5,10 +5,11 @@ from PySide6.QtWidgets import QWidget, QHBoxLayout
 
 from qfluentwidgets import (IconWidget, BodyLabel, FluentIcon, InfoBarIcon, ComboBox,
                             PrimaryPushButton, LineEdit, GroupHeaderCardWidget, PushButton,
-                            CompactSpinBox)
+                            CompactSpinBox, SwitchButton, IndicatorPosition, PlainTextEdit)
 
 from ..common.icon import Logo
 from ..common.config import cfg
+from ..service.m3u8dl_service import M3U8DLCommand
 
 
 class BasicConfigCard(GroupHeaderCardWidget):
@@ -16,7 +17,7 @@ class BasicConfigCard(GroupHeaderCardWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setTitle(self.tr("Basic settings"))
+        self.setTitle(self.tr("Basic Settings"))
 
         self.urlLineEdit = LineEdit()
         self.fileNameLineEdit = LineEdit()
@@ -62,7 +63,7 @@ class BasicConfigCard(GroupHeaderCardWidget):
     def __initLayout(self):
         # add widget to group
         self.addGroup(
-            icon=Logo.LINK,
+            icon=Logo.GLOBE,
             title=self.tr("Download URL"),
             content=self.tr("The URL of m3u8 file"),
             widget=self.urlLineEdit
@@ -109,4 +110,85 @@ class BasicConfigCard(GroupHeaderCardWidget):
         self.vBoxLayout.addLayout(self.toolBarLayout)
 
     def __connectSignalToSlot(self):
+        pass
+
+    def parseOptions(self):
+        pass
+
+
+
+class AdvanceConfigCard(GroupHeaderCardWidget):
+    """ Advance config card """
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setTitle(self.tr("Advance Settings"))
+
+        self.httpTimeoutSpinBox = CompactSpinBox()
+        self.httpHeaderEdit = PlainTextEdit()
+
+        self.__initWidgets()
+
+    def __initWidgets(self):
+        self.setBorderRadius(8)
+
+        self.httpTimeoutSpinBox.setRange(5, 100000)
+        self.httpTimeoutSpinBox.setValue(100)
+        self.httpTimeoutSpinBox.setFixedWidth(120)
+
+        self.httpHeaderEdit.setFixedSize(300, 56)
+        self.httpHeaderEdit.setPlaceholderText("User-Agent: iOS\nCookie: mycookie")
+
+        self.__initLayout()
+        self.__connectSignalToSlot()
+
+    def __initLayout(self):
+        self.addGroup(
+            icon=Logo.COOKIE,
+            title=self.tr("Header"),
+            content=self.tr("Set custom headers for HTTP requests"),
+            widget=self.httpHeaderEdit
+        )
+        self.addGroup(
+            icon=Logo.HOURGLASS,
+            title=self.tr("Request Timeout"),
+            content=self.tr("Set timeout for HTTP requests (in seconds)"),
+            widget=self.httpTimeoutSpinBox
+        )
+
+        self._addSwitchOption(
+            icon=Logo.CARD_FILE_BOX,
+            title=self.tr("Binary Merge"),
+            content=self.tr("Merge ts files directly through binary copy connections"),
+            config=M3U8DLCommand.BINARY_MERGE
+        )
+        self._addSwitchOption(
+            icon=Logo.WASTEBASKET,
+            title=self.tr("Delete After Done"),
+            content=self.tr("Delete temporary files after downloading is complete"),
+            config=M3U8DLCommand.DEL_AFTER_DONE,
+            checked=True
+        )
+        self._addSwitchOption(
+            icon=Logo.LINK,
+            title=self.tr("Append URL Params"),
+            content=self.tr("Adding the Params of the input URL to the shard"),
+            config=M3U8DLCommand.APPEND_URL_PARAMS,
+        )
+
+
+    def _addSwitchOption(self, icon, title, content, config: M3U8DLCommand, checked=False):
+        button = SwitchButton(self.tr("Off"), self, IndicatorPosition.RIGHT)
+        button.setOnText(self.tr("On"))
+        button.setOffText(self.tr("Off"))
+        button.setProperty("config", config)
+        button.setChecked(checked)
+
+        self.addGroup(icon, title, content, button)
+        return button
+
+    def __connectSignalToSlot(self):
+        pass
+
+    def parseOptions(self):
         pass
