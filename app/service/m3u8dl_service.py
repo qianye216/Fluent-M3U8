@@ -23,6 +23,8 @@ class M3U8DLCommand(Enum):
     SELECT_AUDIO = "--select-audio"
     SELECT_SUBTITLE = "--select-subtitle"
     AUTO_SELECT = "--auto-select"
+    NO_DATE_INFO = "--no-date-info"
+    CONCURRENT_DOWNLOAD = "--concurrent-download"
 
     def command(self, value=None):
         if not value:

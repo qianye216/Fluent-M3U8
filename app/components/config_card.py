@@ -166,7 +166,7 @@ class AdvanceConfigCard(GroupHeaderCardWidget):
             content=self.tr("Set maximum download speed, -1 indicates no speed limit"),
             widget=self.speedSpinBox
         )
-        speedGroup.hBoxLayout.addWidget(self.speedComboBox)
+        speedGroup.addWidget(self.speedComboBox)
 
         self.addGroup(
             icon=Logo.HOURGLASS,
@@ -206,6 +206,18 @@ class AdvanceConfigCard(GroupHeaderCardWidget):
             title=self.tr("Append URL Params"),
             content=self.tr("Adding the Params of the input URL to the shard"),
             config=M3U8DLCommand.APPEND_URL_PARAMS,
+        )
+        self._addSwitchOption(
+            icon=Logo.CALENDAR,
+            title=self.tr("Date Info"),
+            content=self.tr("Do not write date information when mixing"),
+            config=M3U8DLCommand.NO_DATE_INFO,
+        )
+        self._addSwitchOption(
+            icon=Logo.INBOX,
+            title=self.tr("Concurrent"),
+            content=self.tr("Concurrent download of selected audio, video, and subtitles"),
+            config=M3U8DLCommand.CONCURRENT_DOWNLOAD,
         )
 
     def _addSwitchOption(self, icon, title, content, config: M3U8DLCommand, checked=False):

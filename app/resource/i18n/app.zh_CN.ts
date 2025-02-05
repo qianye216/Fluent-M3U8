@@ -90,12 +90,32 @@
     </message>
     <message>
         <location filename="../../components/config_card.py" line="212"/>
-        <location filename="../../components/config_card.py" line="214"/>
+        <source>Date Info</source>
+        <translation>日期信息</translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="213"/>
+        <source>Do not write date information when mixing</source>
+        <translation>混流时不写入日期信息</translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="218"/>
+        <source>Concurrent</source>
+        <translation>并发下载</translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="219"/>
+        <source>Concurrent download of selected audio, video, and subtitles</source>
+        <translation>并发下载已选择的音频、视频和字幕</translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="224"/>
+        <location filename="../../components/config_card.py" line="226"/>
         <source>Off</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="213"/>
+        <location filename="../../components/config_card.py" line="225"/>
         <source>On</source>
         <translation>启用</translation>
     </message>
@@ -165,7 +185,7 @@
     <message>
         <location filename="../../components/config_card.py" line="86"/>
         <source>Set the number of concurrent download threads</source>
-        <translation>设置并发下载的线程数量，默认为 CPU 数量</translation>
+        <translation>并发下载的线程数量，默认为 CPU 数量</translation>
     </message>
     <message>
         <location filename="../../components/config_card.py" line="91"/>

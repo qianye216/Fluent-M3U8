@@ -90,12 +90,32 @@
     </message>
     <message>
         <location filename="../../components/config_card.py" line="212"/>
-        <location filename="../../components/config_card.py" line="214"/>
-        <source>Off</source>
+        <source>Date Info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../components/config_card.py" line="213"/>
+        <source>Do not write date information when mixing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="218"/>
+        <source>Concurrent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="219"/>
+        <source>Concurrent download of selected audio, video, and subtitles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="224"/>
+        <location filename="../../components/config_card.py" line="226"/>
+        <source>Off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="225"/>
         <source>On</source>
         <translation type="unfinished"></translation>
     </message>
