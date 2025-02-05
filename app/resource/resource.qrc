@@ -1,0 +1,37 @@
+<RCC>
+    <qresource prefix="/app">
+        <file>images/icons/SettingsFilled_white.svg</file>
+        <file>images/icons/SettingsFilled_black.svg</file>
+        <file>images/icons/Settings_white.svg</file>
+        <file>images/icons/Settings_black.svg</file>
+        <file>images/logo.png</file>
+
+        <file>i18n/app.zh_CN.qm</file>
+        <file>i18n/app.zh_HK.qm</file>
+        <file>images/logo/Terminal.svg</file>
+        <file>images/logo/Whale.svg</file>
+        <file>images/logo/Joystick.svg</file>
+        <file>images/logo/Label.svg</file>
+        <file>images/logo/Bookmark.svg</file>
+        <file>images/logo/Office.svg</file>
+        <file>images/logo/Pencil.svg</file>
+        <file>images/logo/Wastebasket.svg</file>
+        <file>images/logo/Broom.svg</file>
+        <file>images/logo/BarChart.svg</file>
+        <file>images/logo/Package.svg</file>
+        <file>images/logo/Monkey.svg</file>
+        <file>images/logo/Rocket.svg</file>
+        <file>images/logo/Moon.svg</file>
+        <file>images/logo/Knot.svg</file>
+        <file>images/logo/Link.svg</file>
+        <file>images/logo/Alembic.svg</file>
+        <file>images/logo/Hammer.svg</file>
+        <file>images/logo/Folder.svg</file>
+        <file>images/logo/Window.svg</file>
+        <file>images/logo/CardFileBox.svg</file>
+        <file>images/logo/Film.svg</file>
+
+        <file>images/ico/M3U8DL.ico</file>
+
+    </qresource>
+</RCC>
