@@ -9,63 +9,93 @@
         <translation>高级设置</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="148"/>
+        <location filename="../../components/config_card.py" line="158"/>
         <source>Header</source>
         <translation>请求头</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="149"/>
+        <location filename="../../components/config_card.py" line="159"/>
         <source>Set custom headers for HTTP requests</source>
         <translation>设置自定义的 Http 请求头</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="154"/>
+        <location filename="../../components/config_card.py" line="165"/>
+        <source>Max Speed</source>
+        <translation>下载速度</translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="166"/>
+        <source>Set maximum download speed, -1 indicates no speed limit</source>
+        <translation>设置最大下载速度，-1 表示不限速</translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="173"/>
         <source>Request Timeout</source>
         <translation>超时时间</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="155"/>
+        <location filename="../../components/config_card.py" line="174"/>
         <source>Set timeout for HTTP requests (in seconds)</source>
         <translation>设置 Http 请求的超时时间（秒）</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="161"/>
+        <location filename="../../components/config_card.py" line="180"/>
+        <source>Subtitle Format</source>
+        <translation>字幕格式</translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="181"/>
+        <source>Set the output type of subtitle</source>
+        <translation>选择输出字幕的格式</translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="187"/>
+        <source>Auto Select</source>
+        <translation>自动选择</translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="188"/>
+        <source>Automatically select the best track of all types</source>
+        <translation>自动选择所有类型的最佳轨道</translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="193"/>
         <source>Binary Merge</source>
         <translation>二进制合并</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="162"/>
+        <location filename="../../components/config_card.py" line="194"/>
         <source>Merge ts files directly through binary copy connections</source>
         <translation>通过拷贝连接的方式合并 ts 文件</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="167"/>
+        <location filename="../../components/config_card.py" line="199"/>
         <source>Delete After Done</source>
         <translation>自动清理</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="168"/>
+        <location filename="../../components/config_card.py" line="200"/>
         <source>Delete temporary files after downloading is complete</source>
-        <translation>下载完成耨自动删除临时文件</translation>
+        <translation>下载完成后自动删除临时文件</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="174"/>
+        <location filename="../../components/config_card.py" line="206"/>
         <source>Append URL Params</source>
-        <translation>添加 URL 参数</translation>
+        <translation>URL 参数</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="175"/>
+        <location filename="../../components/config_card.py" line="207"/>
         <source>Adding the Params of the input URL to the shard</source>
         <translation>将输入 URL 的 Params 添加至分片</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="181"/>
-        <location filename="../../components/config_card.py" line="186"/>
+        <location filename="../../components/config_card.py" line="212"/>
+        <location filename="../../components/config_card.py" line="214"/>
         <source>Off</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="186"/>
+        <location filename="../../components/config_card.py" line="213"/>
         <source>On</source>
         <translation>启用</translation>
     </message>

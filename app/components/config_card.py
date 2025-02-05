@@ -126,6 +126,9 @@ class AdvanceConfigCard(GroupHeaderCardWidget):
 
         self.httpTimeoutSpinBox = CompactSpinBox()
         self.httpHeaderEdit = PlainTextEdit()
+        self.speedSpinBox = CompactSpinBox()
+        self.speedComboBox = ComboBox()
+        self.subtitleComboBox = ComboBox()
 
         self.__initWidgets()
 
@@ -139,6 +142,13 @@ class AdvanceConfigCard(GroupHeaderCardWidget):
         self.httpHeaderEdit.setFixedSize(300, 56)
         self.httpHeaderEdit.setPlaceholderText("User-Agent: iOS\nCookie: mycookie")
 
+        self.speedSpinBox.setRange(-1, 1000000000)
+        self.speedSpinBox.setValue(-1)
+        self.speedComboBox.addItems(["Mbps", "Kbps"])
+
+        self.subtitleComboBox.setFixedWidth(120)
+        self.subtitleComboBox.addItems(["SRT", "VTT"])
+
         self.__initLayout()
         self.__connectSignalToSlot()
 
@@ -149,6 +159,15 @@ class AdvanceConfigCard(GroupHeaderCardWidget):
             content=self.tr("Set custom headers for HTTP requests"),
             widget=self.httpHeaderEdit
         )
+
+        speedGroup = self.addGroup(
+            icon=Logo.ROCKET,
+            title=self.tr("Max Speed"),
+            content=self.tr("Set maximum download speed, -1 indicates no speed limit"),
+            widget=self.speedSpinBox
+        )
+        speedGroup.hBoxLayout.addWidget(self.speedComboBox)
+
         self.addGroup(
             icon=Logo.HOURGLASS,
             title=self.tr("Request Timeout"),
@@ -156,6 +175,19 @@ class AdvanceConfigCard(GroupHeaderCardWidget):
             widget=self.httpTimeoutSpinBox
         )
 
+        self.addGroup(
+            icon=Logo.SCROLL,
+            title=self.tr("Subtitle Format"),
+            content=self.tr("Set the output type of subtitle"),
+            widget=self.subtitleComboBox
+        )
+
+        self._addSwitchOption(
+            icon=Logo.ALEMBIC,
+            title=self.tr("Auto Select"),
+            content=self.tr("Automatically select the best track of all types"),
+            config=M3U8DLCommand.AUTO_SELECT,
+        )
         self._addSwitchOption(
             icon=Logo.CARD_FILE_BOX,
             title=self.tr("Binary Merge"),
@@ -175,7 +207,6 @@ class AdvanceConfigCard(GroupHeaderCardWidget):
             content=self.tr("Adding the Params of the input URL to the shard"),
             config=M3U8DLCommand.APPEND_URL_PARAMS,
         )
-
 
     def _addSwitchOption(self, icon, title, content, config: M3U8DLCommand, checked=False):
         button = SwitchButton(self.tr("Off"), self, IndicatorPosition.RIGHT)

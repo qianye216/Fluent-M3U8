@@ -17,6 +17,12 @@ class M3U8DLCommand(Enum):
     BINARY_MERGE = "--binary-merge"
     DEL_AFTER_DONE = "--del-after-done"
     APPEND_URL_PARAMS = "--append-url-params"
+    MAX_SPEED = "--max-speed"
+    SUB_FORMAT = "--sub-format"
+    SELECT_VIDEO = "--select-video"
+    SELECT_AUDIO = "--select-audio"
+    SELECT_SUBTITLE = "--select-subtitle"
+    AUTO_SELECT = "--auto-select"
 
     def command(self, value=None):
         if not value:

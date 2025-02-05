@@ -9,63 +9,93 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="148"/>
+        <location filename="../../components/config_card.py" line="158"/>
         <source>Header</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="149"/>
+        <location filename="../../components/config_card.py" line="159"/>
         <source>Set custom headers for HTTP requests</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="154"/>
+        <location filename="../../components/config_card.py" line="165"/>
+        <source>Max Speed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="166"/>
+        <source>Set maximum download speed, -1 indicates no speed limit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="173"/>
         <source>Request Timeout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="155"/>
+        <location filename="../../components/config_card.py" line="174"/>
         <source>Set timeout for HTTP requests (in seconds)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="161"/>
-        <source>Binary Merge</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../components/config_card.py" line="162"/>
-        <source>Merge ts files directly through binary copy connections</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../components/config_card.py" line="167"/>
-        <source>Delete After Done</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../components/config_card.py" line="168"/>
-        <source>Delete temporary files after downloading is complete</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../components/config_card.py" line="174"/>
-        <source>Append URL Params</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../components/config_card.py" line="175"/>
-        <source>Adding the Params of the input URL to the shard</source>
+        <location filename="../../components/config_card.py" line="180"/>
+        <source>Subtitle Format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../components/config_card.py" line="181"/>
-        <location filename="../../components/config_card.py" line="186"/>
+        <source>Set the output type of subtitle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="187"/>
+        <source>Auto Select</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="188"/>
+        <source>Automatically select the best track of all types</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="193"/>
+        <source>Binary Merge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="194"/>
+        <source>Merge ts files directly through binary copy connections</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="199"/>
+        <source>Delete After Done</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="200"/>
+        <source>Delete temporary files after downloading is complete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="206"/>
+        <source>Append URL Params</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="207"/>
+        <source>Adding the Params of the input URL to the shard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="212"/>
+        <location filename="../../components/config_card.py" line="214"/>
         <source>Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="186"/>
+        <location filename="../../components/config_card.py" line="213"/>
         <source>On</source>
         <translation type="unfinished"></translation>
     </message>

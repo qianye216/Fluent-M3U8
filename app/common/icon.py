@@ -38,6 +38,7 @@ class Logo(FluentIconBase, Enum):
     MONKEY = "Monkey"
     FOLDER = "Folder"
     ROCKET = "Rocket"
+    SCROLL = "Scroll"
     WINDOW = "Window"
     ALEMBIC = "Alembic"
     PACKAGE = "Package"
