@@ -25,6 +25,8 @@ class M3U8DLCommand(Enum):
     AUTO_SELECT = "--auto-select"
     NO_DATE_INFO = "--no-date-info"
     CONCURRENT_DOWNLOAD = "--concurrent-download"
+    USE_SYSTEM_PROXY = "--use-system-proxy"
+    CUSTOM_PROXY = "--custom-proxy"
 
     def command(self, value=None):
         if not value:

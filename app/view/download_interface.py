@@ -12,8 +12,7 @@ from ..common.config import cfg
 from ..common.icon import Icon
 
 from ..components.info_card import M3U8DLInfoCard
-from ..components.config_card import BasicConfigCard, AdvanceConfigCard
-from ..components.hint_widget import HintWidget
+from ..components.config_card import BasicConfigCard, AdvanceConfigCard, ProxyConfigCard
 
 
 
@@ -29,6 +28,7 @@ class DownloadInterface(ScrollArea):
         self.m3u8dlInfoCard = M3U8DLInfoCard()
         self.basicSettingCard = BasicConfigCard()
         self.advanceSettingCard = AdvanceConfigCard()
+        self.proxySettingCard = ProxyConfigCard()
 
         self.vBoxLayout = QVBoxLayout(self.view)
 
@@ -47,6 +47,8 @@ class DownloadInterface(ScrollArea):
             self.m3u8dlInfoCard, 0, Qt.AlignmentFlag.AlignTop)
         self.vBoxLayout.addWidget(
             self.basicSettingCard, 0, Qt.AlignmentFlag.AlignTop)
+        self.vBoxLayout.addWidget(
+            self.proxySettingCard, 0, Qt.AlignmentFlag.AlignTop)
         self.vBoxLayout.addWidget(
             self.advanceSettingCard, 0, Qt.AlignmentFlag.AlignTop)
 

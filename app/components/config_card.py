@@ -12,6 +12,19 @@ from ..common.config import cfg
 from ..service.m3u8dl_service import M3U8DLCommand
 
 
+class M3U8GroupHeaderCardWidget(GroupHeaderCardWidget):
+
+    def addSwitchOption(self, icon, title, content, config: M3U8DLCommand, checked=False):
+        button = SwitchButton(self.tr("Off"), self, IndicatorPosition.RIGHT)
+        button.setOnText(self.tr("On"))
+        button.setOffText(self.tr("Off"))
+        button.setProperty("config", config)
+        button.setChecked(checked)
+
+        self.addGroup(icon, title, content, button)
+        return button
+
+
 class BasicConfigCard(GroupHeaderCardWidget):
     """ Basic config card """
 
@@ -117,7 +130,7 @@ class BasicConfigCard(GroupHeaderCardWidget):
 
 
 
-class AdvanceConfigCard(GroupHeaderCardWidget):
+class AdvanceConfigCard(M3U8GroupHeaderCardWidget):
     """ Advance config card """
 
     def __init__(self, parent=None):
@@ -150,7 +163,6 @@ class AdvanceConfigCard(GroupHeaderCardWidget):
         self.subtitleComboBox.addItems(["SRT", "VTT"])
 
         self.__initLayout()
-        self.__connectSignalToSlot()
 
     def __initLayout(self):
         self.addGroup(
@@ -182,56 +194,86 @@ class AdvanceConfigCard(GroupHeaderCardWidget):
             widget=self.subtitleComboBox
         )
 
-        self._addSwitchOption(
+        self.addSwitchOption(
             icon=Logo.ALEMBIC,
             title=self.tr("Auto Select"),
             content=self.tr("Automatically select the best track of all types"),
             config=M3U8DLCommand.AUTO_SELECT,
         )
-        self._addSwitchOption(
+        self.addSwitchOption(
             icon=Logo.CARD_FILE_BOX,
             title=self.tr("Binary Merge"),
             content=self.tr("Merge ts files directly through binary copy connections"),
             config=M3U8DLCommand.BINARY_MERGE
         )
-        self._addSwitchOption(
+        self.addSwitchOption(
             icon=Logo.WASTEBASKET,
             title=self.tr("Delete After Done"),
             content=self.tr("Delete temporary files after downloading is complete"),
             config=M3U8DLCommand.DEL_AFTER_DONE,
             checked=True
         )
-        self._addSwitchOption(
+        self.addSwitchOption(
             icon=Logo.LINK,
             title=self.tr("Append URL Params"),
             content=self.tr("Adding the Params of the input URL to the shard"),
             config=M3U8DLCommand.APPEND_URL_PARAMS,
         )
-        self._addSwitchOption(
+        self.addSwitchOption(
             icon=Logo.CALENDAR,
             title=self.tr("Date Info"),
             content=self.tr("Do not write date information when mixing"),
             config=M3U8DLCommand.NO_DATE_INFO,
         )
-        self._addSwitchOption(
+        self.addSwitchOption(
             icon=Logo.INBOX,
             title=self.tr("Concurrent"),
             content=self.tr("Concurrent download of selected audio, video, and subtitles"),
             config=M3U8DLCommand.CONCURRENT_DOWNLOAD,
         )
 
-    def _addSwitchOption(self, icon, title, content, config: M3U8DLCommand, checked=False):
-        button = SwitchButton(self.tr("Off"), self, IndicatorPosition.RIGHT)
-        button.setOnText(self.tr("On"))
-        button.setOffText(self.tr("Off"))
-        button.setProperty("config", config)
-        button.setChecked(checked)
+    def parseOptions(self):
+        pass
 
-        self.addGroup(icon, title, content, button)
-        return button
+
+class ProxyConfigCard(M3U8GroupHeaderCardWidget):
+    """ Proxy config card """
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setTitle(self.tr("Proxy Settings"))
+
+        self.proxyLineEdit = LineEdit()
+
+        self.__initWidgets()
+
+    def __initWidgets(self):
+        self.setBorderRadius(8)
+
+        self.proxyLineEdit.setFixedWidth(300)
+        self.proxyLineEdit.setPlaceholderText("http://127.0.0.1:8080")
+        self.proxyLineEdit.setEnabled(False)
+
+        self.__initLayout()
+        self.__connectSignalToSlot()
+
+    def __initLayout(self):
+        self.systemProxyButton = self.addSwitchOption(
+            icon=Logo.PLANET,
+            title=self.tr("System Proxy"),
+            content=self.tr("Use system default proxy"),
+            config=M3U8DLCommand.USE_SYSTEM_PROXY,
+            checked=True
+        )
+        self.addGroup(
+            icon=Logo.AIRPLANE,
+            title=self.tr("Custom Proxy"),
+            content=self.tr("Set the http request proxy to be used"),
+            widget=self.proxyLineEdit
+        )
 
     def __connectSignalToSlot(self):
-        pass
+        self.systemProxyButton.checkedChanged.connect(self.proxyLineEdit.setDisabled)
 
     def parseOptions(self):
         pass
