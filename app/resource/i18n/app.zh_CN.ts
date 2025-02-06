@@ -219,6 +219,24 @@
     </message>
 </context>
 <context>
+    <name>DeleteTaskDialog</name>
+    <message>
+        <location filename="../../components/task_card.py" line="115"/>
+        <source>Delete task</source>
+        <translation>删除任务</translation>
+    </message>
+    <message>
+        <location filename="../../components/task_card.py" line="117"/>
+        <source>Are you sure to delete this task?</source>
+        <translation>是否确定要删除此下载任务？</translation>
+    </message>
+    <message>
+        <location filename="../../components/task_card.py" line="118"/>
+        <source>Clear cache</source>
+        <translation>清除缓存文件</translation>
+    </message>
+</context>
+<context>
     <name>HomeInterface</name>
     <message>
         <location filename="../../view/home_interface.py" line="68"/>
@@ -301,22 +319,22 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../view/main_window.py" line="44"/>
+        <location filename="../../view/main_window.py" line="45"/>
         <source>Home</source>
         <translation>主页</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="45"/>
+        <location filename="../../view/main_window.py" line="46"/>
         <source>Task</source>
         <translation>下载任务</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="48"/>
+        <location filename="../../view/main_window.py" line="49"/>
         <source>Help</source>
         <translation>帮助</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="50"/>
+        <location filename="../../view/main_window.py" line="51"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>

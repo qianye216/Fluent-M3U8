@@ -15,6 +15,6 @@ class TestM3U8DLService(TestCase):
         self.assertEqual(len(videos), 3)
 
     def test_get_empty_stream_infos(self):
-        url = "https://qabo-ahha.mushroomtrack.com/hls/YnxAlYvXxnXZlVgaL7KOLQ/1738856591/0/297/297.m3u8"
+        url = "https://qabo-ahha.mushroomtrack.com/hls/wvoGCyOtU80DkQRa0YNoOg/1738866278/0/297/297.m3u8"
         videos = self.service.getStreamInfos(url)
         self.assertEqual(len(videos), 0)

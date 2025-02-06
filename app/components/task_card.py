@@ -1,18 +1,24 @@
 # coding:utf-8
 from dataclasses import dataclass
+from pathlib import Path
 from PySide6.QtCore import Qt, Signal, Property, QFileInfo
 from PySide6.QtGui import QPixmap, QPainter, QFont
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QFileIconProvider
 
 from qfluentwidgets import (SimpleCardWidget, IconWidget, ToolButton, FluentIcon,
-                            BodyLabel, CaptionLabel, ProgressBar, ImageLabel, setFont)
+                            BodyLabel, CaptionLabel, ProgressBar, ImageLabel, setFont,
+                            MessageBoxBase, SubtitleLabel, CheckBox)
 
+from ..common.utils import showInFolder
 from ..common.database.entity import Task
-from ..service.m3u8dl_service import DownloadProgressInfo
+from ..common.signal_bus import signalBus
+from ..service.m3u8dl_service import DownloadProgressInfo, m3u8Service
 
 
 class DownloadingTaskCard(SimpleCardWidget):
     """ Task card """
+
+    deleted = Signal(int)
 
     def __init__(self, task: Task, parent=None):
         super().__init__(parent=parent)
@@ -44,7 +50,8 @@ class DownloadingTaskCard(SimpleCardWidget):
         self.remainTimeIcon.setFixedSize(16, 16)
         self.sizeIcon.setFixedSize(16, 16)
 
-        setFont(self.fileNameLabel, 16, QFont.Weight.Bold)
+        setFont(self.fileNameLabel, 18, QFont.Weight.Bold)
+        self.fileNameLabel.setWordWrap(True)
 
         self._initLayout()
         self._connectSignalToSlot()
@@ -66,17 +73,30 @@ class DownloadingTaskCard(SimpleCardWidget):
         self.infoLayout.setContentsMargins(0, 0, 0, 0)
         self.infoLayout.setSpacing(2)
         self.infoLayout.addWidget(self.speedIcon)
-        self.infoLayout.addWidget(self.speedLabel)
+        self.infoLayout.addWidget(self.speedLabel, 0, Qt.AlignmentFlag.AlignLeft)
         self.infoLayout.addSpacing(5)
         self.infoLayout.addWidget(self.remainTimeIcon)
-        self.infoLayout.addWidget(self.remainTimeLabel)
+        self.infoLayout.addWidget(self.remainTimeLabel, 0, Qt.AlignmentFlag.AlignLeft)
         self.infoLayout.addSpacing(5)
         self.infoLayout.addWidget(self.sizeIcon)
-        self.infoLayout.addWidget(self.sizeLabel)
+        self.infoLayout.addWidget(self.sizeLabel, 0, Qt.AlignmentFlag.AlignLeft)
         self.infoLayout.addStretch(1)
 
     def _connectSignalToSlot(self):
-        pass
+        self.openFolderButton.clicked.connect(self._onOpenButtonClicked)
+        self.deleteButton.clicked.connect(self._onDeleteButtonClicked)
+
+    def _onOpenButtonClicked(self):
+        path = Path(m3u8Service.downloaderPath).parent / self.task.fileName
+        showInFolder(path)
+
+    def _onDeleteButtonClicked(self):
+        w = DeleteTaskDialog(self.window())
+        if w.exec():
+            signalBus.downloadTerminated.emit(self.task.pid, w.deleteFileCheckBox.isChecked())
+            self.deleted.emit(self.task.pid)
+
+        w.deleteLater()
 
     def setInfo(self, info: DownloadProgressInfo):
         """ update progress info """
@@ -86,3 +106,29 @@ class DownloadingTaskCard(SimpleCardWidget):
 
         self.progressBar.setRange(0, info.totalChunks)
         self.progressBar.setValue(info.currentChunk)
+
+
+class DeleteTaskDialog(MessageBoxBase):
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.titleLabel = SubtitleLabel(self.tr("Delete task"))
+        self.contentLabel = BodyLabel(
+            self.tr("Are you sure to delete this task?"))
+        self.deleteFileCheckBox = CheckBox(self.tr("Clear cache"))
+
+        self._initWidgets()
+
+    def _initWidgets(self):
+        self.deleteFileCheckBox.setCheckable(True)
+        self.widget.setMinimumWidth(330)
+
+        layout = QVBoxLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+        layout.addWidget(self.titleLabel)
+        layout.addSpacing(12)
+        layout.addWidget(self.contentLabel)
+        layout.addSpacing(10)
+        layout.addWidget(self.deleteFileCheckBox)
+        self.viewLayout.addLayout(layout)

@@ -14,52 +14,52 @@ class TaskService(ServiceBase):
 
     def __init__(self, db: QSqlDatabase = None):
         super().__init__()
-        self.userDao = TaskDao(db)
+        self.taskDao = TaskDao(db)
 
     def createTable(self) -> bool:
-        return self.userDao.createTable()
+        return self.taskDao.createTable()
 
     def findBy(self, **condition) -> Task:
-        return self.userDao.selectBy(**condition)
+        return self.taskDao.selectBy(**condition)
 
     def listBy(self, **condition) -> List[Task]:
-        return self.userDao.listBy(**condition)
+        return self.taskDao.listBy(**condition)
 
     def listAll(self) -> List[Task]:
-        return self.userDao.listAll()
+        return self.taskDao.listAll()
 
     def listByIds(self, ids: List[str]) -> List[Task]:
-        return self.userDao.listByIds(ids)
+        return self.taskDao.listByIds(ids)
 
     def modify(self, id: str, field: str, value) -> bool:
-        return self.userDao.update(id, field, value)
+        return self.taskDao.update(id, field, value)
 
-    def modifyById(self, user: Task) -> bool:
-        return self.userDao.updateById(user)
+    def modifyById(self, task: Task) -> bool:
+        return self.taskDao.updateById(task)
 
     def modifyByIds(self, users: List[Task]) -> bool:
-        return self.userDao.updateByIds(users)
+        return self.taskDao.updateByIds(users)
 
-    def add(self, user: Task) -> bool:
-        return self.userDao.insert(user)
+    def add(self, task: Task) -> bool:
+        return self.taskDao.insert(task)
 
     def addBatch(self, users: List[Task]) -> bool:
-        return self.userDao.insertBatch(users)
+        return self.taskDao.insertBatch(users)
 
     def removeById(self, id: str) -> bool:
-        return self.userDao.deleteById(id)
+        return self.taskDao.deleteById(id)
 
     def removeByIds(self, ids: List[str]) -> bool:
-        return self.userDao.deleteByIds(ids)
+        return self.taskDao.deleteByIds(ids)
 
     def clearTable(self) -> bool:
-        return self.userDao.clearTable()
+        return self.taskDao.clearTable()
 
     def setDatabase(self, db: QSqlDatabase):
-        self.userDao.setDatabase(db)
+        self.taskDao.setDatabase(db)
 
     def listLike(self, **condition) -> List[Task]:
-        return self.userDao.listLike(**condition)
+        return self.taskDao.listLike(**condition)
 
     def count(self) -> int:
-        return self.userDao.count()
+        return self.taskDao.count()

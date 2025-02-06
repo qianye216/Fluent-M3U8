@@ -20,7 +20,3 @@ class Entity:
         return deepcopy(self)
 
 
-@dataclass
-class EntityPage:
-    total: int = 0
-    rows: List[Entity] = field(default_factory=list)

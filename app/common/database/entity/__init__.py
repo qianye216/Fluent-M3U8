@@ -1,4 +1,4 @@
-from .entity import Entity, EntityPage
+from .entity import Entity
 from .task import Task
 
 from dataclasses import dataclass

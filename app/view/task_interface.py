@@ -75,6 +75,8 @@ class DownloadingTaskView(QWidget):
 
     def addTask(self, task: Task):
         card = DownloadingTaskCard(task, self)
+        card.deleted.connect(self.removeTask)
+        
         self.vBoxLayout.addWidget(card, 0, Qt.AlignmentFlag.AlignTop)
         self.cards.append(card)
         self.cardMap[task.pid] = card

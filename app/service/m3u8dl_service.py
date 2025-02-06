@@ -4,7 +4,8 @@ from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
 import re
-from typing import List
+from typing import Dict, List
+import shutil
 
 from PySide6.QtCore import Qt, Signal, QProcess, QObject, QDateTime
 import m3u8
@@ -97,6 +98,12 @@ class M3U8DLService(QObject):
         super().__init__(parent=parent)
         self.logger = Logger("download")
         self.cmdParser = M3U8DLCommandLineParser()
+        self.processMap = {}    # type: Dict[str, QProcess]
+
+        self._connectSignalToSlot()
+
+    def _connectSignalToSlot(self):
+        signalBus.downloadTerminated.connect(self._onDownloadTerminated)
 
     @exceptionTracebackHandler("download", False)
     def download(self, options: List[str]):
@@ -111,11 +118,12 @@ class M3U8DLService(QObject):
         process.setProcessChannelMode(QProcess.ProcessChannelMode.MergedChannels)
 
         process.readyRead.connect(lambda: self._onDownloadMessage(process, taskLogger))
-        process.finished.connect(lambda code, status: self._onDownloadFinished(process, code, status))
-        # compileTerminated.connect(process.terminate)
+        process.finished.connect(lambda code, status: self._onDownloadFinished(process, task, code, status))
         process.start(self.downloaderPath, options)
 
         task.pid = process.processId()
+        process.setProperty("task", task)
+        self.processMap[task.pid] = process
         self.downloadCreated.emit(task)
         return True
 
@@ -140,11 +148,16 @@ class M3U8DLService(QObject):
         )
         self.downloadProcessChanged.emit(process.processId(), info)
 
-    def _onDownloadFinished(self, process: QProcess, code, status: QProcess.ExitStatus):
+    def _onDownloadFinished(self, process: QProcess, task: Task, code, status: QProcess.ExitStatus):
+        if task.pid not in self.processMap:
+            return
+
+        self.processMap.pop(task.pid)
+
         if status == QProcess.ExitStatus.NormalExit:
-            self.downloadFinished.emit(process.processId(), True, "")
+            self.downloadFinished.emit(task.pid, True, "")
         else:
-            self.downloadFinished.emit(process.processId(), False, process.errorString())
+            self.downloadFinished.emit(task.pid, False, process.errorString())
 
     def generateCommand(self, options):
         # options.extend([
@@ -154,6 +167,14 @@ class M3U8DLService(QObject):
         #     'for=all'
         # ])
         return options
+
+    @exceptionTracebackHandler("download")
+    def clearTasks(self):
+        for process in self.processMap.values():
+            if process.state() != QProcess.ProcessState.NotRunning:
+                process.terminate()
+
+        self.processMap.clear()
 
     @exceptionTracebackHandler("download", [])
     def getStreamInfos(self, url: str, timeout=10):
@@ -172,6 +193,21 @@ class M3U8DLService(QObject):
     @property
     def downloaderPath(self):
         return cfg.get(cfg.m3u8dlPath)
+
+    def _onDownloadTerminated(self, pid: int, isClearCache: bool):
+        process = self.processMap.get(pid)
+        if not process:
+            return
+
+        # terminate process
+        self.processMap.pop(pid)
+        process.terminate()
+
+        # remove cache files
+        if isClearCache:
+            task = process.property("task")     # type: Task
+            folder = Path(self.downloaderPath).parent / task.fileName
+            shutil.rmtree(folder, ignore_errors=True)
 
 
 m3u8Service = M3U8DLService()

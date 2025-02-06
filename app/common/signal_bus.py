@@ -26,6 +26,8 @@ class SignalBus(QObject):
     checkUpdateSig = Signal()
     micaEnableChanged = Signal(bool)
 
+    downloadTerminated = Signal(int, bool)  # pid, isClearCache
+
     switchToTaskInterfaceSig = Signal()
 
     fetchDataSig = Signal(SqlRequest)

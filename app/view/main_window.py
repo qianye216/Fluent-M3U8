@@ -16,6 +16,7 @@ from ..common.icon import Icon
 from ..common.utils import openUrl
 from ..common.signal_bus import signalBus, SqlResponse
 from ..common.setting import DOC_URL
+from ..service.m3u8dl_service import m3u8Service
 from ..common import resource
 
 
@@ -88,3 +89,7 @@ class MainWindow(MSFluentWindow):
         super().resizeEvent(e)
         if hasattr(self, 'splashScreen'):
             self.splashScreen.resize(self.size())
+
+    def closeEvent(self, e):
+        m3u8Service.clearTasks()
+        super().closeEvent(e)

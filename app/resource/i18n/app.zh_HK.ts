@@ -219,6 +219,24 @@
     </message>
 </context>
 <context>
+    <name>DeleteTaskDialog</name>
+    <message>
+        <location filename="../../components/task_card.py" line="115"/>
+        <source>Delete task</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/task_card.py" line="117"/>
+        <source>Are you sure to delete this task?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/task_card.py" line="118"/>
+        <source>Clear cache</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>HomeInterface</name>
     <message>
         <location filename="../../view/home_interface.py" line="68"/>
@@ -301,22 +319,22 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../view/main_window.py" line="44"/>
+        <location filename="../../view/main_window.py" line="45"/>
         <source>Home</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="45"/>
+        <location filename="../../view/main_window.py" line="46"/>
         <source>Task</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="48"/>
+        <location filename="../../view/main_window.py" line="49"/>
         <source>Help</source>
         <translation type="unfinished">幫助</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="50"/>
+        <location filename="../../view/main_window.py" line="51"/>
         <source>Settings</source>
         <translation>設置</translation>
     </message>

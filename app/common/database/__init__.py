@@ -38,7 +38,7 @@ class Database(QObject):
 
     def setDatabase(self, db: QSqlDatabase):
         """ set the database to be used """
-        self.taskService.userDao.setDatabase(db)
+        self.taskService.taskDao.setDatabase(db)
 
 
 
