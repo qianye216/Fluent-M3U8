@@ -13,8 +13,8 @@ from ..components.config_card import BasicConfigCard, AdvanceConfigCard, ProxyCo
 from ..service.m3u8dl_service import m3u8Service
 
 
-class DownloadInterface(ScrollArea):
-    """ Download interface """
+class HomeInterface(ScrollArea):
+    """ Home interface """
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -29,9 +29,9 @@ class DownloadInterface(ScrollArea):
 
         self.vBoxLayout = QVBoxLayout(self.view)
 
-        self.__initWidget()
+        self._initWidget()
 
-    def __initWidget(self):
+    def _initWidget(self):
         self.setWidget(self.view)
         self.setAcceptDrops(True)
         self.setWidgetResizable(True)
@@ -53,7 +53,7 @@ class DownloadInterface(ScrollArea):
         self.setObjectName("packageInterface")
         self.enableTransparentBackground()
 
-        self.__connectSignalToSlot()
+        self._connectSignalToSlot()
 
     def _onDownloadButtonClicked(self):
         options = [
@@ -63,5 +63,5 @@ class DownloadInterface(ScrollArea):
         ]
         m3u8Service.download(options)
 
-    def __connectSignalToSlot(self):
+    def _connectSignalToSlot(self):
         self.basicSettingCard.downloadButton.clicked.connect(self._onDownloadButtonClicked)

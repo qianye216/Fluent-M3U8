@@ -2,16 +2,19 @@
 from PySide6.QtCore import QUrl, QSize
 from PySide6.QtGui import QIcon, QColor
 from PySide6.QtWidgets import QApplication
+from PySide6.QtSql import QSqlDatabase
 
 from qfluentwidgets import NavigationItemPosition, MSFluentWindow, SplashScreen
 from qfluentwidgets import FluentIcon as FIF
 
 from .setting_interface import SettingInterface
-from .download_interface import DownloadInterface
+from .home_interface import HomeInterface
+from .task_interface import TaskInterface
+from ..common.database import DBInitializer, DatabaseThread, Database
 from ..common.config import cfg
 from ..common.icon import Icon
 from ..common.utils import openUrl
-from ..common.signal_bus import signalBus
+from ..common.signal_bus import signalBus, SqlResponse
 from ..common.setting import DOC_URL
 from ..common import resource
 
@@ -20,10 +23,12 @@ class MainWindow(MSFluentWindow):
 
     def __init__(self):
         super().__init__()
+        
+        self.initDatabase()
         self.initWindow()
 
-        # TODO: create sub interface
-        self.downloadInterface = DownloadInterface(self)
+        self.homeInterface = HomeInterface(self)
+        self.taskInterface = TaskInterface(self)
         self.settingInterface = SettingInterface(self)
 
         self.connectSignalToSlot()
@@ -35,15 +40,11 @@ class MainWindow(MSFluentWindow):
         signalBus.micaEnableChanged.connect(self.setMicaEffectEnabled)
 
     def initNavigation(self):
-        # self.navigationInterface.setAcrylicEnabled(True)
-
-        # TODO: add navigation items
-        self.addSubInterface(self.downloadInterface, FIF.HOME, self.tr('Home'), FIF.HOME_FILL, isTransparent=True)
+        self.addSubInterface(self.homeInterface, FIF.HOME, self.tr('Home'), FIF.HOME_FILL, isTransparent=True)
+        self.addSubInterface(self.taskInterface, Icon.CLOUD_DOWNLOAD, self.tr('Task'), Icon.CLOUD_DOWNLOAD_FILLED)
 
         self.navigationInterface.addItem(
             'help', FIF.HELP, self.tr("Help"), lambda: openUrl(DOC_URL), False, position=NavigationItemPosition.BOTTOM)
-
-        # add custom widget to bottom
         self.addSubInterface(
             self.settingInterface, Icon.SETTINGS, self.tr('Settings'), Icon.SETTINGS_FILLED, NavigationItemPosition.BOTTOM)
 
@@ -68,6 +69,19 @@ class MainWindow(MSFluentWindow):
         self.move(w//2 - self.width()//2, h//2 - self.height()//2)
         self.show()
         QApplication.processEvents()
+
+    def initDatabase(self):
+        """ initialize song library """
+        DBInitializer.init()
+
+        self.databaseThread = DatabaseThread(
+            QSqlDatabase.database(DBInitializer.CONNECTION_NAME), self)
+
+        signalBus.dataFetched.connect(self._onDataFetched)
+
+    def _onDataFetched(self, response: SqlResponse):
+        if response.slot:
+            response.slot(response.data)
 
     def resizeEvent(self, e):
         super().resizeEvent(e)

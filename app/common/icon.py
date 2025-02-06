@@ -8,6 +8,8 @@ class Icon(FluentIconBase, Enum):
 
     SETTINGS = "Settings"
     SETTINGS_FILLED = "SettingsFilled"
+    CLOUD_DOWNLOAD = "CloudDownload"
+    CLOUD_DOWNLOAD_FILLED = "CloudDownloadFilled"
 
     def path(self, theme=Theme.AUTO):
         return f":/app/images/icons/{self.value}_{getIconColor(theme)}.svg"

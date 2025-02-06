@@ -23,6 +23,7 @@ else:
     CONFIG_FOLDER = Path(QStandardPaths.writableLocation(QStandardPaths.AppDataLocation)) / APP_NAME
 
 CONFIG_FILE = CONFIG_FOLDER / "config.json"
+DB_PATH = CONFIG_FOLDER / "database.db"
 
 if sys.platform == "win32":
     EXE_SUFFIX = ".exe"
