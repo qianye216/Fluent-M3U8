@@ -12,7 +12,8 @@ class Interface(ScrollArea):
         self.view = QWidget(self)
         self.titleLabel = TitleLabel(self.view)
 
-        self.vBoxLayout = QVBoxLayout(self.view)
+        self.vBoxLayout = QVBoxLayout(self)
+        self.viewLayout = QVBoxLayout(self.view)
 
         self.__initWidgets()
 
@@ -23,6 +24,7 @@ class Interface(ScrollArea):
         self.setWidgetResizable(True)
 
         self.vBoxLayout.setContentsMargins(30, 33, 30, 10)
+        self.viewLayout.setContentsMargins(0, 0, 0, 0)
         self.vBoxLayout.addWidget(self.titleLabel)
         self.vBoxLayout.setSpacing(20)
         self.vBoxLayout.setAlignment(Qt.AlignmentFlag.AlignTop)

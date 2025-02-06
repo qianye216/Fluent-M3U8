@@ -23,7 +23,7 @@ class MainWindow(MSFluentWindow):
 
     def __init__(self):
         super().__init__()
-        
+
         self.initDatabase()
         self.initWindow()
 
@@ -38,6 +38,7 @@ class MainWindow(MSFluentWindow):
 
     def connectSignalToSlot(self):
         signalBus.micaEnableChanged.connect(self.setMicaEffectEnabled)
+        signalBus.switchToTaskInterfaceSig.connect(lambda: self.switchTo(self.taskInterface))
 
     def initNavigation(self):
         self.addSubInterface(self.homeInterface, FIF.HOME, self.tr('Home'), FIF.HOME_FILL, isTransparent=True)

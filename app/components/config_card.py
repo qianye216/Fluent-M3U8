@@ -128,7 +128,7 @@ class BasicConfigCard(GroupHeaderCardWidget):
         self.vBoxLayout.addLayout(self.toolBarLayout)
 
     def _onTextChanged(self):
-        url = self.urlLineEdit.text()
+        url = self.urlLineEdit.text().strip()
         fileName = self.fileNameLineEdit.text()
         if url.endswith('m3u8') and fileName:
             self.downloadButton.setEnabled(True)
@@ -136,6 +136,7 @@ class BasicConfigCard(GroupHeaderCardWidget):
             self.downloadButton.setEnabled(False)
 
     def _onUrlChanged(self, url: str):
+        url = url.strip()
         if not url.endswith(".m3u8"):
             return
 
@@ -172,8 +173,8 @@ class BasicConfigCard(GroupHeaderCardWidget):
     def parseOptions(self):
         """ Returns the m3u8dl options """
         options = [
-            self.urlLineEdit.text(),
-            M3U8DLCommand.SAVE_NAME.command(self.fileNameLineEdit.text()),
+            self.urlLineEdit.text().strip(),
+            M3U8DLCommand.SAVE_NAME.command(self.fileNameLineEdit.text().strip()),
             M3U8DLCommand.SAVE_DIR.command(self.saveFolderGroup.content()),
             M3U8DLCommand.THREAD_COUNT.command(self.threadCountSpinBox.value()),
         ]

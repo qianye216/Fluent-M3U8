@@ -5,12 +5,13 @@ from PySide6.QtCore import Qt, Signal, QSize, QPoint, QRect, QUrl, QPropertyAnim
 from PySide6.QtGui import QPixmap, QPainter, QColor, QIcon, QAction, QFont, QStandardItem, QTextCursor, QTextOption
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QGraphicsOpacityEffect, QFileDialog, QGridLayout
 
-from qfluentwidgets import ScrollArea
+from qfluentwidgets import ScrollArea, InfoBar, InfoBarPosition, PushButton
 
 from ..components.info_card import M3U8DLInfoCard
 from ..components.config_card import BasicConfigCard, AdvanceConfigCard, ProxyConfigCard
 
 from ..service.m3u8dl_service import m3u8Service
+from ..common.signal_bus import signalBus
 
 
 class HomeInterface(ScrollArea):
@@ -61,7 +62,27 @@ class HomeInterface(ScrollArea):
             *self.proxySettingCard.parseOptions(),
             *self.advanceSettingCard.parseOptions(),
         ]
-        m3u8Service.download(options)
+        success = m3u8Service.download(options)
+        if success:
+            w = InfoBar.success(
+                self.tr("Task created"),
+                self.tr("Please check the download task"),
+                duration=5000,
+                position=InfoBarPosition.BOTTOM,
+                parent=self.window()
+            )
+            button = PushButton(self.tr('Check'))
+            button.clicked.connect(signalBus.switchToTaskInterfaceSig)
+            w.widgetLayout.insertSpacing(0, 10)
+            w.addWidget(button)
+        else:
+            InfoBar.error(
+                self.tr("Task failed"),
+                self.tr("Please check the error log"),
+                duration=-1,
+                position=InfoBarPosition.BOTTOM,
+                parent=self.window()
+            )
 
     def _connectSignalToSlot(self):
         self.basicSettingCard.downloadButton.clicked.connect(self._onDownloadButtonClicked)

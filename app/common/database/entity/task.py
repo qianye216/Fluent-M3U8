@@ -10,6 +10,7 @@ from PySide6.QtCore import QDateTime
 class Task(Entity):
 
     id: int = None
+    pid: int = None                 # 进程 id
     fileName: str = None            # 文件名
     saveFolder: str = None          # 保存文件夹
     command: str = None             # 下载命令
