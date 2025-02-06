@@ -1,6 +1,10 @@
 # coding:utf-8
 import os
 import sys
+from inspect import getsourcefile
+from pathlib import Path
+
+os.chdir(Path(getsourcefile(lambda: 0)).resolve().parent)
 
 from PySide6.QtCore import Qt, QTranslator
 from PySide6.QtGui import QFont

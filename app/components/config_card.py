@@ -87,7 +87,7 @@ class BasicConfigCard(GroupHeaderCardWidget):
             content=self.tr("The name of downloaded file"),
             widget=self.fileNameLineEdit
         )
-        self.addGroup(
+        self.saveFolderGroup = self.addGroup(
             icon=Logo.FOLDER,
             title=self.tr("Save Folder"),
             content=cfg.get(cfg.saveFolder),
@@ -126,8 +126,15 @@ class BasicConfigCard(GroupHeaderCardWidget):
         pass
 
     def parseOptions(self):
-        pass
-
+        """ Returns the m3u8dl options """
+        options = [
+            self.urlLineEdit.text(),
+            M3U8DLCommand.SAVE_NAME.command(self.fileNameLineEdit.text()),
+            M3U8DLCommand.SAVE_DIR.command(self.saveFolderGroup.content()),
+            M3U8DLCommand.THREAD_COUNT.command(self.threadCountSpinBox.value()),
+            M3U8DLCommand.DOWNLOAD_RETRY_COUNT.command(self.retryCountSpinBox.value()),
+        ]
+        return options
 
 
 class AdvanceConfigCard(M3U8GroupHeaderCardWidget):
@@ -233,7 +240,25 @@ class AdvanceConfigCard(M3U8GroupHeaderCardWidget):
         )
 
     def parseOptions(self):
-        pass
+        """ Returns the m3u8dl options """
+        options = [
+            M3U8DLCommand.HTTP_REQUEST_TIMEOUT.command(self.httpTimeoutSpinBox.value()),
+            M3U8DLCommand.SUB_FORMAT.command(self.subtitleComboBox.currentText()),
+        ]
+
+        if self.httpHeaderEdit.toPlainText():
+            options.append(M3U8DLCommand.HEADER.command(self.httpHeaderEdit.toPlainText()))
+
+        if self.speedSpinBox.value() > 0:
+            speed = str(self.speedSpinBox.value()) + self.speedComboBox.currentText()
+            options.append(M3U8DLCommand.MAX_SPEED.command(speed))
+
+        for button in self.findChildren(SwitchButton):
+            config = button.property("config")
+            if config:
+                options.append(config.command(button.isChecked()))
+
+        return options
 
 
 class ProxyConfigCard(M3U8GroupHeaderCardWidget):
@@ -276,4 +301,13 @@ class ProxyConfigCard(M3U8GroupHeaderCardWidget):
         self.systemProxyButton.checkedChanged.connect(self.proxyLineEdit.setDisabled)
 
     def parseOptions(self):
-        pass
+        """ Returns the m3u8dl options """
+        if self.systemProxyButton.isChecked():
+            return []
+
+        options = [M3U8DLCommand.USE_SYSTEM_PROXY.command(False)]
+
+        if self.proxyLineEdit.text():
+            options.append(M3U8DLCommand.CUSTOM_PROXY.command(self.proxyLineEdit.text()))
+
+        return options

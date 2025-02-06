@@ -6,7 +6,9 @@ from PySide6.QtCore import QLocale, QStandardPaths
 from qfluentwidgets import (qconfig, QConfig, ConfigItem, OptionsConfigItem, BoolValidator,
                             OptionsValidator, Theme, FolderValidator, ConfigSerializer)
 
-from .setting import CONFIG_FILE
+from .setting import CONFIG_FILE, EXE_SUFFIX
+from pathlib import Path
+
 
 class Language(Enum):
     """ Language enumeration """
@@ -37,6 +39,10 @@ class Config(QConfig):
     # download
     saveFolder = ConfigItem("Download", "SaveFolder", QStandardPaths.writableLocation(
         QStandardPaths.DownloadLocation), FolderValidator())
+    m3u8dlPath = ConfigItem("Download", "M3U8DLPath", Path(
+        f"tools/N_m3u8DL-RE{EXE_SUFFIX}").absolute())
+    ffmpegPath = ConfigItem("Download", "FFmpegPath", Path(
+        f"tools/ffmpeg{EXE_SUFFIX}").absolute())
 
     # main window
     micaEnabled = ConfigItem("MainWindow", "MicaEnabled", isWin11(), BoolValidator())

@@ -10,7 +10,9 @@ from .setting_interface import SettingInterface
 from .download_interface import DownloadInterface
 from ..common.config import cfg
 from ..common.icon import Icon
+from ..common.utils import openUrl
 from ..common.signal_bus import signalBus
+from ..common.setting import DOC_URL
 from ..common import resource
 
 
@@ -37,6 +39,9 @@ class MainWindow(MSFluentWindow):
 
         # TODO: add navigation items
         self.addSubInterface(self.downloadInterface, FIF.HOME, self.tr('Home'), FIF.HOME_FILL, isTransparent=True)
+
+        self.navigationInterface.addItem(
+            'help', FIF.HELP, self.tr("Help"), lambda: openUrl(DOC_URL), False, position=NavigationItemPosition.BOTTOM)
 
         # add custom widget to bottom
         self.addSubInterface(

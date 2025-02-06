@@ -1,4 +1,5 @@
 # coding: utf-8
+import sys
 from pathlib import Path
 from PySide6.QtCore import QStandardPaths
 
@@ -22,3 +23,8 @@ else:
     CONFIG_FOLDER = Path(QStandardPaths.writableLocation(QStandardPaths.AppDataLocation)) / APP_NAME
 
 CONFIG_FILE = CONFIG_FOLDER / "config.json"
+
+if sys.platform == "win32":
+    EXE_SUFFIX = ".exe"
+else:
+    EXE_SUFFIX = ""

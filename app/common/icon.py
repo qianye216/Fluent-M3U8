@@ -37,6 +37,7 @@ class Logo(FluentIconBase, Enum):
     HAMMER = "Hammer"
     OFFICE = "Office"
     PENCIL = "Pencil"
+    FFMPEG = "FFmpeg"
     MONKEY = "Monkey"
     FOLDER = "Folder"
     ROCKET = "Rocket"

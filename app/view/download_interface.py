@@ -60,3 +60,10 @@ class DownloadInterface(ScrollArea):
 
     def __connectSignalToSlot(self):
         pass
+
+    def parseOptions(self):
+        options = [
+            *self.basicSettingCard.parseOptions(),
+            *self.proxySettingCard.parseOptions(),
+            *self.advanceSettingCard.parseOptions(),
+        ]

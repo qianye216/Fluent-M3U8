@@ -14,6 +14,7 @@ from PySide6.QtWidgets import QWidget, QLabel, QFileDialog
 from ..common.config import cfg, isWin11
 from ..common.setting import HELP_URL, FEEDBACK_URL, AUTHOR, VERSION, YEAR
 from ..common.signal_bus import signalBus
+from ..common.icon import Logo
 
 
 class SettingCardGroup(CardGroup):
@@ -74,6 +75,30 @@ class SettingInterface(ScrollArea):
             self.tr('Set your preferred language for UI'),
             texts=['简体中文', '繁體中文', 'English', self.tr('Use system setting')],
             parent=self.personalGroup
+        )
+
+        # download
+        self.downloadGroup = SettingCardGroup(self.tr("Download"), self.scrollWidget)
+        self.saveFolderCard = PushSettingCard(
+            self.tr("Choose"),
+            FIF.FOLDER,
+            self.tr("Save folder"),
+            cfg.get(cfg.saveFolder),
+            self.downloadGroup
+        )
+        self.m3u8dlPathCard = PushSettingCard(
+            self.tr("Choose"),
+            ":/app/images/M3U8DL.png",
+            "N_m3u8DL-RE",
+            cfg.get(cfg.m3u8dlPath),
+            self.downloadGroup
+        )
+        self.ffmpegPathCard = PushSettingCard(
+            self.tr("Choose"),
+            Logo.FFMPEG,
+            "FFmpeg",
+            cfg.get(cfg.ffmpegPath),
+            self.downloadGroup
         )
 
         # update software
@@ -142,6 +167,10 @@ class SettingInterface(ScrollArea):
         self.personalGroup.addSettingCard(self.zoomCard)
         self.personalGroup.addSettingCard(self.languageCard)
 
+        self.downloadGroup.addSettingCard(self.saveFolderCard)
+        self.downloadGroup.addSettingCard(self.m3u8dlPathCard)
+        self.downloadGroup.addSettingCard(self.ffmpegPathCard)
+
         self.updateSoftwareGroup.addSettingCard(self.updateOnStartUpCard)
 
         self.aboutGroup.addSettingCard(self.helpCard)
@@ -152,6 +181,7 @@ class SettingInterface(ScrollArea):
         self.expandLayout.setSpacing(28)
         self.expandLayout.setContentsMargins(36, 10, 36, 0)
         self.expandLayout.addWidget(self.personalGroup)
+        self.expandLayout.addWidget(self.downloadGroup)
         self.expandLayout.addWidget(self.updateSoftwareGroup)
         self.expandLayout.addWidget(self.aboutGroup)
 
@@ -168,9 +198,42 @@ class SettingInterface(ScrollArea):
             parent=self
         )
 
+    def _onSaveFolderCardClicked(self):
+        folder = QFileDialog.getExistingDirectory(
+            self, self.tr("Choose folder"), QStandardPaths.writableLocation(QStandardPaths.DownloadLocation))
+
+        if not folder or cfg.get(cfg.saveFolder) == folder:
+            return
+
+        cfg.set(cfg.saveFolder, folder)
+        self.saveFolderCard.setContent(folder)
+
+    def _onM3U8DLPathCardClicked(self):
+        path, _ = QFileDialog.getOpenFileName(self, self.tr("Choose N_m3u8DL-RE"))
+
+        if not path or cfg.get(cfg.m3u8dlPath) == path:
+            return
+
+        cfg.set(cfg.m3u8dlPath, path)
+        self.m3u8dlPathCard.setContent(path)
+
+    def _onFFmpegPathCardClicked(self):
+        path, _ = QFileDialog.getOpenFileName(self, self.tr("Choose ffmpeg"))
+
+        if not path or cfg.get(cfg.ffmpegPath) == path:
+            return
+
+        cfg.set(cfg.ffmpegPath, path)
+        self.ffmpegPathCard.setContent(path)
+
     def _connectSignalToSlot(self):
         """ connect signal to slot """
         cfg.appRestartSig.connect(self._showRestartTooltip)
+
+        # download
+        self.saveFolderCard.clicked.connect(self._onSaveFolderCardClicked)
+        self.m3u8dlPathCard.clicked.connect(self._onM3U8DLPathCardClicked)
+        self.ffmpegPathCard.clicked.connect(self._onFFmpegPathCardClicked)
 
         # personalization
         cfg.themeChanged.connect(setTheme)

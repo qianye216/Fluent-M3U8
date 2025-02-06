@@ -5,6 +5,7 @@
         <file>images/icons/Settings_white.svg</file>
         <file>images/icons/Settings_black.svg</file>
         <file>images/logo.png</file>
+        <file>images/M3U8DL.png</file>
 
         <file>i18n/app.zh_CN.qm</file>
         <file>i18n/app.zh_HK.qm</file>
@@ -38,6 +39,7 @@
         <file>images/logo/Inbox.svg</file>
         <file>images/logo/Planet.svg</file>
         <file>images/logo/Airplane.svg</file>
+        <file>images/logo/FFmpeg.svg</file>
 
         <file>images/ico/M3U8DL.ico</file>
 
