@@ -7,13 +7,10 @@ from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QGraphicsOpacit
 
 from qfluentwidgets import ScrollArea
 
-from ..common.utils import openUrl, showInFolder
-from ..common.config import cfg
-from ..common.icon import Icon
-
 from ..components.info_card import M3U8DLInfoCard
 from ..components.config_card import BasicConfigCard, AdvanceConfigCard, ProxyConfigCard
 
+from ..service.m3u8dl_service import m3u8Service
 
 
 class DownloadInterface(ScrollArea):
@@ -58,12 +55,13 @@ class DownloadInterface(ScrollArea):
 
         self.__connectSignalToSlot()
 
-    def __connectSignalToSlot(self):
-        pass
-
-    def parseOptions(self):
+    def _onDownloadButtonClicked(self):
         options = [
             *self.basicSettingCard.parseOptions(),
             *self.proxySettingCard.parseOptions(),
             *self.advanceSettingCard.parseOptions(),
         ]
+        m3u8Service.download(options)
+
+    def __connectSignalToSlot(self):
+        self.basicSettingCard.downloadButton.clicked.connect(self._onDownloadButtonClicked)

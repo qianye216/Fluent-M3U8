@@ -43,6 +43,7 @@ class Logo(FluentIconBase, Enum):
     ROCKET = "Rocket"
     SCROLL = "Scroll"
     WINDOW = "Window"
+    CONTROL = "Control"
     ALEMBIC = "Alembic"
     PACKAGE = "Package"
     AIRPLANE = "Airplane"
@@ -52,6 +53,7 @@ class Logo(FluentIconBase, Enum):
     JOYSTICK = "Joystick"
     BAR_CHART = "BarChart"
     HOURGLASS = "Hourglass"
+    PROJECTOR = "Projector"
     WASTEBASKET = "Wastebasket"
     CARD_FILE_BOX = "CardFileBox"
 

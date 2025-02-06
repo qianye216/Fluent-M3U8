@@ -4,107 +4,117 @@
 <context>
     <name>AdvanceConfigCard</name>
     <message>
-        <location filename="../../components/config_card.py" line="145"/>
+        <location filename="../../components/config_card.py" line="188"/>
         <source>Advance Settings</source>
         <translation>高级设置</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="177"/>
+        <location filename="../../components/config_card.py" line="225"/>
         <source>Header</source>
         <translation>请求头</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="178"/>
+        <location filename="../../components/config_card.py" line="226"/>
         <source>Set custom headers for HTTP requests</source>
         <translation>设置自定义的 Http 请求头</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="184"/>
+        <location filename="../../components/config_card.py" line="232"/>
         <source>Max Speed</source>
         <translation>下载速度</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="185"/>
+        <location filename="../../components/config_card.py" line="233"/>
         <source>Set maximum download speed, -1 indicates no speed limit</source>
         <translation>设置最大下载速度，-1 表示不限速</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="192"/>
+        <location filename="../../components/config_card.py" line="240"/>
         <source>Request Timeout</source>
         <translation>超时时间</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="193"/>
+        <location filename="../../components/config_card.py" line="241"/>
         <source>Set timeout for HTTP requests (in seconds)</source>
         <translation>设置 Http 请求的超时时间（秒）</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="199"/>
+        <location filename="../../components/config_card.py" line="246"/>
+        <source>Retry Count</source>
+        <translation>重试次数</translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="248"/>
+        <source>Set the retry count for each shard download exception</source>
+        <translation>每个分片下载异常时的重试次数</translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="254"/>
         <source>Subtitle Format</source>
         <translation>字幕格式</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="200"/>
+        <location filename="../../components/config_card.py" line="255"/>
         <source>Set the output type of subtitle</source>
         <translation>选择输出字幕的格式</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="206"/>
+        <location filename="../../components/config_card.py" line="261"/>
         <source>Auto Select</source>
         <translation>自动选择</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="207"/>
+        <location filename="../../components/config_card.py" line="262"/>
         <source>Automatically select the best track of all types</source>
         <translation>自动选择所有类型的最佳轨道</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="212"/>
+        <location filename="../../components/config_card.py" line="267"/>
         <source>Binary Merge</source>
         <translation>二进制合并</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="213"/>
+        <location filename="../../components/config_card.py" line="268"/>
         <source>Merge ts files directly through binary copy connections</source>
         <translation>通过拷贝连接的方式合并 ts 文件</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="218"/>
+        <location filename="../../components/config_card.py" line="273"/>
         <source>Delete After Done</source>
         <translation>自动清理</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="219"/>
+        <location filename="../../components/config_card.py" line="274"/>
         <source>Delete temporary files after downloading is complete</source>
         <translation>下载完成后自动删除临时文件</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="225"/>
+        <location filename="../../components/config_card.py" line="280"/>
         <source>Append URL Params</source>
         <translation>URL 参数</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="226"/>
+        <location filename="../../components/config_card.py" line="281"/>
         <source>Adding the Params of the input URL to the shard</source>
         <translation>将输入 URL 的 Params 添加至分片</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="231"/>
+        <location filename="../../components/config_card.py" line="286"/>
         <source>Date Info</source>
         <translation>日期信息</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="232"/>
+        <location filename="../../components/config_card.py" line="287"/>
         <source>Do not write date information when mixing</source>
         <translation>混流时不写入日期信息</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="237"/>
+        <location filename="../../components/config_card.py" line="292"/>
         <source>Concurrent</source>
         <translation>并发下载</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="238"/>
+        <location filename="../../components/config_card.py" line="293"/>
         <source>Concurrent download of selected audio, video, and subtitles</source>
         <translation>并发下载已选择的音频、视频和字幕</translation>
     </message>
@@ -112,79 +122,99 @@
 <context>
     <name>BasicConfigCard</name>
     <message>
-        <location filename="../../components/config_card.py" line="33"/>
+        <location filename="../../components/config_card.py" line="38"/>
         <source>Basic Settings</source>
         <translation>基本设置</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="37"/>
+        <location filename="../../components/config_card.py" line="42"/>
         <source>Choose</source>
         <translation>选择</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="43"/>
+        <location filename="../../components/config_card.py" line="48"/>
         <source>Click the download button to start downloading</source>
         <translation>点击下载按钮以启动下载任务</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="45"/>
+        <location filename="../../components/config_card.py" line="50"/>
         <source>Download</source>
         <translation>下载</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="64"/>
+        <location filename="../../components/config_card.py" line="60"/>
+        <source>Default</source>
+        <translation>默认媒体</translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="73"/>
         <source>Please enter the url of m3u8 file</source>
         <translation>请输入 m3u8 文件的 URL</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="65"/>
+        <location filename="../../components/config_card.py" line="74"/>
         <source>Please enter the name of downloaded file</source>
         <translation>请输入下载的文件名</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="80"/>
+        <location filename="../../components/config_card.py" line="86"/>
         <source>Download URL</source>
         <translation>下载地址</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="81"/>
+        <location filename="../../components/config_card.py" line="87"/>
         <source>The URL of m3u8 file</source>
         <translation>设置 m3u8 文件的下载地址</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="86"/>
+        <location filename="../../components/config_card.py" line="92"/>
         <source>File Name</source>
         <translation>文件名</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="87"/>
+        <location filename="../../components/config_card.py" line="93"/>
         <source>The name of downloaded file</source>
         <translation>设置保存文件名</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="92"/>
+        <location filename="../../components/config_card.py" line="104"/>
         <source>Save Folder</source>
         <translation>保存目录</translation>
     </message>
     <message>
+        <location filename="../../components/config_card.py" line="157"/>
+        <source>Resolution: </source>
+        <translation>分辨率：</translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="160"/>
+        <source>Codecs: </source>
+        <translation>编码格式：</translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="163"/>
+        <source>Fps: </source>
+        <translation>帧率：</translation>
+    </message>
+    <message>
         <location filename="../../components/config_card.py" line="98"/>
+        <source>Stream Info</source>
+        <translation>流媒体信息</translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="99"/>
+        <source>Select the stream to be downloaded</source>
+        <translation>选择要下载的流媒体</translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="110"/>
         <source>Download Threads</source>
         <translation>下载线程</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="99"/>
+        <location filename="../../components/config_card.py" line="111"/>
         <source>Set the number of concurrent download threads</source>
         <translation>并发下载的线程数量，默认为 CPU 数量</translation>
-    </message>
-    <message>
-        <location filename="../../components/config_card.py" line="104"/>
-        <source>Retry Count</source>
-        <translation>重试次数</translation>
-    </message>
-    <message>
-        <location filename="../../components/config_card.py" line="106"/>
-        <source>Set the retry count for each shard download exception</source>
-        <translation>每个分片下载异常时的重试次数</translation>
     </message>
 </context>
 <context>
@@ -228,13 +258,13 @@
 <context>
     <name>M3U8GroupHeaderCardWidget</name>
     <message>
-        <location filename="../../components/config_card.py" line="18"/>
-        <location filename="../../components/config_card.py" line="20"/>
+        <location filename="../../components/config_card.py" line="23"/>
+        <location filename="../../components/config_card.py" line="25"/>
         <source>Off</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="19"/>
+        <location filename="../../components/config_card.py" line="24"/>
         <source>On</source>
         <translation>启用</translation>
     </message>
@@ -260,27 +290,27 @@
 <context>
     <name>ProxyConfigCard</name>
     <message>
-        <location filename="../../components/config_card.py" line="269"/>
+        <location filename="../../components/config_card.py" line="325"/>
         <source>Proxy Settings</source>
         <translation>代理设置</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="288"/>
+        <location filename="../../components/config_card.py" line="344"/>
         <source>System Proxy</source>
         <translation>系统代理</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="289"/>
+        <location filename="../../components/config_card.py" line="345"/>
         <source>Use system default proxy</source>
         <translation>使用系统默认代理</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="295"/>
+        <location filename="../../components/config_card.py" line="351"/>
         <source>Custom Proxy</source>
         <translation>自定义代理</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="296"/>
+        <location filename="../../components/config_card.py" line="352"/>
         <source>Set the http request proxy to be used</source>
         <translation>设置自定义的代理地址</translation>
     </message>

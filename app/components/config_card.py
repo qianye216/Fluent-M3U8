@@ -1,5 +1,6 @@
 # coding:utf-8
 import os
+from typing import List
 from PySide6.QtCore import Qt, Signal, QSize, QPoint, QRect, QUrl
 from PySide6.QtWidgets import QWidget, QHBoxLayout
 
@@ -7,9 +8,13 @@ from qfluentwidgets import (IconWidget, BodyLabel, FluentIcon, InfoBarIcon, Comb
                             PrimaryPushButton, LineEdit, GroupHeaderCardWidget, PushButton,
                             CompactSpinBox, SwitchButton, IndicatorPosition, PlainTextEdit)
 
+from m3u8.model import StreamInfo
+
 from ..common.icon import Logo
 from ..common.config import cfg
-from ..service.m3u8dl_service import M3U8DLCommand
+from ..common.concurrent import TaskExecutor
+
+from ..service.m3u8dl_service import M3U8DLCommand, m3u8Service
 
 
 class M3U8GroupHeaderCardWidget(GroupHeaderCardWidget):
@@ -36,7 +41,7 @@ class BasicConfigCard(GroupHeaderCardWidget):
         self.fileNameLineEdit = LineEdit()
         self.saveFolderButton = PushButton(self.tr("Choose"))
         self.threadCountSpinBox = CompactSpinBox()
-        self.retryCountSpinBox = CompactSpinBox()
+        self.streamInfoComboBox = ComboBox()
 
         self.hintIcon = IconWidget(InfoBarIcon.INFORMATION, self)
         self.hintLabel = BodyLabel(
@@ -46,17 +51,21 @@ class BasicConfigCard(GroupHeaderCardWidget):
 
         self.toolBarLayout = QHBoxLayout()
 
-        self.__initWidgets()
+        self._initWidgets()
 
-    def __initWidgets(self):
-        self.hintIcon.setFixedSize(16, 16)
+    def _initWidgets(self):
         self.setBorderRadius(8)
+
+        self.streamInfoComboBox.setMinimumWidth(120)
+        self.streamInfoComboBox.addItem(self.tr("Default"))
+
+        self.downloadButton.setEnabled(False)
+        self.hintIcon.setFixedSize(16, 16)
 
         self.urlLineEdit.setFixedWidth(300)
         self.fileNameLineEdit.setFixedWidth(300)
         self.saveFolderButton.setFixedWidth(120)
         self.threadCountSpinBox.setFixedWidth(120)
-        self.retryCountSpinBox.setFixedWidth(120)
 
         self.urlLineEdit.setClearButtonEnabled(True)
         self.fileNameLineEdit.setClearButtonEnabled(True)
@@ -67,13 +76,10 @@ class BasicConfigCard(GroupHeaderCardWidget):
         self.threadCountSpinBox.setRange(1, 1000)
         self.threadCountSpinBox.setValue(os.cpu_count())
 
-        self.retryCountSpinBox.setRange(1, 1000)
-        self.retryCountSpinBox.setValue(3)
+        self._initLayout()
+        self._connectSignalToSlot()
 
-        self.__initLayout()
-        self.__connectSignalToSlot()
-
-    def __initLayout(self):
+    def _initLayout(self):
         # add widget to group
         self.addGroup(
             icon=Logo.GLOBE,
@@ -87,24 +93,23 @@ class BasicConfigCard(GroupHeaderCardWidget):
             content=self.tr("The name of downloaded file"),
             widget=self.fileNameLineEdit
         )
+        self.addGroup(
+            icon=Logo.PROJECTOR,
+            title=self.tr("Stream Info"),
+            content=self.tr("Select the stream to be downloaded"),
+            widget=self.streamInfoComboBox
+        )
         self.saveFolderGroup = self.addGroup(
             icon=Logo.FOLDER,
             title=self.tr("Save Folder"),
             content=cfg.get(cfg.saveFolder),
             widget=self.saveFolderButton
         )
-        self.addGroup(
+        group = self.addGroup(
             icon=Logo.KNOT,
             title=self.tr("Download Threads"),
             content=self.tr("Set the number of concurrent download threads"),
             widget=self.threadCountSpinBox
-        )
-        group = self.addGroup(
-            icon=Logo.JOYSTICK,
-            title=self.tr("Retry Count"),
-            content=self.tr(
-                "Set the retry count for each shard download exception"),
-            widget=self.retryCountSpinBox
         )
         group.setSeparatorVisible(True)
 
@@ -122,8 +127,47 @@ class BasicConfigCard(GroupHeaderCardWidget):
 
         self.vBoxLayout.addLayout(self.toolBarLayout)
 
-    def __connectSignalToSlot(self):
-        pass
+    def _onTextChanged(self):
+        url = self.urlLineEdit.text()
+        fileName = self.fileNameLineEdit.text()
+        if url.endswith('m3u8') and fileName:
+            self.downloadButton.setEnabled(True)
+        else:
+            self.downloadButton.setEnabled(False)
+
+    def _onUrlChanged(self, url: str):
+        if not url.endswith(".m3u8"):
+            return
+
+        TaskExecutor.runTask(m3u8Service.getStreamInfos, url).then(
+            self._onStreamInfosFetched)
+
+    def _onStreamInfosFetched(self, streamInfos: List[StreamInfo]):
+        self.streamInfoComboBox.clear()
+
+        if not streamInfos:
+            self.streamInfoComboBox.addItem(self.tr("Default"))
+            return
+
+        for info in streamInfos:
+            texts = []
+
+            if info.resolution:
+                w, h = info.resolution
+                texts.append(self.tr("Resolution: ") + f"{w} × {h}")
+
+            if info.codecs:
+                texts.append(self.tr("Codecs: ") + info.codecs)
+
+            if info.frame_rate is not None:
+                texts.append(self.tr("Fps: ") + f"{info.frame_rate:.1f}")
+
+            self.streamInfoComboBox.addItem("; ".join(texts), userData=info)
+
+    def _connectSignalToSlot(self):
+        self.urlLineEdit.textChanged.connect(self._onUrlChanged)
+        self.urlLineEdit.textChanged.connect(self._onTextChanged)
+        self.fileNameLineEdit.textChanged.connect(self._onTextChanged)
 
     def parseOptions(self):
         """ Returns the m3u8dl options """
@@ -132,8 +176,23 @@ class BasicConfigCard(GroupHeaderCardWidget):
             M3U8DLCommand.SAVE_NAME.command(self.fileNameLineEdit.text()),
             M3U8DLCommand.SAVE_DIR.command(self.saveFolderGroup.content()),
             M3U8DLCommand.THREAD_COUNT.command(self.threadCountSpinBox.value()),
-            M3U8DLCommand.DOWNLOAD_RETRY_COUNT.command(self.retryCountSpinBox.value()),
         ]
+
+        if self.streamInfoComboBox.count() > 1:
+            info = self.streamInfoComboBox.currentData()    # type: StreamInfo
+            cmds = []
+
+            if info.resolution:
+                cmds.append(f"res={info.resolution[0]}*")
+
+            if info.frame_rate:
+                cmds.append(f"frame={int(info.frame_rate)}*")
+
+            options.extend([
+                M3U8DLCommand.SELECT_VIDEO.command(),
+                ":".join(cmds)
+            ])
+
         return options
 
 
@@ -148,12 +207,17 @@ class AdvanceConfigCard(M3U8GroupHeaderCardWidget):
         self.httpHeaderEdit = PlainTextEdit()
         self.speedSpinBox = CompactSpinBox()
         self.speedComboBox = ComboBox()
+        self.retryCountSpinBox = CompactSpinBox()
         self.subtitleComboBox = ComboBox()
 
-        self.__initWidgets()
+        self._initWidgets()
 
-    def __initWidgets(self):
+    def _initWidgets(self):
         self.setBorderRadius(8)
+
+        self.retryCountSpinBox.setFixedWidth(120)
+        self.retryCountSpinBox.setRange(1, 1000)
+        self.retryCountSpinBox.setValue(3)
 
         self.httpTimeoutSpinBox.setRange(5, 100000)
         self.httpTimeoutSpinBox.setValue(100)
@@ -169,9 +233,9 @@ class AdvanceConfigCard(M3U8GroupHeaderCardWidget):
         self.subtitleComboBox.setFixedWidth(120)
         self.subtitleComboBox.addItems(["SRT", "VTT"])
 
-        self.__initLayout()
+        self._initLayout()
 
-    def __initLayout(self):
+    def _initLayout(self):
         self.addGroup(
             icon=Logo.COOKIE,
             title=self.tr("Header"),
@@ -192,6 +256,13 @@ class AdvanceConfigCard(M3U8GroupHeaderCardWidget):
             title=self.tr("Request Timeout"),
             content=self.tr("Set timeout for HTTP requests (in seconds)"),
             widget=self.httpTimeoutSpinBox
+        )
+        self.addGroup(
+            icon=Logo.JOYSTICK,
+            title=self.tr("Retry Count"),
+            content=self.tr(
+                "Set the retry count for each shard download exception"),
+            widget=self.retryCountSpinBox
         )
 
         self.addGroup(
@@ -243,6 +314,7 @@ class AdvanceConfigCard(M3U8GroupHeaderCardWidget):
         """ Returns the m3u8dl options """
         options = [
             M3U8DLCommand.HTTP_REQUEST_TIMEOUT.command(self.httpTimeoutSpinBox.value()),
+            M3U8DLCommand.DOWNLOAD_RETRY_COUNT.command(self.retryCountSpinBox.value()),
             M3U8DLCommand.SUB_FORMAT.command(self.subtitleComboBox.currentText()),
         ]
 
@@ -270,19 +342,19 @@ class ProxyConfigCard(M3U8GroupHeaderCardWidget):
 
         self.proxyLineEdit = LineEdit()
 
-        self.__initWidgets()
+        self._initWidgets()
 
-    def __initWidgets(self):
+    def _initWidgets(self):
         self.setBorderRadius(8)
 
         self.proxyLineEdit.setFixedWidth(300)
         self.proxyLineEdit.setPlaceholderText("http://127.0.0.1:8080")
         self.proxyLineEdit.setEnabled(False)
 
-        self.__initLayout()
-        self.__connectSignalToSlot()
+        self._initLayout()
+        self._connectSignalToSlot()
 
-    def __initLayout(self):
+    def _initLayout(self):
         self.systemProxyButton = self.addSwitchOption(
             icon=Logo.PLANET,
             title=self.tr("System Proxy"),
@@ -297,7 +369,7 @@ class ProxyConfigCard(M3U8GroupHeaderCardWidget):
             widget=self.proxyLineEdit
         )
 
-    def __connectSignalToSlot(self):
+    def _connectSignalToSlot(self):
         self.systemProxyButton.checkedChanged.connect(self.proxyLineEdit.setDisabled)
 
     def parseOptions(self):

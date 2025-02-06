@@ -8,5 +8,7 @@ class SignalBus(QObject):
     checkUpdateSig = Signal()
     micaEnableChanged = Signal(bool)
 
+    downloadProcessChanged = Signal(int, str)   # pid, message
+    downloadFinished = Signal(int, bool, str)   # pid, isSuccess, message
 
 signalBus = SignalBus()

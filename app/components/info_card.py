@@ -26,7 +26,7 @@ class M3U8DLInfoCard(SimpleCardWidget):
             QUrl('https://github.com/nilaoda/N_m3u8DL-RE'), 'Nilaoda', self)
 
         self.versionWidget = StatisticsWidget(
-            self.tr('Version'), '0.3.0', self)
+            self.tr('Version'), 'v0.3.0', self)
         self.fileSizeWidget = StatisticsWidget(self.tr('File Size'), '19MB', self)
         self.updateTimeWidget = StatisticsWidget(self.tr('Update Time'), '2024-12-01', self)
 
