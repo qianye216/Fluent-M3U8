@@ -7,7 +7,7 @@ from PySide6.QtCore import QObject, QThread, Signal
 from PySide6.QtSql import QSqlDatabase
 
 
-def sqlRequest(service: str, method: str, slot=None, params: dict = None):
+def sqlRequest(service: str, method: str, slot=None, **params):
     """ query sql from database """
     request = SqlRequest(service, method, slot, params)
     signalBus.fetchDataSig.emit(request)

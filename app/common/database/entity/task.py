@@ -17,4 +17,8 @@ class Task(Entity):
     status: int = 0                 # 状态，0 为下载中，1 为下载完成，2 为下载失败
     createTime: QDateTime = field(default_factory=QDateTime.currentDateTime)    # 创建时间
 
+    def error(self):
+        self.status = 2
 
+    def success(self):
+        self.status = 1

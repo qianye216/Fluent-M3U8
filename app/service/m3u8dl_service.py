@@ -15,6 +15,7 @@ from ..common.database.entity import Task
 from ..common.config import cfg
 from ..common.signal_bus import signalBus
 from ..common.exception_handler import exceptionTracebackHandler
+from ..common.database import sqlRequest
 
 
 class M3U8DLCommand(Enum):
@@ -156,8 +157,12 @@ class M3U8DLService(QObject):
 
         if status == QProcess.ExitStatus.NormalExit:
             self.downloadFinished.emit(task.pid, True, "")
+            task.success()
         else:
             self.downloadFinished.emit(task.pid, False, process.errorString())
+            task.error()
+
+        sqlRequest("taskService", "add", task=task)
 
     def generateCommand(self, options):
         # options.extend([
