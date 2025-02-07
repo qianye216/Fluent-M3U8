@@ -2,7 +2,7 @@
 import os
 from typing import List
 from PySide6.QtCore import Qt, Signal, QSize, QPoint, QRect, QUrl
-from PySide6.QtWidgets import QWidget, QHBoxLayout
+from PySide6.QtWidgets import QWidget, QHBoxLayout, QFileDialog
 
 from qfluentwidgets import (IconWidget, BodyLabel, FluentIcon, InfoBarIcon, ComboBox,
                             PrimaryPushButton, LineEdit, GroupHeaderCardWidget, PushButton,
@@ -165,10 +165,18 @@ class BasicConfigCard(GroupHeaderCardWidget):
 
             self.streamInfoComboBox.addItem("; ".join(texts), userData=info)
 
+    def _chooseSaveFolder(self):
+        folder = QFileDialog.getExistingDirectory(
+            self, self.tr("Choose folder"), self.saveFolderGroup.content())
+
+        if folder:
+            self.saveFolderGroup.setContent(folder)
+
     def _connectSignalToSlot(self):
         self.urlLineEdit.textChanged.connect(self._onUrlChanged)
         self.urlLineEdit.textChanged.connect(self._onTextChanged)
         self.fileNameLineEdit.textChanged.connect(self._onTextChanged)
+        self.saveFolderButton.clicked.connect(self._chooseSaveFolder)
 
     def parseOptions(self):
         """ Returns the m3u8dl options """

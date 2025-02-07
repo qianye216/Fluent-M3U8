@@ -4,117 +4,117 @@
 <context>
     <name>AdvanceConfigCard</name>
     <message>
-        <location filename="../../components/config_card.py" line="206"/>
+        <location filename="../../components/config_card.py" line="214"/>
         <source>Advance Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="243"/>
+        <location filename="../../components/config_card.py" line="251"/>
         <source>Header</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="244"/>
+        <location filename="../../components/config_card.py" line="252"/>
         <source>Set custom headers for HTTP requests</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="250"/>
+        <location filename="../../components/config_card.py" line="258"/>
         <source>Max Speed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="251"/>
+        <location filename="../../components/config_card.py" line="259"/>
         <source>Set maximum download speed, -1 indicates no speed limit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="258"/>
+        <location filename="../../components/config_card.py" line="266"/>
         <source>Request Timeout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="259"/>
+        <location filename="../../components/config_card.py" line="267"/>
         <source>Set timeout for HTTP requests (in seconds)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="264"/>
+        <location filename="../../components/config_card.py" line="272"/>
         <source>Retry Count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="266"/>
+        <location filename="../../components/config_card.py" line="274"/>
         <source>Set the retry count for each shard download exception</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="272"/>
+        <location filename="../../components/config_card.py" line="280"/>
         <source>Subtitle Format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="273"/>
+        <location filename="../../components/config_card.py" line="281"/>
         <source>Set the output type of subtitle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="279"/>
+        <location filename="../../components/config_card.py" line="287"/>
         <source>Auto Select</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="280"/>
+        <location filename="../../components/config_card.py" line="288"/>
         <source>Automatically select the best track of all types</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="285"/>
+        <location filename="../../components/config_card.py" line="293"/>
         <source>Binary Merge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="286"/>
+        <location filename="../../components/config_card.py" line="294"/>
         <source>Merge ts files directly through binary copy connections</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="291"/>
+        <location filename="../../components/config_card.py" line="299"/>
         <source>Delete After Done</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="292"/>
+        <location filename="../../components/config_card.py" line="300"/>
         <source>Delete temporary files after downloading is complete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="298"/>
+        <location filename="../../components/config_card.py" line="306"/>
         <source>Append URL Params</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="299"/>
+        <location filename="../../components/config_card.py" line="307"/>
         <source>Adding the Params of the input URL to the shard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="304"/>
+        <location filename="../../components/config_card.py" line="312"/>
         <source>Date Info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="305"/>
+        <location filename="../../components/config_card.py" line="313"/>
         <source>Do not write date information when mixing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="310"/>
+        <location filename="../../components/config_card.py" line="318"/>
         <source>Concurrent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="311"/>
+        <location filename="../../components/config_card.py" line="319"/>
         <source>Concurrent download of selected audio, video, and subtitles</source>
         <translation type="unfinished"></translation>
     </message>
@@ -195,6 +195,11 @@
     <message>
         <location filename="../../components/config_card.py" line="164"/>
         <source>Fps: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="170"/>
+        <source>Choose folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -367,47 +372,47 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="151"/>
+        <location filename="../../view/main_window.py" line="150"/>
         <source>Updates available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="152"/>
+        <location filename="../../view/main_window.py" line="151"/>
         <source>A new version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="152"/>
+        <location filename="../../view/main_window.py" line="151"/>
         <source>is available. Do you want to download this version?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="158"/>
+        <location filename="../../view/main_window.py" line="157"/>
         <source>No updates available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="160"/>
+        <location filename="../../view/main_window.py" line="159"/>
         <source>Fluent M3U8 has been updated to the latest version, feel free to use it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="166"/>
+        <location filename="../../view/main_window.py" line="165"/>
         <source>Task finished</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="167"/>
+        <location filename="../../view/main_window.py" line="166"/>
         <source>download successfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="172"/>
+        <location filename="../../view/main_window.py" line="171"/>
         <source>Task failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="173"/>
+        <location filename="../../view/main_window.py" line="172"/>
         <source>download failed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -415,27 +420,27 @@
 <context>
     <name>ProxyConfigCard</name>
     <message>
-        <location filename="../../components/config_card.py" line="343"/>
+        <location filename="../../components/config_card.py" line="351"/>
         <source>Proxy Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="362"/>
+        <location filename="../../components/config_card.py" line="370"/>
         <source>System Proxy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="363"/>
+        <location filename="../../components/config_card.py" line="371"/>
         <source>Use system default proxy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="369"/>
+        <location filename="../../components/config_card.py" line="377"/>
         <source>Custom Proxy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="370"/>
+        <location filename="../../components/config_card.py" line="378"/>
         <source>Set the http request proxy to be used</source>
         <translation type="unfinished"></translation>
     </message>

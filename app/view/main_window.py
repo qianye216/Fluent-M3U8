@@ -145,7 +145,6 @@ class MainWindow(MSFluentWindow):
             lambda success: self.onVersionInfoFetched(success, ignore))
 
     def onVersionInfoFetched(self, success, ignore=False):
-        print(success, ignore)
         if success:
             self.showMessageBox(
                 self.tr('Updates available'),
