@@ -4,117 +4,117 @@
 <context>
     <name>AdvanceConfigCard</name>
     <message>
-        <location filename="../../components/config_card.py" line="205"/>
+        <location filename="../../components/config_card.py" line="206"/>
         <source>Advance Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="242"/>
+        <location filename="../../components/config_card.py" line="243"/>
         <source>Header</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="243"/>
+        <location filename="../../components/config_card.py" line="244"/>
         <source>Set custom headers for HTTP requests</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="249"/>
+        <location filename="../../components/config_card.py" line="250"/>
         <source>Max Speed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="250"/>
+        <location filename="../../components/config_card.py" line="251"/>
         <source>Set maximum download speed, -1 indicates no speed limit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="257"/>
+        <location filename="../../components/config_card.py" line="258"/>
         <source>Request Timeout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="258"/>
+        <location filename="../../components/config_card.py" line="259"/>
         <source>Set timeout for HTTP requests (in seconds)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="263"/>
+        <location filename="../../components/config_card.py" line="264"/>
         <source>Retry Count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="265"/>
+        <location filename="../../components/config_card.py" line="266"/>
         <source>Set the retry count for each shard download exception</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="271"/>
+        <location filename="../../components/config_card.py" line="272"/>
         <source>Subtitle Format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="272"/>
+        <location filename="../../components/config_card.py" line="273"/>
         <source>Set the output type of subtitle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="278"/>
+        <location filename="../../components/config_card.py" line="279"/>
         <source>Auto Select</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="279"/>
+        <location filename="../../components/config_card.py" line="280"/>
         <source>Automatically select the best track of all types</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="284"/>
+        <location filename="../../components/config_card.py" line="285"/>
         <source>Binary Merge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="285"/>
+        <location filename="../../components/config_card.py" line="286"/>
         <source>Merge ts files directly through binary copy connections</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="290"/>
+        <location filename="../../components/config_card.py" line="291"/>
         <source>Delete After Done</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="291"/>
+        <location filename="../../components/config_card.py" line="292"/>
         <source>Delete temporary files after downloading is complete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="297"/>
+        <location filename="../../components/config_card.py" line="298"/>
         <source>Append URL Params</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="298"/>
+        <location filename="../../components/config_card.py" line="299"/>
         <source>Adding the Params of the input URL to the shard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="303"/>
+        <location filename="../../components/config_card.py" line="304"/>
         <source>Date Info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="304"/>
+        <location filename="../../components/config_card.py" line="305"/>
         <source>Do not write date information when mixing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="309"/>
+        <location filename="../../components/config_card.py" line="310"/>
         <source>Concurrent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="310"/>
+        <location filename="../../components/config_card.py" line="311"/>
         <source>Concurrent download of selected audio, video, and subtitles</source>
         <translation type="unfinished"></translation>
     </message>
@@ -239,12 +239,12 @@
 <context>
     <name>FailedTaskCard</name>
     <message>
-        <location filename="../../components/task_card.py" line="240"/>
+        <location filename="../../components/task_card.py" line="244"/>
         <source>Restart</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="245"/>
+        <location filename="../../components/task_card.py" line="249"/>
         <source>View log</source>
         <translation type="unfinished"></translation>
     </message>
@@ -390,27 +390,27 @@
 <context>
     <name>ProxyConfigCard</name>
     <message>
-        <location filename="../../components/config_card.py" line="342"/>
+        <location filename="../../components/config_card.py" line="343"/>
         <source>Proxy Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="361"/>
+        <location filename="../../components/config_card.py" line="362"/>
         <source>System Proxy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="362"/>
+        <location filename="../../components/config_card.py" line="363"/>
         <source>Use system default proxy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="368"/>
+        <location filename="../../components/config_card.py" line="369"/>
         <source>Custom Proxy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="369"/>
+        <location filename="../../components/config_card.py" line="370"/>
         <source>Set the http request proxy to be used</source>
         <translation type="unfinished"></translation>
     </message>
@@ -592,8 +592,18 @@
 <context>
     <name>SuccessTaskCard</name>
     <message>
-        <location filename="../../components/task_card.py" line="145"/>
+        <location filename="../../components/task_card.py" line="146"/>
         <source>Restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/task_card.py" line="191"/>
+        <source>Open failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/task_card.py" line="192"/>
+        <source>Video file have been deleted</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -618,47 +628,47 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../view/task_interface.py" line="30"/>
+        <location filename="../../view/task_interface.py" line="31"/>
         <source>Currently no download tasks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../view/task_interface.py" line="36"/>
+        <location filename="../../view/task_interface.py" line="37"/>
         <source>Downloading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../view/task_interface.py" line="37"/>
+        <location filename="../../view/task_interface.py" line="38"/>
         <source>Finished</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../view/task_interface.py" line="38"/>
+        <location filename="../../view/task_interface.py" line="39"/>
         <source>Failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../view/task_interface.py" line="104"/>
+        <location filename="../../view/task_interface.py" line="107"/>
         <source>Task created</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../view/task_interface.py" line="105"/>
+        <location filename="../../view/task_interface.py" line="108"/>
         <source>Please check the download task</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../view/task_interface.py" line="110"/>
+        <location filename="../../view/task_interface.py" line="113"/>
         <source>Check</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../view/task_interface.py" line="116"/>
+        <location filename="../../view/task_interface.py" line="119"/>
         <source>Task failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../view/task_interface.py" line="117"/>
+        <location filename="../../view/task_interface.py" line="120"/>
         <source>Please check the error log</source>
         <translation type="unfinished"></translation>
     </message>

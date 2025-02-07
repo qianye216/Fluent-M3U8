@@ -185,7 +185,14 @@ class SuccessTaskCard(TaskCardBase):
         self.imageLabel.setScaledSize(QSize(64, 64))
 
     def _onOpenButtonClicked(self):
-        showInFolder(self.task.videoPath)
+        exist = showInFolder(self.task.videoPath)
+        if not exist:
+            InfoBar.error(
+                title=self.tr("Open failed"),
+                content=self.tr("Video file have been deleted"),
+                duration=2000,
+                parent=self.window().taskInterface
+            )
 
     def _onDeleteButtonClicked(self):
         w = DeleteTaskDialog(self.window(), deleteOnClose=False)

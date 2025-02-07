@@ -32,23 +32,26 @@ def removeFile(filePath: str | Path):
 
 def openUrl(url: str):
     if not url.startswith("http"):
+        if not os.path.exists(url):
+            return False
+
         QDesktopServices.openUrl(QUrl.fromLocalFile(url))
     else:
         QDesktopServices.openUrl(QUrl(url))
 
+    return True
 
 
 def showInFolder(path: Union[str, Path]):
     """ show file in file explorer """
+    if not os.path.exists(path):
+        return False
+
     if isinstance(path, Path):
         path = str(path.absolute())
 
-    if not path or path.lower() == 'http':
-        return
-
-    if path.startswith('http'):
-        QDesktopServices.openUrl(QUrl(path))
-        return
+    if not path or path.lower().startswith('http'):
+        return False
 
     info = QFileInfo(path)   # type:QFileInfo
     if sys.platform == "win32":
@@ -67,6 +70,8 @@ def showInFolder(path: Union[str, Path]):
     else:
         url = QUrl.fromLocalFile(path if info.isDir() else info.path())
         QDesktopServices.openUrl(url)
+
+    return True
 
 
 def runProcess(executable: Union[str, Path], args=None, timeout=5000, cwd=None) -> str:

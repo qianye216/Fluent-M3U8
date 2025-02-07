@@ -106,7 +106,7 @@ class TaskInterface(Interface):
             w = InfoBar.success(
                 self.tr("Task created"),
                 self.tr("Please check the download task"),
-                duration=5000,
+                duration=3000,
                 position=InfoBarPosition.BOTTOM,
                 parent=self
             )
