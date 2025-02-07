@@ -11,11 +11,11 @@
 <p align="center">
 
   <a style="text-decoration:none">
-    <img src="https://img.shields.io/badge/Python-3.8.6-blue.svg?color=00B16A" alt="Python 3.11.11"/>
+    <img src="https://img.shields.io/badge/Python-3.11.11-blue.svg?color=00B16A" alt="Python 3.11.11"/>
   </a>
 
   <a style="text-decoration:none">
-    <img src="https://img.shields.io/badge/PyQt-5.15.2-blue?color=00B16A" alt="PySide6 6.4.2"/>
+    <img src="https://img.shields.io/badge/PySide-6.4.2-blue?color=00B16A" alt="PySide 6.4.2"/>
   </a>
 
   <a style="text-decoration:none">
