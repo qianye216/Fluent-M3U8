@@ -19,7 +19,7 @@ from ..service.m3u8dl_service import DownloadProgressInfo, m3u8Service
 class TaskCardBase(SimpleCardWidget):
     """ Task card base class """
 
-    deleted = Signal(int)
+    deleted = Signal(Task)
 
 
 class DownloadingTaskCard(TaskCardBase):
@@ -99,7 +99,7 @@ class DownloadingTaskCard(TaskCardBase):
         w = DeleteTaskDialog(self.window(), deleteOnClose=False)
         if w.exec():
             signalBus.downloadTerminated.emit(self.task.pid, w.deleteFileCheckBox.isChecked())
-            self.deleted.emit(self.task.pid)
+            self.deleted.emit(self.task)
 
         w.deleteLater()
 
@@ -189,7 +189,7 @@ class SuccessTaskCard(TaskCardBase):
     def _onDeleteButtonClicked(self):
         w = DeleteTaskDialog(self.window(), deleteOnClose=False)
         if w.exec():
-            self.deleted.emit(self.task.pid)
+            self.deleted.emit(self.task)
 
             sqlRequest("taskService", "removeById", id=self.task.id)
 

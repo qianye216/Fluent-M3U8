@@ -8,6 +8,7 @@ from qfluentwidgets import Pivot, FluentIcon, SegmentedWidget
 
 from ..common.icon import Logo
 from ..common.database import sqlRequest
+from ..common.database.entity import TaskStatus
 from ..service.m3u8dl_service import m3u8Service, DownloadProgressInfo
 from ..components.interface import Interface
 from ..components.task_card import DownloadingTaskCard, Task, SuccessTaskCard, TaskCardBase
@@ -54,7 +55,7 @@ class TaskInterface(Interface):
             self.emptyStatusWidget.hide()
 
     def _onDownloadFinished(self, task: Task, isSuccess, errorMsg):
-        self.downloadingTaskView.removeTask(task.pid)
+        self.downloadingTaskView.removeTask(task)
 
         if isSuccess:
             self.successTaskView.addTask(task)
@@ -63,13 +64,13 @@ class TaskInterface(Interface):
 
         self._updateEmptyStatus()
 
-    def _onDownloadProgressChanged(self, pid, info: DownloadProgressInfo):
-        card = self.downloadingTaskView.findCard(pid)
+    def _onDownloadProgressChanged(self, task: Task, info: DownloadProgressInfo):
+        card = self.downloadingTaskView.findCard(task)
         if card:
             card.setInfo(info)
 
-    def _onCoverSaved(self, pid):
-        card = self.successTaskView.findCard(pid)
+    def _onCoverSaved(self, task: Task):
+        card = self.successTaskView.findCard(task)
         if card:
             card.updateCover()
 
@@ -110,6 +111,8 @@ class TaskCardView(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
         self.cards = []     # type: List[TaskCardBase]
+
+        # id ---> task card
         self.cardMap = {}  # type: Dict[str, TaskCardBase]
 
         self.vBoxLayout = QVBoxLayout(self)
@@ -126,13 +129,13 @@ class TaskCardView(QWidget):
 
         self.vBoxLayout.addWidget(card, 0, Qt.AlignmentFlag.AlignTop)
         self.cards.append(card)
-        self.cardMap[task.pid] = card
+        self.cardMap[task.id] = card
 
-    def removeTask(self, pid: int):
-        if pid not in self.cardMap:
+    def removeTask(self, task: Task):
+        if task.id not in self.cardMap:
             return
 
-        card = self.cardMap.pop(pid)
+        card = self.cardMap.pop(task.id)
         self.cards.remove(card)
         self.vBoxLayout.removeWidget(card)
         card.hide()
@@ -140,8 +143,8 @@ class TaskCardView(QWidget):
 
         self.cardCountChanged.emit(self.count())
 
-    def findCard(self, pid):
-        return self.cardMap.get(pid)
+    def findCard(self, task: Task):
+        return self.cardMap.get(task.id)
 
     def count(self):
         return len(self.cards)
@@ -166,7 +169,7 @@ class SuccessTaskView(TaskCardView):
         self.setObjectName("finished")
 
         # load cards
-        sqlRequest("taskService", "listAll", self._loadTasks)
+        sqlRequest("taskService", "listBy", self._loadTasks, status=TaskStatus.SUCCESS)
 
     def _loadTasks(self, tasks: List[Task]):
         if not tasks:

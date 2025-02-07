@@ -1,5 +1,5 @@
 from .entity import Entity
-from .task import Task
+from .task import Task, TaskStatus
 
 from dataclasses import dataclass
 

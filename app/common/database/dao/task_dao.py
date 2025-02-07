@@ -11,7 +11,7 @@ class TaskDao(DaoBase):
     def createTable(self):
         success = self.query.exec(f"""
             CREATE TABLE IF NOT EXISTS {self.table}(
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id CHAR(32) PRIMARY KEY,
                 fileName TEXT,
                 saveFolder TEXT,
                 size TEXT,

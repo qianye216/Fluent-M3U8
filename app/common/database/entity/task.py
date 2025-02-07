@@ -1,4 +1,5 @@
 # coding:utf-8
+from enum import Enum
 from pathlib import Path
 from typing import List
 from .entity import Entity
@@ -7,12 +8,20 @@ from dataclasses import dataclass, field
 from PySide6.QtCore import QDateTime, QFileInfo
 
 from ...setting import COVER_FOLDER
+from ..utils.uuid_utils import UUIDUtils
+
+
+class TaskStatus:
+
+    RUNNING = 0
+    SUCCESS = 1
+    FAILED = 2
 
 
 @dataclass
 class Task(Entity):
 
-    id: int = None
+    id: str = field(default_factory=UUIDUtils.getUUID)
     pid: int = None                 # 进程 id
     fileName: str = None            # 文件名
     saveFolder: str = None          # 保存文件夹
@@ -22,10 +31,10 @@ class Task(Entity):
     createTime: QDateTime = field(default_factory=QDateTime.currentDateTime)    # 创建时间
 
     def error(self):
-        self.status = 2
+        self.status = TaskStatus.FAILED
 
     def success(self):
-        self.status = 1
+        self.status = TaskStatus.SUCCESS
 
     @property
     def videoPath(self):

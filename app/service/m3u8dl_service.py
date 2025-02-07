@@ -94,10 +94,10 @@ class M3U8DLCommandLineParser(QObject):
 class M3U8DLService(QObject):
 
     downloadCreated = Signal(Task)
-    downloadProcessChanged = Signal(int, DownloadProgressInfo)   # pid, info
+    downloadProcessChanged = Signal(Task, DownloadProgressInfo)
     downloadFinished = Signal(Task, bool, str)   # task, isSuccess, message
 
-    coverSaved = Signal(int)    # pid
+    coverSaved = Signal(Task)
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
@@ -155,7 +155,7 @@ class M3U8DLService(QObject):
             remainTime=match[10]
         )
         task.size = info.totalSize
-        self.downloadProcessChanged.emit(process.processId(), info)
+        self.downloadProcessChanged.emit(task, info)
 
     def _onDownloadFinished(self, process: QProcess, task: Task, code, status: QProcess.ExitStatus):
         if task.pid not in self.processMap:
@@ -166,7 +166,7 @@ class M3U8DLService(QObject):
         if status == QProcess.ExitStatus.NormalExit:
             # save cover
             TaskExecutor.runTask(ffmpegService.saveVideoCover, task.videoPath, task.coverPath).then(
-                lambda: self.coverSaved.emit(task.pid))
+                lambda: self.coverSaved.emit(task))
 
             self.downloadFinished.emit(task, True, "")
             task.success()
