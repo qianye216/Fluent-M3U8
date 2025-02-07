@@ -381,6 +381,6 @@ class ProxyConfigCard(M3U8GroupHeaderCardWidget):
         options = [M3U8DLCommand.USE_SYSTEM_PROXY.command(False)]
 
         if self.proxyLineEdit.text():
-            options.append(M3U8DLCommand.CUSTOM_PROXY.command(self.proxyLineEdit.text()))
+            options.append(M3U8DLCommand.CUSTOM_PROXY.command(self.proxyLineEdit.text().strip()))
 
         return options

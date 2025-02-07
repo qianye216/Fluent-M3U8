@@ -319,24 +319,59 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../view/main_window.py" line="45"/>
+        <location filename="../../view/main_window.py" line="53"/>
         <source>Home</source>
         <translation>主页</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="46"/>
+        <location filename="../../view/main_window.py" line="54"/>
         <source>Task</source>
         <translation>下载任务</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="49"/>
+        <location filename="../../view/main_window.py" line="57"/>
         <source>Help</source>
         <translation>帮助</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="51"/>
+        <location filename="../../view/main_window.py" line="59"/>
         <source>Settings</source>
         <translation>设置</translation>
+    </message>
+    <message>
+        <location filename="../../view/main_window.py" line="102"/>
+        <source>Unhandled exception occurred</source>
+        <translation>发生未处理异常</translation>
+    </message>
+    <message>
+        <location filename="../../view/main_window.py" line="103"/>
+        <source>The error message has been written to the paste board and log. Do you want to report?</source>
+        <translation>报错信息已写入系统粘贴板和日志文件，是否立即反馈？</translation>
+    </message>
+    <message>
+        <location filename="../../view/main_window.py" line="124"/>
+        <source>Close</source>
+        <translation>关闭</translation>
+    </message>
+    <message>
+        <location filename="../../view/main_window.py" line="134"/>
+        <source>Task finished</source>
+        <translation>任务完成</translation>
+    </message>
+    <message>
+        <location filename="../../view/main_window.py" line="135"/>
+        <source>download successfully</source>
+        <translation>已下载成功</translation>
+    </message>
+    <message>
+        <location filename="../../view/main_window.py" line="140"/>
+        <source>Task failed</source>
+        <translation>任务失败</translation>
+    </message>
+    <message>
+        <location filename="../../view/main_window.py" line="141"/>
+        <source>download failed</source>
+        <translation>下载发生错误</translation>
     </message>
 </context>
 <context>

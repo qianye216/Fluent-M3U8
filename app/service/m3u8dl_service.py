@@ -93,7 +93,7 @@ class M3U8DLService(QObject):
 
     downloadCreated = Signal(Task)
     downloadProcessChanged = Signal(int, DownloadProgressInfo)   # pid, info
-    downloadFinished = Signal(int, bool, str)   # pid, isSuccess, message
+    downloadFinished = Signal(Task, bool, str)   # task, isSuccess, message
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
@@ -156,10 +156,10 @@ class M3U8DLService(QObject):
         self.processMap.pop(task.pid)
 
         if status == QProcess.ExitStatus.NormalExit:
-            self.downloadFinished.emit(task.pid, True, "")
+            self.downloadFinished.emit(task, True, "")
             task.success()
         else:
-            self.downloadFinished.emit(task.pid, False, process.errorString())
+            self.downloadFinished.emit(task, False, process.errorString())
             task.error()
 
         sqlRequest("taskService", "add", task=task)

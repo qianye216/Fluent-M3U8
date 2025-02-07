@@ -12,6 +12,7 @@ from PySide6.QtWidgets import QApplication
 from qfluentwidgets import FluentTranslator
 
 from app.common.config import cfg
+from app.common.application import SingletonApplication
 from app.view.main_window import MainWindow
 
 
@@ -21,7 +22,7 @@ if cfg.get(cfg.dpiScale) != "Auto":
     os.environ["QT_SCALE_FACTOR"] = str(cfg.get(cfg.dpiScale))
 
 # create application
-app = QApplication(sys.argv)
+app = SingletonApplication(sys.argv, "Fluent-M3U8")
 app.setAttribute(Qt.AA_DontCreateNativeWidgetSiblings)
 
 # internationalization
@@ -35,6 +36,7 @@ app.installTranslator(galleryTranslator)
 
 # create main window
 w = MainWindow()
+app.aboutToQuit.connect(w.onExit)
 w.show()
 
 app.exec()

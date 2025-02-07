@@ -40,8 +40,8 @@ class TaskInterface(Interface):
         self.vBoxLayout.addWidget(self.pivot, 0, Qt.AlignmentFlag.AlignLeft)
         self.viewLayout.addWidget(self.stackedWidget)
 
-    def _onDownloadFinished(self, pid, isSuccess, errorMsg):
-        self.downloadingTaskView.removeTask(pid)
+    def _onDownloadFinished(self, task, isSuccess, errorMsg):
+        self.downloadingTaskView.removeTask(task.pid)
         if isSuccess:
             pass
 
@@ -53,6 +53,8 @@ class TaskInterface(Interface):
     def _connectSignalToSlot(self):
         self.pivot.currentItemChanged.connect(
             lambda k: self.stackedWidget.setCurrentWidget(self.findChild(QWidget, k)))
+        self.stackedWidget.currentChanged.connect(
+            lambda: self.pivot.setCurrentItem(self.stackedWidget.currentWidget().objectName()))
 
         m3u8Service.downloadCreated.connect(self.downloadingTaskView.addTask)
         m3u8Service.downloadProcessChanged.connect(self._onDownloadProgressChanged)
@@ -76,7 +78,7 @@ class DownloadingTaskView(QWidget):
     def addTask(self, task: Task):
         card = DownloadingTaskCard(task, self)
         card.deleted.connect(self.removeTask)
-        
+
         self.vBoxLayout.addWidget(card, 0, Qt.AlignmentFlag.AlignTop)
         self.cards.append(card)
         self.cardMap[task.pid] = card

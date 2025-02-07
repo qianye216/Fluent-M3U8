@@ -23,6 +23,9 @@ class SqlResponse:
 class SignalBus(QObject):
     """ Signal bus """
 
+    appMessageSig = Signal(str)
+    appErrorSig = Signal(str)
+
     checkUpdateSig = Signal()
     micaEnableChanged = Signal(bool)
 
