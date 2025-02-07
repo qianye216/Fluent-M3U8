@@ -221,17 +221,17 @@
 <context>
     <name>DeleteTaskDialog</name>
     <message>
-        <location filename="../../components/task_card.py" line="200"/>
+        <location filename="../../components/task_card.py" line="235"/>
         <source>Delete task</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="202"/>
+        <location filename="../../components/task_card.py" line="237"/>
         <source>Are you sure to delete this task?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="203"/>
+        <location filename="../../components/task_card.py" line="238"/>
         <source>Remove file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -577,6 +577,39 @@
     </message>
 </context>
 <context>
+    <name>SuccessTaskCard</name>
+    <message>
+        <location filename="../../components/task_card.py" line="145"/>
+        <source>Restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/task_card.py" line="206"/>
+        <source>Task created</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/task_card.py" line="207"/>
+        <source>Please check the download task</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/task_card.py" line="212"/>
+        <source>Check</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/task_card.py" line="218"/>
+        <source>Task failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../components/task_card.py" line="219"/>
+        <source>Please check the error log</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SystemTrayIcon</name>
     <message>
         <location filename="../../components/system_tray_icon.py" line="22"/>
@@ -592,27 +625,27 @@
 <context>
     <name>TaskInterface</name>
     <message>
-        <location filename="../../view/task_interface.py" line="21"/>
+        <location filename="../../view/task_interface.py" line="22"/>
         <source>Task</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../view/task_interface.py" line="27"/>
+        <location filename="../../view/task_interface.py" line="28"/>
         <source>Currently no download tasks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../view/task_interface.py" line="33"/>
+        <location filename="../../view/task_interface.py" line="34"/>
         <source>Downloading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../view/task_interface.py" line="34"/>
+        <location filename="../../view/task_interface.py" line="35"/>
         <source>Finished</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../view/task_interface.py" line="35"/>
+        <location filename="../../view/task_interface.py" line="36"/>
         <source>Failed</source>
         <translation type="unfinished"></translation>
     </message>

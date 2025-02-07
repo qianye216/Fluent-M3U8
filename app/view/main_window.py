@@ -41,7 +41,7 @@ class MainWindow(MSFluentWindow):
 
     def connectSignalToSlot(self):
         signalBus.micaEnableChanged.connect(self.setMicaEffectEnabled)
-        signalBus.switchToTaskInterfaceSig.connect(lambda: self.switchTo(self.taskInterface))
+        signalBus.switchToTaskInterfaceSig.connect(self.onSwitchToTaskInterface)
         signalBus.appErrorSig.connect(self.onAppError)
         signalBus.appMessageSig.connect(self.onAppMessage)
 
@@ -145,6 +145,10 @@ class MainWindow(MSFluentWindow):
     def onSystemTrayMessageClicked(self):
         self.switchTo(self.taskInterface)
         self.taskInterface.stackedWidget.setCurrentIndex(1)
+
+    def onSwitchToTaskInterface(self):
+        self.taskInterface.stackedWidget.setCurrentIndex(0)
+        self.switchTo(self.taskInterface)
 
     def resizeEvent(self, e):
         super().resizeEvent(e)

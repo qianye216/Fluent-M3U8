@@ -120,7 +120,7 @@ class TaskCardView(QWidget):
     def createCard(self, task: Task) -> TaskCardBase:
         raise NotImplementedError
 
-    def addTask(self, task: Task):
+    def addTask(self, task: Task) -> TaskCardBase:
         card = self.createCard(task)
         card.deleted.connect(self.removeTask)
 

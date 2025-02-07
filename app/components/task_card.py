@@ -6,7 +6,8 @@ from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QFileIconProvid
 
 from qfluentwidgets import (SimpleCardWidget, IconWidget, ToolButton, FluentIcon,
                             BodyLabel, CaptionLabel, ProgressBar, ImageLabel, setFont,
-                            MessageBoxBase, SubtitleLabel, CheckBox)
+                            MessageBoxBase, SubtitleLabel, CheckBox, InfoBar, InfoBarPosition,
+                            PushButton, ToolTipFilter)
 
 from ..common.utils import showInFolder, removeFile
 from ..common.database.entity import Task
@@ -130,6 +131,7 @@ class SuccessTaskCard(TaskCardBase):
         self.sizeIcon = IconWidget(FluentIcon.BOOK_SHELF)
         self.sizeLabel = CaptionLabel(task.size)
 
+        self.redownloadButton = ToolButton(FluentIcon.UPDATE)
         self.openFolderButton = ToolButton(FluentIcon.FOLDER)
         self.deleteButton = ToolButton(FluentIcon.DELETE)
 
@@ -139,6 +141,10 @@ class SuccessTaskCard(TaskCardBase):
         self.imageLabel.setBorderRadius(4, 4, 4, 4)
         self.createTimeIcon.setFixedSize(16, 16)
         self.sizeIcon.setFixedSize(16, 16)
+
+        self.redownloadButton.setToolTip(self.tr("Restart"))
+        self.redownloadButton.setToolTipDuration(3000)
+        self.redownloadButton.installEventFilter(ToolTipFilter(self.redownloadButton))
 
         setFont(self.fileNameLabel, 18, QFont.Weight.Bold)
         self.fileNameLabel.setWordWrap(True)
@@ -155,6 +161,7 @@ class SuccessTaskCard(TaskCardBase):
         self.hBoxLayout.addSpacing(5)
         self.hBoxLayout.addLayout(self.vBoxLayout)
         self.hBoxLayout.addSpacing(20)
+        self.hBoxLayout.addWidget(self.redownloadButton)
         self.hBoxLayout.addWidget(self.openFolderButton)
         self.hBoxLayout.addWidget(self.deleteButton)
 
@@ -191,9 +198,34 @@ class SuccessTaskCard(TaskCardBase):
 
         w.deleteLater()
 
+    def _onRedownloadButtonClicked(self):
+        options = self.task.command.split(" ")[1:]
+        success = m3u8Service.download(options)
+        if success:
+            w = InfoBar.success(
+                self.tr("Task created"),
+                self.tr("Please check the download task"),
+                duration=5000,
+                position=InfoBarPosition.BOTTOM,
+                parent=self.window().taskInterface
+            )
+            button = PushButton(self.tr('Check'))
+            button.clicked.connect(signalBus.switchToTaskInterfaceSig)
+            w.widgetLayout.insertSpacing(0, 10)
+            w.addWidget(button)
+        else:
+            InfoBar.error(
+                self.tr("Task failed"),
+                self.tr("Please check the error log"),
+                duration=-1,
+                position=InfoBarPosition.BOTTOM,
+                parent=self.window().taskInterface
+            )
+
     def _connectSignalToSlot(self):
         self.openFolderButton.clicked.connect(self._onOpenButtonClicked)
         self.deleteButton.clicked.connect(self._onDeleteButtonClicked)
+        self.redownloadButton.clicked.connect(self._onRedownloadButtonClicked)
 
 
 class DeleteTaskDialog(MessageBoxBase):

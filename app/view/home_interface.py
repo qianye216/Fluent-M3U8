@@ -69,7 +69,7 @@ class HomeInterface(ScrollArea):
                 self.tr("Please check the download task"),
                 duration=5000,
                 position=InfoBarPosition.BOTTOM,
-                parent=self.window()
+                parent=self
             )
             button = PushButton(self.tr('Check'))
             button.clicked.connect(signalBus.switchToTaskInterfaceSig)
@@ -81,7 +81,7 @@ class HomeInterface(ScrollArea):
                 self.tr("Please check the error log"),
                 duration=-1,
                 position=InfoBarPosition.BOTTOM,
-                parent=self.window()
+                parent=self
             )
 
     def _connectSignalToSlot(self):
