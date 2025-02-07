@@ -115,6 +115,12 @@ class M3U8DLService(QObject):
         options = self.generateCommand(options)
         task = self.cmdParser.parse([self.downloaderPath, *options])
 
+        # auto rename
+        if task.videoPath.exists():
+            task.fileName += task.createTime.toString("_yyyy-MM-dd_hh-mm-ss")
+            options = [M3U8DLCommand.SAVE_NAME.command(task.fileName) if i.startswith(M3U8DLCommand.SAVE_NAME.value) else i for i in options]
+            task.command = " ".join([self.downloaderPath, *options])
+
         self.logger.info(f"添加下载任务：{self.downloaderPath} {' '.join(options)}")
         taskLogger = Logger("Tasks/" + task.createTime.toString(Qt.DateFormat.ISODateWithMs))
 
