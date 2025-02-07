@@ -14,8 +14,10 @@ from ..common.database import DBInitializer, DatabaseThread, sqlSignalBus, SqlRe
 from ..common.config import cfg
 from ..common.icon import Icon
 from ..common.utils import openUrl
+from ..common.concurrent import TaskExecutor
+from ..service.version_service import VersionService
 from ..common.signal_bus import signalBus
-from ..common.setting import DOC_URL, FEEDBACK_URL
+from ..common.setting import DOC_URL, FEEDBACK_URL, RELEASE_URL
 from ..service.m3u8dl_service import m3u8Service, Task
 from ..components.system_tray_icon import SystemTrayIcon
 from ..common import resource
@@ -29,6 +31,8 @@ class MainWindow(MSFluentWindow):
         self.initDatabase()
         self.initWindow()
 
+        self.versionManager = VersionService()
+
         self.homeInterface = HomeInterface(self)
         self.taskInterface = TaskInterface(self)
         self.settingInterface = SettingInterface(self)
@@ -39,11 +43,15 @@ class MainWindow(MSFluentWindow):
         # add items to navigation interface
         self.initNavigation()
 
+        # check for updates
+        self.onInitFinished()
+
     def connectSignalToSlot(self):
         signalBus.micaEnableChanged.connect(self.setMicaEffectEnabled)
         signalBus.switchToTaskInterfaceSig.connect(self.onSwitchToTaskInterface)
         signalBus.appErrorSig.connect(self.onAppError)
         signalBus.appMessageSig.connect(self.onAppMessage)
+        signalBus.checkUpdateSig.connect(self.checkUpdate)
 
         m3u8Service.downloadFinished.connect(self.onDownloadFinished)
 
@@ -57,9 +65,6 @@ class MainWindow(MSFluentWindow):
             'help', FIF.HELP, self.tr("Help"), lambda: openUrl(DOC_URL), False, position=NavigationItemPosition.BOTTOM)
         self.addSubInterface(
             self.settingInterface, Icon.SETTINGS, self.tr('Settings'), Icon.SETTINGS_FILLED, NavigationItemPosition.BOTTOM)
-
-        self.splashScreen.finish()
-        self.systemTrayIcon.show()
 
     def initWindow(self):
         self.resize(960, 773)
@@ -128,6 +133,33 @@ class MainWindow(MSFluentWindow):
         if w.exec() and yesSlot is not None:
             yesSlot()
 
+    def checkUpdate(self, ignore=False):
+        """ check software update
+
+        Parameters
+        ----------
+        ignore: bool
+            ignore message box when no updates are available
+        """
+        TaskExecutor.runTask(self.versionManager.hasNewVersion).then(
+            lambda success: self.onVersionInfoFetched(success, ignore))
+
+    def onVersionInfoFetched(self, success, ignore=False):
+        print(success, ignore)
+        if success:
+            self.showMessageBox(
+                self.tr('Updates available'),
+                self.tr('A new version')+f" {self.versionManager.lastestVersion[1:]} " +self.tr('is available. Do you want to download this version?'),
+                True,
+                lambda: openUrl(RELEASE_URL)
+            )
+        elif not ignore:
+            self.showMessageBox(
+                self.tr('No updates available'),
+                self.tr(
+                    'Fluent M3U8 has been updated to the latest version, feel free to use it.'),
+            )
+
     def onDownloadFinished(self, task: Task, success: bool, errorMsg: str):
         if success:
             self.systemTrayIcon.showMessage(
@@ -158,6 +190,13 @@ class MainWindow(MSFluentWindow):
     def closeEvent(self, event):
         event.ignore()
         self.hide()
+
+    def onInitFinished(self):
+        self.splashScreen.finish()
+        self.systemTrayIcon.show()
+
+        if cfg.get(cfg.checkUpdateAtStartUp):
+            self.checkUpdate(True)
 
     def onExit(self):
         """ exit main window """

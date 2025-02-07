@@ -14,6 +14,7 @@ APP_NAME = "Fluent-M3U8"
 HELP_URL = "https://github.com/zhiyiYo/Fluent-M3U8"
 REPO_URL = "https://github.com/zhiyiYo/Fluent-M3U8"
 FEEDBACK_URL = "https://github.com/zhiyiYo/Fluent-M3U8/issues"
+RELEASE_URL = "https://github.com/zhiyiYo/Fluent-M3U8/releases"
 DOC_URL = "https://github.com/zhiyiYo/Fluent-M3U8/"
 
 

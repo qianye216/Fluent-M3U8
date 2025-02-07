@@ -332,57 +332,82 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../view/main_window.py" line="53"/>
+        <location filename="../../view/main_window.py" line="61"/>
         <source>Home</source>
         <translation>主页</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="54"/>
+        <location filename="../../view/main_window.py" line="62"/>
         <source>Task</source>
         <translation>下载任务</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="57"/>
+        <location filename="../../view/main_window.py" line="65"/>
         <source>Help</source>
         <translation>帮助</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="59"/>
+        <location filename="../../view/main_window.py" line="67"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="102"/>
+        <location filename="../../view/main_window.py" line="107"/>
         <source>Unhandled exception occurred</source>
         <translation>发生未处理异常</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="103"/>
+        <location filename="../../view/main_window.py" line="108"/>
         <source>The error message has been written to the paste board and log. Do you want to report?</source>
         <translation>报错信息已写入系统粘贴板和日志文件，是否立即反馈？</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="124"/>
+        <location filename="../../view/main_window.py" line="129"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="134"/>
+        <location filename="../../view/main_window.py" line="151"/>
+        <source>Updates available</source>
+        <translation>发现可用更新</translation>
+    </message>
+    <message>
+        <location filename="../../view/main_window.py" line="152"/>
+        <source>A new version</source>
+        <translation>新版本</translation>
+    </message>
+    <message>
+        <location filename="../../view/main_window.py" line="152"/>
+        <source>is available. Do you want to download this version?</source>
+        <translation>已发布，是否立即下载此版本？</translation>
+    </message>
+    <message>
+        <location filename="../../view/main_window.py" line="158"/>
+        <source>No updates available</source>
+        <translation>无可用更新</translation>
+    </message>
+    <message>
+        <location filename="../../view/main_window.py" line="160"/>
+        <source>Fluent M3U8 has been updated to the latest version, feel free to use it.</source>
+        <translation>Fluent M3U8 已更新到最新版，请放心食用~</translation>
+    </message>
+    <message>
+        <location filename="../../view/main_window.py" line="166"/>
         <source>Task finished</source>
         <translation>任务完成</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="135"/>
+        <location filename="../../view/main_window.py" line="167"/>
         <source>download successfully</source>
         <translation>已下载成功</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="140"/>
+        <location filename="../../view/main_window.py" line="172"/>
         <source>Task failed</source>
         <translation>任务失败</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="141"/>
+        <location filename="../../view/main_window.py" line="173"/>
         <source>download failed</source>
         <translation>下载发生错误</translation>
     </message>
