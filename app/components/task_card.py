@@ -1,7 +1,6 @@
 # coding:utf-8
-from dataclasses import dataclass
 from pathlib import Path
-from PySide6.QtCore import Qt, Signal, Property, QFileInfo
+from PySide6.QtCore import Qt, Signal, Property, QFileInfo, QSize
 from PySide6.QtGui import QPixmap, QPainter, QFont
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QFileIconProvider
 
@@ -9,16 +8,21 @@ from qfluentwidgets import (SimpleCardWidget, IconWidget, ToolButton, FluentIcon
                             BodyLabel, CaptionLabel, ProgressBar, ImageLabel, setFont,
                             MessageBoxBase, SubtitleLabel, CheckBox)
 
-from ..common.utils import showInFolder
+from ..common.utils import showInFolder, removeFile
 from ..common.database.entity import Task
 from ..common.signal_bus import signalBus
+from ..common.database import sqlRequest
 from ..service.m3u8dl_service import DownloadProgressInfo, m3u8Service
 
 
-class DownloadingTaskCard(SimpleCardWidget):
-    """ Task card """
+class TaskCardBase(SimpleCardWidget):
+    """ Task card base class """
 
     deleted = Signal(int)
+
+
+class DownloadingTaskCard(TaskCardBase):
+    """ Task card """
 
     def __init__(self, task: Task, parent=None):
         super().__init__(parent=parent)
@@ -35,7 +39,7 @@ class DownloadingTaskCard(SimpleCardWidget):
         self.speedLabel = CaptionLabel()
         self.remainTimeIcon = IconWidget(FluentIcon.STOP_WATCH)
         self.remainTimeLabel = CaptionLabel()
-        self.sizeIcon = IconWidget(FluentIcon.PIE_SINGLE)
+        self.sizeIcon = IconWidget(FluentIcon.BOOK_SHELF)
         self.sizeLabel = CaptionLabel()
 
         self.openFolderButton = ToolButton(FluentIcon.FOLDER)
@@ -45,7 +49,7 @@ class DownloadingTaskCard(SimpleCardWidget):
 
     def _initWidget(self):
         self.imageLabel.setImage(QFileIconProvider().icon(
-            QFileInfo(self.task.fileName)).pixmap(32, 32))
+            QFileInfo(self.task.videoPath)).pixmap(32, 32))
         self.speedIcon.setFixedSize(16, 16)
         self.remainTimeIcon.setFixedSize(16, 16)
         self.sizeIcon.setFixedSize(16, 16)
@@ -71,7 +75,7 @@ class DownloadingTaskCard(SimpleCardWidget):
         self.vBoxLayout.addWidget(self.progressBar)
 
         self.infoLayout.setContentsMargins(0, 0, 0, 0)
-        self.infoLayout.setSpacing(2)
+        self.infoLayout.setSpacing(3)
         self.infoLayout.addWidget(self.speedIcon)
         self.infoLayout.addWidget(self.speedLabel, 0, Qt.AlignmentFlag.AlignLeft)
         self.infoLayout.addSpacing(5)
@@ -91,7 +95,7 @@ class DownloadingTaskCard(SimpleCardWidget):
         showInFolder(path)
 
     def _onDeleteButtonClicked(self):
-        w = DeleteTaskDialog(self.window())
+        w = DeleteTaskDialog(self.window(), deleteOnClose=False)
         if w.exec():
             signalBus.downloadTerminated.emit(self.task.pid, w.deleteFileCheckBox.isChecked())
             self.deleted.emit(self.task.pid)
@@ -108,19 +112,108 @@ class DownloadingTaskCard(SimpleCardWidget):
         self.progressBar.setValue(info.currentChunk)
 
 
+class SuccessTaskCard(TaskCardBase):
+
+    def __init__(self, task: Task, parent=None):
+        super().__init__(parent)
+        self.hBoxLayout = QHBoxLayout(self)
+        self.vBoxLayout = QVBoxLayout()
+        self.infoLayout = QHBoxLayout()
+
+        self.task = task
+        self.imageLabel = ImageLabel()
+        self.fileNameLabel = BodyLabel(task.fileName)
+
+        self.createTimeIcon = IconWidget(FluentIcon.DATE_TIME)
+        self.createTimeLabel = CaptionLabel(
+            task.createTime.toString("yyyy-MM-dd hh:mm:ss"))
+        self.sizeIcon = IconWidget(FluentIcon.BOOK_SHELF)
+        self.sizeLabel = CaptionLabel(task.size)
+
+        self.openFolderButton = ToolButton(FluentIcon.FOLDER)
+        self.deleteButton = ToolButton(FluentIcon.DELETE)
+
+        self._initWidget()
+
+    def _initWidget(self):
+        self.imageLabel.setBorderRadius(4, 4, 4, 4)
+        self.createTimeIcon.setFixedSize(16, 16)
+        self.sizeIcon.setFixedSize(16, 16)
+
+        setFont(self.fileNameLabel, 18, QFont.Weight.Bold)
+        self.fileNameLabel.setWordWrap(True)
+
+        if self.task.coverPath.exists():
+            self.updateCover()
+
+        self._initLayout()
+        self._connectSignalToSlot()
+
+    def _initLayout(self):
+        self.hBoxLayout.setContentsMargins(20, 11, 11, 11)
+        self.hBoxLayout.addWidget(self.imageLabel)
+        self.hBoxLayout.addSpacing(5)
+        self.hBoxLayout.addLayout(self.vBoxLayout)
+        self.hBoxLayout.addSpacing(20)
+        self.hBoxLayout.addWidget(self.openFolderButton)
+        self.hBoxLayout.addWidget(self.deleteButton)
+
+        self.vBoxLayout.setSpacing(0)
+        self.vBoxLayout.setContentsMargins(0, 0, 0, 0)
+        self.vBoxLayout.addWidget(self.fileNameLabel)
+        self.vBoxLayout.addLayout(self.infoLayout)
+
+        self.infoLayout.setContentsMargins(0, 0, 0, 0)
+        self.infoLayout.setSpacing(3)
+        self.infoLayout.addWidget(self.createTimeIcon)
+        self.infoLayout.addWidget(self.createTimeLabel, 0, Qt.AlignmentFlag.AlignLeft)
+        self.infoLayout.addSpacing(8)
+        self.infoLayout.addWidget(self.sizeIcon)
+        self.infoLayout.addWidget(self.sizeLabel, 0, Qt.AlignmentFlag.AlignLeft)
+        self.infoLayout.addStretch(1)
+
+    def updateCover(self):
+        self.imageLabel.setImage(str(self.task.coverPath))
+        self.imageLabel.setScaledSize(QSize(64, 64))
+
+    def _onOpenButtonClicked(self):
+        showInFolder(self.task.videoPath)
+
+    def _onDeleteButtonClicked(self):
+        w = DeleteTaskDialog(self.window(), deleteOnClose=False)
+        if w.exec():
+            self.deleted.emit(self.task.pid)
+
+            sqlRequest("taskService", "removeById", id=self.task.id)
+
+            if w.deleteFileCheckBox.isChecked():
+                removeFile(self.task.videoPath)
+
+        w.deleteLater()
+
+    def _connectSignalToSlot(self):
+        self.openFolderButton.clicked.connect(self._onOpenButtonClicked)
+        self.deleteButton.clicked.connect(self._onDeleteButtonClicked)
+
+
 class DeleteTaskDialog(MessageBoxBase):
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, showCheckBox=True, deleteOnClose=True):
         super().__init__(parent)
         self.titleLabel = SubtitleLabel(self.tr("Delete task"))
         self.contentLabel = BodyLabel(
             self.tr("Are you sure to delete this task?"))
-        self.deleteFileCheckBox = CheckBox(self.tr("Clear cache"))
+        self.deleteFileCheckBox = CheckBox(self.tr("Remove file"))
+
+        self.deleteFileCheckBox.setVisible(showCheckBox)
+
+        if deleteOnClose:
+            self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose, True)
 
         self._initWidgets()
 
     def _initWidgets(self):
-        self.deleteFileCheckBox.setCheckable(True)
+        self.deleteFileCheckBox.setChecked(True)
         self.widget.setMinimumWidth(330)
 
         layout = QVBoxLayout()

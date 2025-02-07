@@ -1,4 +1,5 @@
 # coding: utf-8
+import os
 from pathlib import Path
 import sys
 from typing import Union
@@ -20,6 +21,13 @@ def readFile(filePath: str):
 def loadJsonData(filePath: str):
     """ load json data from file """
     return loads(readFile(filePath))
+
+
+def removeFile(filePath: str | Path):
+    try:
+        os.remove(filePath)
+    except:
+        pass
 
 
 def openUrl(url: str):

@@ -221,19 +221,19 @@
 <context>
     <name>DeleteTaskDialog</name>
     <message>
-        <location filename="../../components/task_card.py" line="115"/>
+        <location filename="../../components/task_card.py" line="200"/>
         <source>Delete task</source>
         <translation>删除任务</translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="117"/>
+        <location filename="../../components/task_card.py" line="202"/>
         <source>Are you sure to delete this task?</source>
         <translation>是否确定要删除此下载任务？</translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="118"/>
-        <source>Clear cache</source>
-        <translation>清除缓存文件</translation>
+        <location filename="../../components/task_card.py" line="203"/>
+        <source>Remove file</source>
+        <translation>同时删除文件</translation>
     </message>
 </context>
 <context>
@@ -577,24 +577,42 @@
     </message>
 </context>
 <context>
+    <name>SystemTrayIcon</name>
+    <message>
+        <location filename="../../components/system_tray_icon.py" line="22"/>
+        <source>Show panel</source>
+        <translation>打开面板</translation>
+    </message>
+    <message>
+        <location filename="../../components/system_tray_icon.py" line="26"/>
+        <source>Exit</source>
+        <translation>退出</translation>
+    </message>
+</context>
+<context>
     <name>TaskInterface</name>
     <message>
-        <location filename="../../view/task_interface.py" line="19"/>
+        <location filename="../../view/task_interface.py" line="21"/>
         <source>Task</source>
         <translation>下载任务</translation>
     </message>
     <message>
-        <location filename="../../view/task_interface.py" line="29"/>
+        <location filename="../../view/task_interface.py" line="27"/>
+        <source>Currently no download tasks</source>
+        <translation>任务列表为空</translation>
+    </message>
+    <message>
+        <location filename="../../view/task_interface.py" line="33"/>
         <source>Downloading</source>
         <translation>正在下载</translation>
     </message>
     <message>
-        <location filename="../../view/task_interface.py" line="30"/>
+        <location filename="../../view/task_interface.py" line="34"/>
         <source>Finished</source>
         <translation>下载完成</translation>
     </message>
     <message>
-        <location filename="../../view/task_interface.py" line="31"/>
+        <location filename="../../view/task_interface.py" line="35"/>
         <source>Failed</source>
         <translation>下载失败</translation>
     </message>

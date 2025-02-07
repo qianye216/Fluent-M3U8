@@ -14,8 +14,10 @@ from ..common.logger import Logger
 from ..common.database.entity import Task
 from ..common.config import cfg
 from ..common.signal_bus import signalBus
+from ..common.concurrent import TaskExecutor
 from ..common.exception_handler import exceptionTracebackHandler
 from ..common.database import sqlRequest
+from .ffmpeg_service import ffmpegService
 
 
 class M3U8DLCommand(Enum):
@@ -95,6 +97,8 @@ class M3U8DLService(QObject):
     downloadProcessChanged = Signal(int, DownloadProgressInfo)   # pid, info
     downloadFinished = Signal(Task, bool, str)   # task, isSuccess, message
 
+    coverSaved = Signal(int)    # pid
+
     def __init__(self, parent=None):
         super().__init__(parent=parent)
         self.logger = Logger("download")
@@ -118,7 +122,7 @@ class M3U8DLService(QObject):
         process.setWorkingDirectory(str(Path(self.downloaderPath).parent))
         process.setProcessChannelMode(QProcess.ProcessChannelMode.MergedChannels)
 
-        process.readyRead.connect(lambda: self._onDownloadMessage(process, taskLogger))
+        process.readyRead.connect(lambda: self._onDownloadMessage(process, task, taskLogger))
         process.finished.connect(lambda code, status: self._onDownloadFinished(process, task, code, status))
         process.start(self.downloaderPath, options)
 
@@ -128,9 +132,12 @@ class M3U8DLService(QObject):
         self.downloadCreated.emit(task)
         return True
 
-    def _onDownloadMessage(self, process: QProcess, logger: Logger):
+    def _onDownloadMessage(self, process: QProcess, task: Task, logger: Logger):
         message = process.readAllStandardOutput().toStdString()
         logger.info(message)
+
+        if 'WARN' in message:
+            return
 
         # parse progress message
         regex = r"(\d+)\/(\d+)\s+(\d+\.\d+)%\s+(\d+\.\d+)(KB|MB|GB)\/(\d+\.\d+)(KB|MB|GB)\s+(\d+\.\d+)(GBps|MBps|KBps|Bps)\s(.+)"
@@ -147,6 +154,7 @@ class M3U8DLService(QObject):
             speed=match[8]+match[9],
             remainTime=match[10]
         )
+        task.size = info.totalSize
         self.downloadProcessChanged.emit(process.processId(), info)
 
     def _onDownloadFinished(self, process: QProcess, task: Task, code, status: QProcess.ExitStatus):
@@ -156,6 +164,10 @@ class M3U8DLService(QObject):
         self.processMap.pop(task.pid)
 
         if status == QProcess.ExitStatus.NormalExit:
+            # save cover
+            TaskExecutor.runTask(ffmpegService.saveVideoCover, task.videoPath, task.coverPath).then(
+                lambda: self.coverSaved.emit(task.pid))
+
             self.downloadFinished.emit(task, True, "")
             task.success()
         else:

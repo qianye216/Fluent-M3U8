@@ -25,6 +25,9 @@ else:
 CONFIG_FILE = CONFIG_FOLDER / "config.json"
 DB_PATH = CONFIG_FOLDER / "database.db"
 
+COVER_FOLDER = CONFIG_FOLDER / "Cover"
+COVER_FOLDER.mkdir(exist_ok=True, parents=True)
+
 if sys.platform == "win32":
     EXE_SUFFIX = ".exe"
 else:
