@@ -93,7 +93,7 @@ class DownloadingTaskCard(TaskCardBase):
         self.deleteButton.clicked.connect(self._onDeleteButtonClicked)
 
     def _onOpenButtonClicked(self):
-        path = Path(m3u8Service.downloaderPath).parent / self.task.fileName
+        path = Path(self.task.saveFolder) / self.task.fileName
         showInFolder(path)
 
     def _onDeleteButtonClicked(self):
