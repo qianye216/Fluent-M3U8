@@ -36,14 +36,14 @@ class Logger:
             log filename which doesn't contain `.log` suffix
         """
         LOG_FOLDER.mkdir(exist_ok=True, parents=True)
-        
-        self.__logFile = LOG_FOLDER / (fileName + '.log')
-        self.__logFile.parent.mkdir(exist_ok=True, parents=True)
+
+        self.logFile = LOG_FOLDER / (fileName + '.log')
+        self.logFile.parent.mkdir(exist_ok=True, parents=True)
 
         self.__logger = logging.getLogger(fileName)
         self.__consoleHandler = logging.StreamHandler()
         self.__fileHandler = logging.FileHandler(
-            self.__logFile, encoding='utf-8')
+            self.logFile, encoding='utf-8')
 
         # set log level
         self.__logger.setLevel(logging.DEBUG)

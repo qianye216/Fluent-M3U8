@@ -31,7 +31,10 @@ def removeFile(filePath: str | Path):
 
 
 def openUrl(url: str):
-    QDesktopServices.openUrl(QUrl(url))
+    if not url.startswith("http"):
+        QDesktopServices.openUrl(QUrl.fromLocalFile(url))
+    else:
+        QDesktopServices.openUrl(QUrl(url))
 
 
 

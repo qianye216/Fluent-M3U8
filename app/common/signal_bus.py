@@ -1,23 +1,6 @@
 # coding: utf-8
 from PySide6.QtCore import QObject, Signal
-
-
-class SqlRequest:
-    """ Sql request """
-
-    def __init__(self, service: str, method: str, slot=None, params: dict = None):
-        self.service = service
-        self.method = method
-        self.slot = slot
-        self.params = params or {}
-
-
-class SqlResponse:
-    """ Sql response """
-
-    def __init__(self, data, slot):
-        self.slot = slot
-        self.data = data
+from .database.entity import Task
 
 
 class SignalBus(QObject):
@@ -33,7 +16,6 @@ class SignalBus(QObject):
 
     switchToTaskInterfaceSig = Signal()
 
-    fetchDataSig = Signal(SqlRequest)
-    dataFetched = Signal(SqlResponse)
+    redownloadTask = Signal(Task)
 
 signalBus = SignalBus()

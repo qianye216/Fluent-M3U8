@@ -176,6 +176,7 @@ class BasicConfigCard(GroupHeaderCardWidget):
             self.urlLineEdit.text().strip(),
             M3U8DLCommand.SAVE_NAME.command(self.fileNameLineEdit.text().strip()),
             M3U8DLCommand.SAVE_DIR.command(self.saveFolderGroup.content()),
+            M3U8DLCommand.TMP_DIR.command(self.saveFolderGroup.content()),
             M3U8DLCommand.THREAD_COUNT.command(self.threadCountSpinBox.value()),
         ]
 

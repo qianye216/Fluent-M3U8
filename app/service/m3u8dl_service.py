@@ -23,6 +23,7 @@ from .ffmpeg_service import ffmpegService
 class M3U8DLCommand(Enum):
     """ M3U8DL command options """
 
+    TMP_DIR = "--tmp-dir"
     SAVE_DIR = "--save-dir"
     SAVE_NAME = "--save-name"
     THREAD_COUNT = "--thread-count"
@@ -105,13 +106,9 @@ class M3U8DLService(QObject):
         self.cmdParser = M3U8DLCommandLineParser()
         self.processMap = {}    # type: Dict[str, QProcess]
 
-        self._connectSignalToSlot()
-
-    def _connectSignalToSlot(self):
-        signalBus.downloadTerminated.connect(self._onDownloadTerminated)
-
     @exceptionTracebackHandler("download", False)
     def download(self, options: List[str]):
+        # create task
         options = self.generateCommand(options)
         task = self.cmdParser.parse([self.downloaderPath, *options])
 
@@ -121,9 +118,12 @@ class M3U8DLService(QObject):
             options = [M3U8DLCommand.SAVE_NAME.command(task.fileName) if i.startswith(M3U8DLCommand.SAVE_NAME.value) else i for i in options]
             task.command = " ".join([self.downloaderPath, *options])
 
+        # create logger
         self.logger.info(f"添加下载任务：{self.downloaderPath} {' '.join(options)}")
         taskLogger = Logger("Tasks/" + task.createTime.toString(Qt.DateFormat.ISODateWithMs))
+        task.logFile = str(taskLogger.logFile.absolute())
 
+        # create N_m3u8dl-RE process
         process = QProcess()
         process.setWorkingDirectory(str(Path(self.downloaderPath).parent))
         process.setProcessChannelMode(QProcess.ProcessChannelMode.MergedChannels)
@@ -161,6 +161,7 @@ class M3U8DLService(QObject):
             remainTime=match[10]
         )
         task.size = info.totalSize
+        info.speed = info.speed.replace("KBps", "KB/s").replace("MBps", "MB/s").replace("GBps", "GB/s")
         self.downloadProcessChanged.emit(task, info)
 
     def _onDownloadFinished(self, process: QProcess, task: Task, code, status: QProcess.ExitStatus):
@@ -217,20 +218,13 @@ class M3U8DLService(QObject):
     def downloaderPath(self):
         return cfg.get(cfg.m3u8dlPath)
 
-    def _onDownloadTerminated(self, pid: int, isClearCache: bool):
-        process = self.processMap.get(pid)
+    def terminateTask(self, task: Task):
+        process = self.processMap.get(task.pid)
         if not process:
             return
 
-        # terminate process
-        self.processMap.pop(pid)
+        self.processMap.pop(task.pid)
         process.terminate()
-
-        # remove cache files
-        if isClearCache:
-            task = process.property("task")     # type: Task
-            folder = Path(self.downloaderPath).parent / task.fileName
-            shutil.rmtree(folder, ignore_errors=True)
 
 
 m3u8Service = M3U8DLService()

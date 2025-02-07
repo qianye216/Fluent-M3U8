@@ -221,19 +221,32 @@
 <context>
     <name>DeleteTaskDialog</name>
     <message>
-        <location filename="../../components/task_card.py" line="235"/>
+        <location filename="../../components/task_card.py" line="307"/>
         <source>Delete task</source>
         <translation>删除任务</translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="237"/>
+        <location filename="../../components/task_card.py" line="309"/>
         <source>Are you sure to delete this task?</source>
         <translation>是否确定要删除此下载任务？</translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="238"/>
+        <location filename="../../components/task_card.py" line="310"/>
         <source>Remove file</source>
         <translation>同时删除文件</translation>
+    </message>
+</context>
+<context>
+    <name>FailedTaskCard</name>
+    <message>
+        <location filename="../../components/task_card.py" line="240"/>
+        <source>Restart</source>
+        <translation>重新下载</translation>
+    </message>
+    <message>
+        <location filename="../../components/task_card.py" line="245"/>
+        <source>View log</source>
+        <translation>查看报错日志</translation>
     </message>
 </context>
 <context>
@@ -583,31 +596,6 @@
         <source>Restart</source>
         <translation>重新下载</translation>
     </message>
-    <message>
-        <location filename="../../components/task_card.py" line="206"/>
-        <source>Task created</source>
-        <translation>任务创建成功</translation>
-    </message>
-    <message>
-        <location filename="../../components/task_card.py" line="207"/>
-        <source>Please check the download task</source>
-        <translation>请查收下载任务</translation>
-    </message>
-    <message>
-        <location filename="../../components/task_card.py" line="212"/>
-        <source>Check</source>
-        <translation>查看</translation>
-    </message>
-    <message>
-        <location filename="../../components/task_card.py" line="218"/>
-        <source>Task failed</source>
-        <translation>任务创建失败</translation>
-    </message>
-    <message>
-        <location filename="../../components/task_card.py" line="219"/>
-        <source>Please check the error log</source>
-        <translation>请检查报错日志</translation>
-    </message>
 </context>
 <context>
     <name>SystemTrayIcon</name>
@@ -625,29 +613,54 @@
 <context>
     <name>TaskInterface</name>
     <message>
-        <location filename="../../view/task_interface.py" line="22"/>
+        <location filename="../../view/task_interface.py" line="24"/>
         <source>Task</source>
         <translation>下载任务</translation>
     </message>
     <message>
-        <location filename="../../view/task_interface.py" line="28"/>
+        <location filename="../../view/task_interface.py" line="30"/>
         <source>Currently no download tasks</source>
         <translation>任务列表为空</translation>
     </message>
     <message>
-        <location filename="../../view/task_interface.py" line="34"/>
+        <location filename="../../view/task_interface.py" line="36"/>
         <source>Downloading</source>
         <translation>正在下载</translation>
     </message>
     <message>
-        <location filename="../../view/task_interface.py" line="35"/>
+        <location filename="../../view/task_interface.py" line="37"/>
         <source>Finished</source>
         <translation>下载完成</translation>
     </message>
     <message>
-        <location filename="../../view/task_interface.py" line="36"/>
+        <location filename="../../view/task_interface.py" line="38"/>
         <source>Failed</source>
         <translation>下载失败</translation>
+    </message>
+    <message>
+        <location filename="../../view/task_interface.py" line="104"/>
+        <source>Task created</source>
+        <translation>任务创建成功</translation>
+    </message>
+    <message>
+        <location filename="../../view/task_interface.py" line="105"/>
+        <source>Please check the download task</source>
+        <translation>请查收下载任务</translation>
+    </message>
+    <message>
+        <location filename="../../view/task_interface.py" line="110"/>
+        <source>Check</source>
+        <translation>查看</translation>
+    </message>
+    <message>
+        <location filename="../../view/task_interface.py" line="116"/>
+        <source>Task failed</source>
+        <translation>任务创建失败</translation>
+    </message>
+    <message>
+        <location filename="../../view/task_interface.py" line="117"/>
+        <source>Please check the error log</source>
+        <translation>请检查报错日志</translation>
     </message>
 </context>
 </TS>

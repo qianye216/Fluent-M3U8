@@ -1,17 +1,18 @@
 # coding:utf-8
 from typing import Dict, List
 from PySide6.QtCore import Qt, Signal, Property
-from PySide6.QtGui import QPixmap, QPainter, QColor
 from PySide6.QtWidgets import QWidget, QStackedWidget, QVBoxLayout
 
-from qfluentwidgets import Pivot, FluentIcon, SegmentedWidget
+from qfluentwidgets import Pivot, FluentIcon, SegmentedWidget, InfoBar, InfoBarPosition, PushButton
 
 from ..common.icon import Logo
 from ..common.database import sqlRequest
 from ..common.database.entity import TaskStatus
+from ..common.signal_bus import signalBus
+from ..service.download_task_service import downloadTaskService
 from ..service.m3u8dl_service import m3u8Service, DownloadProgressInfo
 from ..components.interface import Interface
-from ..components.task_card import DownloadingTaskCard, Task, SuccessTaskCard, TaskCardBase
+from ..components.task_card import DownloadingTaskCard, Task, SuccessTaskCard, TaskCardBase, FailedTaskCard
 from ..components.empty_status_widget import EmptyStatusWidget
 
 
@@ -26,6 +27,7 @@ class TaskInterface(Interface):
         self.stackedWidget = QStackedWidget()
         self.downloadingTaskView = DownloadingTaskView(self)
         self.successTaskView = SuccessTaskView(self)
+        self.failedTaskView = FailedTaskView(self)
         self.emptyStatusWidget = EmptyStatusWidget(Logo.SMILEFACE, self.tr("Currently no download tasks"), self)
 
         self._initWidgets()
@@ -41,6 +43,7 @@ class TaskInterface(Interface):
 
         self.stackedWidget.addWidget(self.downloadingTaskView)
         self.stackedWidget.addWidget(self.successTaskView)
+        self.stackedWidget.addWidget(self.failedTaskView)
 
         self._initLayout()
         self._connectSignalToSlot()
@@ -60,7 +63,7 @@ class TaskInterface(Interface):
         if isSuccess:
             self.successTaskView.addTask(task)
         else:
-            pass
+            self.failedTaskView.addTask(task)
 
         self._updateEmptyStatus()
 
@@ -84,16 +87,41 @@ class TaskInterface(Interface):
             lambda k: self.stackedWidget.setCurrentWidget(self.findChild(QWidget, k)))
         self.stackedWidget.currentChanged.connect(self._onCurrentWidgetChanged)
         self.successTaskView.cardCountChanged.connect(self._updateEmptyStatus)
+        self.failedTaskView.cardCountChanged.connect(self._updateEmptyStatus)
+
+        signalBus.redownloadTask.connect(self._redownload)
 
         m3u8Service.downloadCreated.connect(self._onTaskCreated)
         m3u8Service.downloadProcessChanged.connect(self._onDownloadProgressChanged)
         m3u8Service.downloadFinished.connect(self._onDownloadFinished)
-
         m3u8Service.coverSaved.connect(self._onCoverSaved)
 
     def _updateEmptyStatus(self):
         visible = self.stackedWidget.currentWidget().count() == 0
         self.emptyStatusWidget.setVisible(visible)
+
+    def _redownload(self, task: Task):
+        success = downloadTaskService.redownload(task)
+        if success:
+            w = InfoBar.success(
+                self.tr("Task created"),
+                self.tr("Please check the download task"),
+                duration=5000,
+                position=InfoBarPosition.BOTTOM,
+                parent=self
+            )
+            button = PushButton(self.tr('Check'))
+            button.clicked.connect(signalBus.switchToTaskInterfaceSig)
+            w.widgetLayout.insertSpacing(0, 10)
+            w.addWidget(button)
+        else:
+            InfoBar.error(
+                self.tr("Task failed"),
+                self.tr("Please check the error log"),
+                duration=-1,
+                position=InfoBarPosition.BOTTOM,
+                parent=self
+            )
 
     def resizeEvent(self, e):
         super().resizeEvent(e)
@@ -127,8 +155,8 @@ class TaskCardView(QWidget):
         card = self.createCard(task)
         card.deleted.connect(self.removeTask)
 
-        self.vBoxLayout.addWidget(card, 0, Qt.AlignmentFlag.AlignTop)
-        self.cards.append(card)
+        self.vBoxLayout.insertWidget(0, card, 0, Qt.AlignmentFlag.AlignTop)
+        self.cards.insert(0, card)
         self.cardMap[task.id] = card
 
     def removeTask(self, task: Task):
@@ -169,7 +197,14 @@ class SuccessTaskView(TaskCardView):
         self.setObjectName("finished")
 
         # load cards
-        sqlRequest("taskService", "listBy", self._loadTasks, status=TaskStatus.SUCCESS)
+        sqlRequest(
+            "taskService",
+            "listBy",
+            self._loadTasks,
+            status=TaskStatus.SUCCESS,
+            orderBy="createTime",
+            asc=True
+        )
 
     def _loadTasks(self, tasks: List[Task]):
         if not tasks:
@@ -182,3 +217,33 @@ class SuccessTaskView(TaskCardView):
 
     def createCard(self, task: Task):
         return SuccessTaskCard(task, self)
+
+
+class FailedTaskView(TaskCardView):
+    """ Failed task view """
+
+    def __init__(self, parent=None):
+        super().__init__(parent=parent)
+        self.setObjectName("failed")
+
+        # load cards
+        sqlRequest(
+            "taskService",
+            "listBy",
+            self._loadTasks,
+            status=TaskStatus.FAILED,
+            orderBy="createTime",
+            asc=True
+        )
+
+    def _loadTasks(self, tasks: List[Task]):
+        if not tasks:
+            return
+
+        for task in tasks:
+            self.addTask(task)
+
+        self.cardCountChanged.emit(self.count())
+
+    def createCard(self, task: Task):
+        return FailedTaskCard(task, self)

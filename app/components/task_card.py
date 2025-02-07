@@ -9,10 +9,11 @@ from qfluentwidgets import (SimpleCardWidget, IconWidget, ToolButton, FluentIcon
                             MessageBoxBase, SubtitleLabel, CheckBox, InfoBar, InfoBarPosition,
                             PushButton, ToolTipFilter)
 
-from ..common.utils import showInFolder, removeFile
+from ..common.utils import showInFolder, removeFile, openUrl
 from ..common.database.entity import Task
 from ..common.signal_bus import signalBus
 from ..common.database import sqlRequest
+from ..service.download_task_service import downloadTaskService
 from ..service.m3u8dl_service import DownloadProgressInfo, m3u8Service
 
 
@@ -37,11 +38,11 @@ class DownloadingTaskCard(TaskCardBase):
         self.progressBar = ProgressBar()
 
         self.speedIcon = IconWidget(FluentIcon.SPEED_HIGH)
-        self.speedLabel = CaptionLabel()
+        self.speedLabel = CaptionLabel("0MB/s")
         self.remainTimeIcon = IconWidget(FluentIcon.STOP_WATCH)
-        self.remainTimeLabel = CaptionLabel()
+        self.remainTimeLabel = CaptionLabel("00:00:00")
         self.sizeIcon = IconWidget(FluentIcon.BOOK_SHELF)
-        self.sizeLabel = CaptionLabel()
+        self.sizeLabel = CaptionLabel("0MB/0MB")
 
         self.openFolderButton = ToolButton(FluentIcon.FOLDER)
         self.deleteButton = ToolButton(FluentIcon.DELETE)
@@ -98,8 +99,8 @@ class DownloadingTaskCard(TaskCardBase):
     def _onDeleteButtonClicked(self):
         w = DeleteTaskDialog(self.window(), deleteOnClose=False)
         if w.exec():
-            signalBus.downloadTerminated.emit(self.task.pid, w.deleteFileCheckBox.isChecked())
             self.deleted.emit(self.task)
+            downloadTaskService.removeDownloadingTask(self.task, w.deleteFileCheckBox.isChecked())
 
         w.deleteLater()
 
@@ -190,40 +191,104 @@ class SuccessTaskCard(TaskCardBase):
         w = DeleteTaskDialog(self.window(), deleteOnClose=False)
         if w.exec():
             self.deleted.emit(self.task)
-
-            sqlRequest("taskService", "removeById", id=self.task.id)
-
-            if w.deleteFileCheckBox.isChecked():
-                removeFile(self.task.videoPath)
+            downloadTaskService.removedSuccessTask(self.task, w.deleteFileCheckBox.isChecked())
 
         w.deleteLater()
 
     def _onRedownloadButtonClicked(self):
-        options = self.task.command.split(" ")[1:]
-        success = m3u8Service.download(options)
-        if success:
-            w = InfoBar.success(
-                self.tr("Task created"),
-                self.tr("Please check the download task"),
-                duration=5000,
-                position=InfoBarPosition.BOTTOM,
-                parent=self.window().taskInterface
-            )
-            button = PushButton(self.tr('Check'))
-            button.clicked.connect(signalBus.switchToTaskInterfaceSig)
-            w.widgetLayout.insertSpacing(0, 10)
-            w.addWidget(button)
-        else:
-            InfoBar.error(
-                self.tr("Task failed"),
-                self.tr("Please check the error log"),
-                duration=-1,
-                position=InfoBarPosition.BOTTOM,
-                parent=self.window().taskInterface
-            )
+        signalBus.redownloadTask.emit(self.task)
 
     def _connectSignalToSlot(self):
         self.openFolderButton.clicked.connect(self._onOpenButtonClicked)
+        self.deleteButton.clicked.connect(self._onDeleteButtonClicked)
+        self.redownloadButton.clicked.connect(self._onRedownloadButtonClicked)
+
+
+class FailedTaskCard(TaskCardBase):
+
+    def __init__(self, task: Task, parent=None):
+        super().__init__(parent)
+        self.hBoxLayout = QHBoxLayout(self)
+        self.vBoxLayout = QVBoxLayout()
+        self.infoLayout = QHBoxLayout()
+
+        self.task = task
+        self.imageLabel = ImageLabel()
+        self.fileNameLabel = BodyLabel(task.fileName)
+
+        self.createTimeIcon = IconWidget(FluentIcon.DATE_TIME)
+        self.createTimeLabel = CaptionLabel(
+            task.createTime.toString("yyyy-MM-dd hh:mm:ss"))
+        self.sizeIcon = IconWidget(FluentIcon.BOOK_SHELF)
+        self.sizeLabel = CaptionLabel(task.size)
+
+        self.redownloadButton = ToolButton(FluentIcon.UPDATE)
+        self.logButton = ToolButton(FluentIcon.COMMAND_PROMPT)
+        self.deleteButton = ToolButton(FluentIcon.DELETE)
+
+        self._initWidget()
+
+    def _initWidget(self):
+        self.imageLabel.setImage(QFileIconProvider().icon(
+            QFileInfo(self.task.videoPath)).pixmap(32, 32))
+        self.createTimeIcon.setFixedSize(16, 16)
+        self.sizeIcon.setFixedSize(16, 16)
+
+        self.redownloadButton.setToolTip(self.tr("Restart"))
+        self.redownloadButton.setToolTipDuration(3000)
+        self.redownloadButton.installEventFilter(
+            ToolTipFilter(self.redownloadButton))
+
+        self.logButton.setToolTip(self.tr("View log"))
+        self.logButton.setToolTipDuration(3000)
+        self.logButton.installEventFilter(ToolTipFilter(self.logButton))
+
+        setFont(self.fileNameLabel, 18, QFont.Weight.Bold)
+        self.fileNameLabel.setWordWrap(True)
+
+        self._initLayout()
+        self._connectSignalToSlot()
+
+    def _initLayout(self):
+        self.hBoxLayout.setContentsMargins(20, 11, 11, 11)
+        self.hBoxLayout.addWidget(self.imageLabel)
+        self.hBoxLayout.addSpacing(5)
+        self.hBoxLayout.addLayout(self.vBoxLayout)
+        self.hBoxLayout.addSpacing(20)
+        self.hBoxLayout.addWidget(self.redownloadButton)
+        self.hBoxLayout.addWidget(self.logButton)
+        self.hBoxLayout.addWidget(self.deleteButton)
+
+        self.vBoxLayout.setSpacing(0)
+        self.vBoxLayout.setContentsMargins(0, 0, 0, 0)
+        self.vBoxLayout.addWidget(self.fileNameLabel)
+        self.vBoxLayout.addLayout(self.infoLayout)
+
+        self.infoLayout.setContentsMargins(0, 0, 0, 0)
+        self.infoLayout.setSpacing(3)
+        self.infoLayout.addWidget(self.createTimeIcon)
+        self.infoLayout.addWidget(self.createTimeLabel, 0, Qt.AlignmentFlag.AlignLeft)
+        self.infoLayout.addSpacing(8)
+        self.infoLayout.addWidget(self.sizeIcon)
+        self.infoLayout.addWidget(self.sizeLabel, 0, Qt.AlignmentFlag.AlignLeft)
+        self.infoLayout.addStretch(1)
+
+    def _onLogButtonClicked(self):
+        openUrl(self.task.logFile)
+
+    def _onDeleteButtonClicked(self):
+        w = DeleteTaskDialog(self.window(), deleteOnClose=False)
+        if w.exec():
+            self.deleted.emit(self.task)
+            downloadTaskService.removeFailedTask(self.task, w.deleteFileCheckBox.isChecked())
+
+        w.deleteLater()
+
+    def _onRedownloadButtonClicked(self):
+        signalBus.redownloadTask.emit(self.task)
+
+    def _connectSignalToSlot(self):
+        self.logButton.clicked.connect(self._onLogButtonClicked)
         self.deleteButton.clicked.connect(self._onDeleteButtonClicked)
         self.redownloadButton.clicked.connect(self._onRedownloadButtonClicked)
 

@@ -10,11 +10,11 @@ from qfluentwidgets import FluentIcon as FIF
 from .setting_interface import SettingInterface
 from .home_interface import HomeInterface
 from .task_interface import TaskInterface
-from ..common.database import DBInitializer, DatabaseThread, Database
+from ..common.database import DBInitializer, DatabaseThread, sqlSignalBus, SqlResponse
 from ..common.config import cfg
 from ..common.icon import Icon
 from ..common.utils import openUrl
-from ..common.signal_bus import signalBus, SqlResponse
+from ..common.signal_bus import signalBus
 from ..common.setting import DOC_URL, FEEDBACK_URL
 from ..service.m3u8dl_service import m3u8Service, Task
 from ..components.system_tray_icon import SystemTrayIcon
@@ -89,7 +89,7 @@ class MainWindow(MSFluentWindow):
         self.databaseThread = DatabaseThread(
             QSqlDatabase.database(DBInitializer.CONNECTION_NAME), self)
 
-        signalBus.dataFetched.connect(self.onDataFetched)
+        sqlSignalBus.dataFetched.connect(self.onDataFetched)
 
     def onDataFetched(self, response: SqlResponse):
         if response.slot:

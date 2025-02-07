@@ -28,7 +28,8 @@ class Task(Entity):
     size: str = None                # 文件大小
     command: str = None             # 下载命令
     status: int = 0                 # 状态，0 为下载中，1 为下载完成，2 为下载失败
-    createTime: QDateTime = field(default_factory=QDateTime.currentDateTime)    # 创建时间
+    logFile: str = None             # 日志文件路径
+    createTime: QDateTime = field(default_factory=QDateTime.currentDateTime)
 
     def error(self):
         self.status = TaskStatus.FAILED
