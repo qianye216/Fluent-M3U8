@@ -73,6 +73,8 @@ class HomeInterface(ScrollArea):
             *self.advanceSettingCard.parseOptions(),
         ]
         success = m3u8Service.download(options)
+        button = PushButton(self.tr('Check'))
+
         if success:
             w = InfoBar.success(
                 self.tr("Task created"),
@@ -81,18 +83,19 @@ class HomeInterface(ScrollArea):
                 position=InfoBarPosition.BOTTOM,
                 parent=self
             )
-            button = PushButton(self.tr('Check'))
             button.clicked.connect(signalBus.switchToTaskInterfaceSig)
-            w.widgetLayout.insertSpacing(0, 10)
-            w.addWidget(button)
         else:
-            InfoBar.error(
+            w = InfoBar.error(
                 self.tr("Task failed"),
                 self.tr("Please check the error log"),
                 duration=-1,
                 position=InfoBarPosition.BOTTOM,
                 parent=self
             )
+            button.clicked.connect(m3u8Service.showDownloadLog)
+
+        w.widgetLayout.insertSpacing(0, 10)
+        w.addWidget(button)
 
     def _connectSignalToSlot(self):
         self.basicSettingCard.downloadButton.clicked.connect(self._onDownloadButtonClicked)

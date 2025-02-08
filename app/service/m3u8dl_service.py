@@ -13,6 +13,7 @@ import m3u8
 from ..common.logger import Logger
 from ..common.database.entity import Task
 from ..common.config import cfg
+from ..common.utils import openUrl
 from ..common.signal_bus import signalBus
 from ..common.concurrent import TaskExecutor
 from ..common.exception_handler import exceptionTracebackHandler
@@ -123,9 +124,12 @@ class M3U8DLService(QObject):
             task.command = " ".join([self.downloaderPath, *options])
 
         # create logger
-        self.logger.info(f"添加下载任务：{self.downloaderPath} {' '.join(options)}")
         taskLogger = Logger("Tasks/" + currentTime, False)
         task.logFile = str(taskLogger.logFile.absolute())
+
+        message = f"Add download task：{self.downloaderPath} {' '.join(options)}"
+        self.logger.info(message)
+        taskLogger.info(message)
 
         # create N_m3u8dl-RE process
         process = QProcess()
@@ -232,6 +236,10 @@ class M3U8DLService(QObject):
 
         self.processMap.pop(task.pid)
         process.terminate()
+
+    def showDownloadLog(self):
+        """ show download log """
+        openUrl(str(self.logger.logFile))
 
 
 m3u8Service = M3U8DLService()
