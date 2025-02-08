@@ -1,4 +1,6 @@
 # coding: utf-8
+import sys
+
 from PySide6.QtCore import QUrl, QSize, Qt
 from PySide6.QtGui import QIcon, QColor, QGuiApplication
 from PySide6.QtWidgets import QApplication
@@ -67,7 +69,7 @@ class MainWindow(MSFluentWindow):
             self.settingInterface, Icon.SETTINGS, self.tr('Settings'), Icon.SETTINGS_FILLED, NavigationItemPosition.BOTTOM)
 
     def initWindow(self):
-        self.resize(960, 773)
+        self.resize(960, 753 if sys.platform == "win32" else 773)
         self.setMinimumWidth(760)
         self.setWindowIcon(QIcon(':/app/images/logo.png'))
         self.setWindowTitle('Fluent M3U8')
