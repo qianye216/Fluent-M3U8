@@ -7,6 +7,8 @@ from qfluentwidgets import (SwitchSettingCard, FolderListSettingCard,
 from qfluentwidgets import FluentIcon as FIF
 from qfluentwidgets import SettingCardGroup as CardGroup
 from qfluentwidgets import InfoBar, TitleLabel, SettingCard
+from qframelesswindow.utils import getSystemAccentColor
+
 from PySide6.QtCore import Qt, Signal, QUrl, QStandardPaths
 from PySide6.QtGui import QDesktopServices, QFont
 from PySide6.QtWidgets import QWidget, QLabel, QFileDialog
@@ -53,6 +55,17 @@ class SettingInterface(ScrollArea):
             self.tr("Change the appearance of your application"),
             texts=[
                 self.tr('Light'), self.tr('Dark'),
+                self.tr('Use system setting')
+            ],
+            parent=self.personalGroup
+        )
+        self.accentColorCard = ComboBoxSettingCard(
+            cfg.accentColor,
+            FIF.PALETTE,
+            self.tr('Accent color'),
+            self.tr('Change the accent color of your application'),
+            texts=[
+                self.tr('Sea foam green'),
                 self.tr('Use system setting')
             ],
             parent=self.personalGroup
@@ -166,6 +179,7 @@ class SettingInterface(ScrollArea):
         self.personalGroup.addSettingCard(self.themeCard)
         self.personalGroup.addSettingCard(self.zoomCard)
         self.personalGroup.addSettingCard(self.languageCard)
+        self.personalGroup.addSettingCard(self.accentColorCard)
 
         self.downloadGroup.addSettingCard(self.saveFolderCard)
         self.downloadGroup.addSettingCard(self.m3u8dlPathCard)
@@ -226,6 +240,17 @@ class SettingInterface(ScrollArea):
         cfg.set(cfg.ffmpegPath, path)
         self.ffmpegPathCard.setContent(path)
 
+    def _onAccentColorChanged(self):
+        color = cfg.get(cfg.accentColor)
+        if color != "Auto":
+            setThemeColor(color, save=False)
+        else:
+            sysColor = getSystemAccentColor()
+            if sysColor.isValid():
+                setThemeColor(sysColor, save=False)
+            else:
+                setThemeColor(color, save=False)
+
     def _connectSignalToSlot(self):
         """ connect signal to slot """
         cfg.appRestartSig.connect(self._showRestartTooltip)
@@ -238,6 +263,7 @@ class SettingInterface(ScrollArea):
         # personalization
         cfg.themeChanged.connect(setTheme)
         self.micaCard.checkedChanged.connect(signalBus.micaEnableChanged)
+        cfg.accentColor.valueChanged.connect(self._onAccentColorChanged)
 
         # check update
         self.aboutCard.clicked.connect(signalBus.checkUpdateSig)
