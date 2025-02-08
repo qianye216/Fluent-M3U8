@@ -116,6 +116,7 @@ class MainWindow(MSFluentWindow):
                 self.showNormal()
             else:
                 self.show()
+                self.raise_()
         else:
             # TODO: parse command line args
 
