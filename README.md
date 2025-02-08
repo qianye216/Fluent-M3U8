@@ -15,7 +15,7 @@
   </a>
 
   <a style="text-decoration:none">
-    <img src="https://img.shields.io/badge/PySide-6.4.2-blue?color=00B16A" alt="PySide 6.4.2"/>
+    <img src="https://img.shields.io/badge/PySide-6.6.2-blue?color=00B16A" alt="PySide 6.6.2"/>
   </a>
 
   <a style="text-decoration:none">
