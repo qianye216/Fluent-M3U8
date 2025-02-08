@@ -120,7 +120,7 @@ class M3U8DLService(QObject):
 
         # create logger
         self.logger.info(f"添加下载任务：{self.downloaderPath} {' '.join(options)}")
-        taskLogger = Logger("Tasks/" + task.createTime.toString(Qt.DateFormat.ISODateWithMs))
+        taskLogger = Logger("Tasks/" + task.createTime.toString(Qt.DateFormat.ISODateWithMs), False)
         task.logFile = str(taskLogger.logFile.absolute())
 
         # create N_m3u8dl-RE process

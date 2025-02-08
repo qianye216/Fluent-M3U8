@@ -1,12 +1,25 @@
 # coding: utf-8
 import os
 from pathlib import Path
+import re
 import sys
 from typing import Union
 from json import loads
 
 from PySide6.QtCore import QFile, QUrl, QFileInfo, QDir, QProcess, QStandardPaths
 from PySide6.QtGui import QDesktopServices
+
+
+def adjustFileName(name: str):
+    """ adjust file name
+
+    Returns
+    -------
+    name: str
+        file name after adjusting
+    """
+    name = re.sub(r'[\\/:*?"<>|\r\n\s]+', "_", name.strip()).strip()
+    return name.rstrip(".")
 
 
 def readFile(filePath: str):

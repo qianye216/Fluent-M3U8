@@ -28,12 +28,15 @@ def loggerCache(cls):
 class Logger:
     """ Logger class """
 
-    def __init__(self, fileName: str):
+    def __init__(self, fileName: str, printConsole=True):
         """
         Parameters
         ----------
         fileName: str
             log filename which doesn't contain `.log` suffix
+
+        printConsole: bool
+            print log to console
         """
         LOG_FOLDER.mkdir(exist_ok=True, parents=True)
 
@@ -56,7 +59,9 @@ class Logger:
         self.__fileHandler.setFormatter(fmt)
 
         if not self.__logger.hasHandlers():
-            self.__logger.addHandler(self.__consoleHandler)
+            if printConsole:
+                self.__logger.addHandler(self.__consoleHandler)
+                
             self.__logger.addHandler(self.__fileHandler)
 
     def info(self, msg):

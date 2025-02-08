@@ -182,7 +182,7 @@ class SuccessTaskCard(TaskCardBase):
 
     def updateCover(self):
         self.imageLabel.setImage(str(self.task.coverPath))
-        self.imageLabel.setScaledSize(QSize(64, 64))
+        self.imageLabel.setScaledSize(QSize(112, 63))
 
     def _onOpenButtonClicked(self):
         exist = showInFolder(self.task.videoPath)

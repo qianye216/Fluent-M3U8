@@ -13,6 +13,7 @@ from m3u8.model import StreamInfo
 from ..common.icon import Logo
 from ..common.config import cfg
 from ..common.concurrent import TaskExecutor
+from ..common.utils import adjustFileName
 
 from ..service.m3u8dl_service import M3U8DLCommand, m3u8Service
 
@@ -182,7 +183,7 @@ class BasicConfigCard(GroupHeaderCardWidget):
         """ Returns the m3u8dl options """
         options = [
             self.urlLineEdit.text().strip(),
-            M3U8DLCommand.SAVE_NAME.command(self.fileNameLineEdit.text().strip()),
+            M3U8DLCommand.SAVE_NAME.command(adjustFileName(self.fileNameLineEdit.text())),
             M3U8DLCommand.SAVE_DIR.command(self.saveFolderGroup.content()),
             M3U8DLCommand.TMP_DIR.command(self.saveFolderGroup.content()),
             M3U8DLCommand.THREAD_COUNT.command(self.threadCountSpinBox.value()),
