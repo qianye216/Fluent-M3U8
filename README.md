@@ -73,6 +73,7 @@ English | <a href="docs/README_zh.md">简体中文</a>
 
 - [zhiyiYo/PyQt-Fluent-Widgets](https://qfluentwidgets.com/)：A fluent design widgets library based on C++ Qt/PyQt/PySide. Make Qt Great Again.
 - [nilaoda/N_m3u8DL-RE](https://github.com/nilaoda/N_m3u8DL-RE)：Cross-Platform, modern and powerful stream downloader for MPD/M3U8/ISM.
+- [AresConnor/pyqt5_concurrent](https://github.com/AresConnor/pyqt5-concurrent)：A QThreadPool based task concurrency library.
 
 ## License
 Fluent-M3U8 is licensed under GPLv3.
