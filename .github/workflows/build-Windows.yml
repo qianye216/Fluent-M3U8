@@ -1,0 +1,34 @@
+name: Build Windows
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    strategy:
+      matrix:
+        architecture: [x86_64]
+    runs-on: windows-2019
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Build with Nuitka
+        run: |
+          python deploy.py
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Fluent-M3U8-v0.1.0-Windows-${{ matrix.architecture }}
+          path: dist/Fluent-M3U8.dist
+

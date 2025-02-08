@@ -9,12 +9,17 @@ if sys.platform == "win32":
         '--windows-disable-console',
         '--plugin-enable=pyside6' ,
         '--include-qt-plugins=sensible,sqldrivers',
+        '--assume-yes-for-downloads',
         # '--msvc=latest',              # Use MSVC
-        '--assume-yes-for-downloads',   # Use MinGW
         '--show-memory' ,
         '--show-progress' ,
         '--windows-icon-from-ico=app/resource/images/logo.ico',
-        '--output-dir=dist/Fluent-M3U8',
+        '--windows-company-name="Shokokawaii Inc."',
+        '--windows-product-name=Fluent-M3U8',
+        f'--windows-file-version={VERSION}',
+        f'--windows-product-version={VERSION}',
+        '--windows-file-description="A cross-platform m3u8 downloader"',
+        '--output-dir=dist',
         'Fluent-M3U8.py',
     ]
 elif sys.platform == "darwin":
@@ -32,7 +37,7 @@ elif sys.platform == "darwin":
         "--macos-app-name=Fluent-M3U8",
         "--macos-app-icon=app/resource/images/logo.icns",
         "--copyright=zhiyiYo",
-        '--output-dir=dist/Fluent-M3U8',
+        '--output-dir=dist',
         'Fluent-M3U8.py',
     ]
 

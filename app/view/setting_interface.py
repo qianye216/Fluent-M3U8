@@ -148,7 +148,7 @@ class SettingInterface(ScrollArea):
             ":/app/images/logo.png",
             self.tr('About'),
             '© ' + self.tr('Copyright') + f" {YEAR}, {AUTHOR}. " +
-            self.tr('Version') + " " + VERSION,
+            self.tr('Version') + " v" + VERSION,
             self.aboutGroup
         )
 

@@ -29,11 +29,11 @@ class VersionService:
         if not match:
             return VERSION
 
-        self.lastestVersion = version
-        return version
+        self.lastestVersion = version[1:]
+        return self.lastestVersion
 
     def hasNewVersion(self) -> bool:
         """ check whether there is a new version """
-        version = QVersionNumber.fromString(self.getLatestVersion()[1:])
-        currentVersion = QVersionNumber.fromString(self.currentVersion[1:])
+        version = QVersionNumber.fromString(self.getLatestVersion())
+        currentVersion = QVersionNumber.fromString(self.currentVersion)
         return version > currentVersion
