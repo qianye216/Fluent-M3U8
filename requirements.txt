@@ -2,5 +2,5 @@ PySide6==6.6.2
 PySide6-Fluent-Widgets>=1.7.4
 m3u8
 requests
-ffmpeg
+ffmpeg-python
 nuitka==2.6.4
