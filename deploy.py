@@ -11,6 +11,7 @@ if sys.platform == "win32":
         '--include-qt-plugins=sensible,sqldrivers',
         '--assume-yes-for-downloads',
         # '--msvc=latest',              # Use MSVC
+        '--mingw64',                    # Use MinGW
         '--show-memory' ,
         '--show-progress' ,
         '--windows-icon-from-ico=app/resource/images/logo.ico',

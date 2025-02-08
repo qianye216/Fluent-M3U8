@@ -196,6 +196,8 @@ class SuccessTaskCard(TaskCardBase):
 
     def _onDeleteButtonClicked(self):
         w = DeleteTaskDialog(self.window(), deleteOnClose=False)
+        w.deleteFileCheckBox.setChecked(False)
+        
         if w.exec():
             self.deleted.emit(self.task)
             downloadTaskService.removedSuccessTask(self.task, w.deleteFileCheckBox.isChecked())
