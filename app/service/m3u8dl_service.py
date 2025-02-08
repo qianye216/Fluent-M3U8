@@ -147,7 +147,11 @@ class M3U8DLService(QObject):
         return True
 
     def _onDownloadMessage(self, process: QProcess, task: Task, logger: Logger):
-        message = process.readAllStandardOutput().toStdString()
+        try:
+            message = process.readAllStandardOutput().toStdString()
+        except:
+            return
+
         logger.info(message)
 
         if 'WARN' in message:
