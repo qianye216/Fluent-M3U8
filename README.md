@@ -45,7 +45,7 @@ English | <a href="docs/README_zh.md">简体中文</a>
     pip install -r requirements.txt
     ```
 
-2. Download [FFmpeg](https://www.ffmpeg.org/download.html) and [N_m3u8DL-RE](https://github.com/nilaoda/N_m3u8DL-RE)
+2. Download [FFmpeg](https://www.ffmpeg.org/download.html) and [N_m3u8DL-RE](https://github.com/nilaoda/N_m3u8DL-RE/releases)
 
 3. Place the executable files of ffmpeg and N_m3u8DL-RE in the `tools` directory.
 
@@ -55,6 +55,18 @@ English | <a href="docs/README_zh.md">简体中文</a>
     conda activate fluent-m3u8
     python Fluent-M3U8.py
     ```
+
+## Deploy
+
+1. Run deploy script:
+    ```shell
+    conda activate fluent-m3u8
+    python deploy.py
+    ```
+
+2. Copy `tools` folder to the packaging folder:
+   * For Windows and Linux: `dist/Fluent-M3U8.dist/tools`
+   * For macOS: `dist/Fluent-M3U8.app/Contents/MacOS/tools`
 
 
 ## See also

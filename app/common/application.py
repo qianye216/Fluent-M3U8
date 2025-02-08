@@ -31,7 +31,6 @@ class SingletonApplication(QApplication):
         if self.memory.attach():
             self.isRunning = True
 
-            # 第二个参数为 ui 文件路径
             self.sendMessage(" ".join(argv[1:]) if len(argv) > 1 else 'show')
             sys.exit()
 

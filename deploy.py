@@ -6,12 +6,13 @@ if sys.platform == "win32":
     args = [
         'nuitka',
         '--standalone',
-        # '--windows-disable-console',
+        '--windows-disable-console',
         '--plugin-enable=pyside6' ,
-        '--msvc=latest',
+        '--include-qt-plugins=sensible,sqldrivers',
+        # '--msvc=latest',              # Use MSVC
+        '--assume-yes-for-downloads',   # Use MinGW
         '--show-memory' ,
         '--show-progress' ,
-        '--include-qt-plugins=sensible,sqldrivers',
         '--windows-icon-from-ico=app/resource/images/logo.ico',
         '--output-dir=dist/Fluent-M3U8',
         'Fluent-M3U8.py',

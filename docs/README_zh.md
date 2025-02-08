@@ -46,7 +46,7 @@
     pip install -r requirements.txt
     ```
 
-2. 下载 [FFmpeg](https://www.ffmpeg.org/download.html) 和 [N_m3u8DL-RE](https://github.com/nilaoda/N_m3u8DL-RE)
+2. 下载 [FFmpeg](https://www.ffmpeg.org/download.html) 和 [N_m3u8DL-RE](https://github.com/nilaoda/N_m3u8DL-RE/releases)
 
 3. 将 ffmpeg 和 N_m3u8DL-RE 的可执行文件放在 `tools` 目录下.
 
@@ -56,6 +56,18 @@
     conda activate fluent-m3u8
     python Fluent-M3U8.py
     ```
+
+## 打包
+
+1. 运行打包脚本:
+    ```shell
+    conda activate fluent-m3u8
+    python deploy.py
+    ```
+
+2. 复制 `tools` 文件夹到打包目录:
+   * 对于 Windows/Linux: 拷贝为 `dist/Fluent-M3U8.dist/tools`
+   * 对于 macOS: 拷贝为 `dist/Fluent-M3U8.app/Contents/MacOS/tools`
 
 
 ## 致谢
