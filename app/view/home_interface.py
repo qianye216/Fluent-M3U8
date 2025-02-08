@@ -57,6 +57,16 @@ class HomeInterface(ScrollArea):
         self._connectSignalToSlot()
 
     def _onDownloadButtonClicked(self):
+        if not m3u8Service.isAvailable():
+            InfoBar.error(
+                self.tr("Task failed"),
+                self.tr("Please choose N_m3u8DL-RE binary file in setting interface"),
+                duration=-1,
+                position=InfoBarPosition.BOTTOM,
+                parent=self
+            )
+            return
+
         options = [
             *self.basicSettingCard.parseOptions(),
             *self.proxySettingCard.parseOptions(),

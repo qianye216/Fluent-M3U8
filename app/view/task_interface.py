@@ -101,6 +101,16 @@ class TaskInterface(Interface):
         self.emptyStatusWidget.setVisible(visible)
 
     def _redownload(self, task: Task):
+        if not m3u8Service.isAvailable():
+            InfoBar.error(
+                self.tr("Task failed"),
+                self.tr("Please choose N_m3u8DL-RE binary file in setting interface"),
+                duration=-1,
+                position=InfoBarPosition.BOTTOM,
+                parent=self
+            )
+            return
+
         success = downloadTaskService.redownload(task)
         if success:
             w = InfoBar.success(

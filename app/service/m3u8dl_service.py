@@ -108,6 +108,9 @@ class M3U8DLService(QObject):
 
     @exceptionTracebackHandler("download", False)
     def download(self, options: List[str]):
+        if not self.isAvailable():
+            return False
+
         # create task
         options = self.generateCommand(options)
         task = self.cmdParser.parse([self.downloaderPath, *options])
@@ -217,6 +220,9 @@ class M3U8DLService(QObject):
     @property
     def downloaderPath(self):
         return cfg.get(cfg.m3u8dlPath)
+
+    def isAvailable(self):
+        return Path(self.downloaderPath).exists()
 
     def terminateTask(self, task: Task):
         process = self.processMap.get(task.pid)
