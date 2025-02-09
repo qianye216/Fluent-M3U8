@@ -307,10 +307,10 @@ class DeleteTaskDialog(MessageBoxBase):
 
     def __init__(self, parent=None, showCheckBox=True, deleteOnClose=True):
         super().__init__(parent)
-        self.titleLabel = SubtitleLabel(self.tr("Delete task"))
+        self.titleLabel = SubtitleLabel(self.tr("Delete task"), self)
         self.contentLabel = BodyLabel(
-            self.tr("Are you sure to delete this task?"))
-        self.deleteFileCheckBox = CheckBox(self.tr("Remove file"))
+            self.tr("Are you sure to delete this task?"), self)
+        self.deleteFileCheckBox = CheckBox(self.tr("Remove file"), self)
 
         self.deleteFileCheckBox.setVisible(showCheckBox)
 
