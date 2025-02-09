@@ -69,7 +69,7 @@ class MainWindow(MSFluentWindow):
             self.settingInterface, Icon.SETTINGS, self.tr('Settings'), Icon.SETTINGS_FILLED, NavigationItemPosition.BOTTOM)
 
     def initWindow(self):
-        self.resize(960, 757 if sys.platform == "win32" else 773)
+        self.resize(960, 754 if sys.platform == "win32" else 773)
         self.setMinimumWidth(760)
         self.setWindowIcon(QIcon(':/app/images/logo.png'))
         self.setWindowTitle('Fluent M3U8')

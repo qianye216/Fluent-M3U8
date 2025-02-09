@@ -66,6 +66,7 @@ class DownloadingTaskCard(TaskCardBase):
     def _initLayout(self):
         self.hBoxLayout.setContentsMargins(20, 11, 11, 11)
         self.hBoxLayout.addWidget(self.imageLabel)
+        self.hBoxLayout.addSpacing(5)
         self.hBoxLayout.addLayout(self.vBoxLayout)
         self.hBoxLayout.addSpacing(20)
         self.hBoxLayout.addWidget(self.openFolderButton)
