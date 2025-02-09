@@ -30,7 +30,7 @@ jobs:
           chmod u+x "dist/Fluent-M3U8.app/Contents/MacOS/Fluent-M3U8"
           rm -rf "dist/Fluent-M3U8.build"
 
-      - name: Download and extract remote package
+      - name: Download and extract tools
         run: |
           # Setup variables
           ZIP_URL="https://github.com/zhiyiYo/Fluent-M3U8-Tools/releases/download/v0.1.0/macOS-${{ matrix.architecture }}.zip"
@@ -52,7 +52,7 @@ jobs:
       - name: Create DMG
         run: |
           ln -s /Applications dist/Applications
-          hdiutil create -srcfolder "dist/" -volname "Fluent-M3U8" -fs HFS+ -fsargs "-c c=64,a=16,e=16" -format UDZO -size 200m "Fluent-M3U8-v${{ env.VERSION }}-macOS-${{ matrix.architecture }}.dmg"
+          hdiutil create -srcfolder "dist/" -volname "Fluent-M3U8" -fs HFS+ -fsargs "-c c=64,a=16,e=16" -format UDZO -size 400m "Fluent-M3U8-v${{ env.VERSION }}-macOS-${{ matrix.architecture }}.dmg"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4

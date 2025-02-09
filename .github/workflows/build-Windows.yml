@@ -26,6 +26,26 @@ jobs:
         run: |
           python deploy.py
 
+      - name: Download and extract tools
+        shell: pwsh
+        run: |
+          # Setup variables
+          $ZIP_URL = "https://github.com/zhiyiYo/Fluent-M3U8-Tools/releases/download/v0.1.0/Windows-${{ matrix.architecture }}.zip"
+          $DEST_DIR = "dist/Fluent-M3U8.dist"
+
+          # download zip
+          Write-Output "Downloading package from $ZIP_URL..."
+          Invoke-WebRequest -Uri $ZIP_URL -OutFile "$env:TEMP/package.zip"
+
+          # unzip
+          Write-Output "Extracting package..."
+          Expand-Archive -Path "$env:TEMP/package.zip" -DestinationPath $DEST_DIR -Force
+
+          # delete zip
+          Remove-Item "$env:TEMP/package.zip" -Force
+
+          Write-Output "Download and extraction complete!"
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
