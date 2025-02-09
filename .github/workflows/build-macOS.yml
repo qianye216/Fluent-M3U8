@@ -24,7 +24,7 @@ jobs:
 
       - name: Build with Nuitka
         run: |
-          VERSION=$(python3 -c "from app.common.setting import VERSION; print(VERSION[1:])")
+          VERSION=$(python3 -c "from app.common.setting import VERSION; print(VERSION)")
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
           python deploy.py
           chmod u+x "dist/Fluent-M3U8.app/Contents/MacOS/Fluent-M3U8"
