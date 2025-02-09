@@ -30,12 +30,12 @@ jobs:
           chmod u+x "dist/Fluent-M3U8.app/Contents/MacOS/Fluent-M3U8"
           rm -rf "dist/Fluent-M3U8.build"
           ln -s /Applications dist/Applications
-          hdiutil create -srcfolder "dist/" -volname "Fluent-M3U8" -fs HFS+ -fsargs "-c c=64,a=16,e=16" -format UDZO -size 200m "Fluent-M3U8.dmg"
+          hdiutil create -srcfolder "dist/" -volname "Fluent-M3U8" -fs HFS+ -fsargs "-c c=64,a=16,e=16" -format UDZO -size 200m "Fluent-M3U8-v${{ env.VERSION }}-macOS-${{ matrix.architecture }}.dmg"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: Fluent-M3U8-v${{ env.VERSION }}-macOS-${{ matrix.architecture }}
-          path: Fluent-M3U8.dmg
+          path: Fluent-M3U8-v${{ env.VERSION }}-macOS-${{ matrix.architecture }}.dmg
 
 
