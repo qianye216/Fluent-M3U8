@@ -1,5 +1,6 @@
 # coding:utf-8
 from pathlib import Path
+import sys
 from PySide6.QtCore import Qt, Signal, Property, QFileInfo, QSize
 from PySide6.QtGui import QPixmap, QPainter, QFont
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QFileIconProvider
@@ -70,7 +71,7 @@ class DownloadingTaskCard(TaskCardBase):
         self.hBoxLayout.addWidget(self.openFolderButton)
         self.hBoxLayout.addWidget(self.deleteButton)
 
-        self.vBoxLayout.setSpacing(0)
+        self.vBoxLayout.setSpacing(5)
         self.vBoxLayout.setContentsMargins(0, 0, 0, 0)
         self.vBoxLayout.addWidget(self.fileNameLabel)
         self.vBoxLayout.addLayout(self.infoLayout)
@@ -166,7 +167,7 @@ class SuccessTaskCard(TaskCardBase):
         self.hBoxLayout.addWidget(self.openFolderButton)
         self.hBoxLayout.addWidget(self.deleteButton)
 
-        self.vBoxLayout.setSpacing(0)
+        self.vBoxLayout.setSpacing(5)
         self.vBoxLayout.setContentsMargins(0, 0, 0, 0)
         self.vBoxLayout.addWidget(self.fileNameLabel)
         self.vBoxLayout.addLayout(self.infoLayout)
@@ -197,7 +198,7 @@ class SuccessTaskCard(TaskCardBase):
     def _onDeleteButtonClicked(self):
         w = DeleteTaskDialog(self.window(), deleteOnClose=False)
         w.deleteFileCheckBox.setChecked(False)
-        
+
         if w.exec():
             self.deleted.emit(self.task)
             downloadTaskService.removedSuccessTask(self.task, w.deleteFileCheckBox.isChecked())
@@ -268,7 +269,7 @@ class FailedTaskCard(TaskCardBase):
         self.hBoxLayout.addWidget(self.logButton)
         self.hBoxLayout.addWidget(self.deleteButton)
 
-        self.vBoxLayout.setSpacing(0)
+        self.vBoxLayout.setSpacing(5)
         self.vBoxLayout.setContentsMargins(0, 0, 0, 0)
         self.vBoxLayout.addWidget(self.fileNameLabel)
         self.vBoxLayout.addLayout(self.infoLayout)
