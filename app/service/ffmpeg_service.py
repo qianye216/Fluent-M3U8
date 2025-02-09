@@ -1,5 +1,6 @@
 # coding:utf-8
 from pathlib import Path
+import subprocess
 from typing import Union
 from PySide6.QtCore import Qt, Signal, Property, QObject
 from PySide6.QtGui import QPixmap, QPainter, QColor
@@ -20,7 +21,8 @@ class FFmpegService(QObject):
         if Path(savePath).exists():
             removeFile(savePath)
 
-        ffmpeg.input(str(videoPath), ss=0).output(str(savePath), vframes=1).run(self.path)
+        ffmpeg.input(str(videoPath), ss=0).output(str(savePath), vframes=1).run(
+            self.path, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
 
     @property
     def path(self):
