@@ -167,13 +167,13 @@ class MainWindow(MSFluentWindow):
             self.systemTrayIcon.showMessage(
                 self.tr("Task finished"),
                 f'"{task.fileName}"' + self.tr("download successfully"),
-                InfoBarIcon.SUCCESS.qicon()
+                InfoBarIcon.SUCCESS.icon()
             )
         else:
             self.systemTrayIcon.showMessage(
                 self.tr("Task failed"),
                 f'"{task.fileName}"' + self.tr("download failed") + ": " + errorMsg,
-                InfoBarIcon.ERROR.qicon()
+                InfoBarIcon.ERROR.icon()
             )
 
     def onSystemTrayMessageClicked(self):
