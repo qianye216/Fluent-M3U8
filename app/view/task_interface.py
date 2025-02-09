@@ -24,7 +24,7 @@ class TaskInterface(Interface):
         self.setTitle(self.tr("Task"))
 
         self.pivot = SegmentedWidget()
-        self.stackedWidget = QStackedWidget()
+        self.stackedWidget = TaskStackedWidget()
         self.downloadingTaskView = DownloadingTaskView(self)
         self.successTaskView = SuccessTaskView(self)
         self.failedTaskView = FailedTaskView(self)
@@ -140,7 +140,8 @@ class TaskInterface(Interface):
         super().resizeEvent(e)
         self.emptyStatusWidget.adjustSize()
         w, h = self.emptyStatusWidget.width(), self.emptyStatusWidget.height()
-        y = self.stackedWidget.y() + (self.height() - self.stackedWidget.y()) // 2 - h //2
+        top = self.pivot.geometry().bottom()
+        y = top + (self.height() - top) // 2 - h //2
         self.emptyStatusWidget.move(int(self.width()/2 - w/2), y)
 
 
@@ -260,3 +261,12 @@ class FailedTaskView(TaskCardView):
 
     def createCard(self, task: Task):
         return FailedTaskCard(task, self)
+
+
+class TaskStackedWidget(QStackedWidget):
+
+    def sizeHint(self):
+        return self.currentWidget().sizeHint()
+
+    def minimumSizeHint(self):
+        return self.currentWidget().minimumSizeHint()
