@@ -19,7 +19,7 @@ if sys.platform == "win32":
         '--windows-product-name=Fluent-M3U8',
         f'--windows-file-version={VERSION}',
         f'--windows-product-version={VERSION}',
-        '--windows-file-description="A cross-platform m3u8 downloader"',
+        '--windows-file-description="Fluent M3U8"',
         '--output-dir=dist',
         'Fluent-M3U8.py',
     ]
