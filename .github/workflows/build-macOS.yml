@@ -29,6 +29,28 @@ jobs:
           python deploy.py
           chmod u+x "dist/Fluent-M3U8.app/Contents/MacOS/Fluent-M3U8"
           rm -rf "dist/Fluent-M3U8.build"
+
+      - name: Download and extract remote package
+        run: |
+          # Setup variables
+          ZIP_URL="https://github.com/zhiyiYo/Fluent-M3U8-Tools/releases/download/v0.1.0/macOS-arm64.zip"
+          DEST_DIR="dist/Fluent-M3U8.app/Contents/MacOS"
+
+          # Download tools
+          echo "Downloading package from $ZIP_URL..."
+          curl -L "$ZIP_URL" -o "/tmp/package.zip"
+
+          # unzip
+          echo "Extracting package..."
+          unzip -o "/tmp/package.zip" -d "$DEST_DIR"
+
+          # delete zip
+          rm "/tmp/package.zip"
+
+          echo "Download and extraction complete!"
+
+      - name: Create DMG
+        run: |
           ln -s /Applications dist/Applications
           hdiutil create -srcfolder "dist/" -volname "Fluent-M3U8" -fs HFS+ -fsargs "-c c=64,a=16,e=16" -format UDZO -size 200m "Fluent-M3U8-v${{ env.VERSION }}-macOS-${{ matrix.architecture }}.dmg"
 
