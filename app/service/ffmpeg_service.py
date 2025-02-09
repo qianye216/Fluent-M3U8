@@ -21,8 +21,7 @@ class FFmpegService(QObject):
         if Path(savePath).exists():
             removeFile(savePath)
 
-        ffmpeg.input(str(videoPath), ss=0).output(str(savePath), vframes=1).run(
-            self.path, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+        ffmpeg.input(str(videoPath), ss=0).output(str(savePath), vframes=1).run(self.path)
 
     @property
     def path(self):
