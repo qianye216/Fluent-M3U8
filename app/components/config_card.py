@@ -83,31 +83,31 @@ class BasicConfigCard(GroupHeaderCardWidget):
     def _initLayout(self):
         # add widget to group
         self.addGroup(
-            icon=Logo.GLOBE,
+            icon=Logo.GLOBE.icon(),
             title=self.tr("Download URL"),
             content=self.tr("The URL of m3u8 file"),
             widget=self.urlLineEdit
         )
         self.addGroup(
-            icon=Logo.FILM,
+            icon=Logo.FILM.icon(),
             title=self.tr("File Name"),
             content=self.tr("The name of downloaded file"),
             widget=self.fileNameLineEdit
         )
         self.addGroup(
-            icon=Logo.PROJECTOR,
+            icon=Logo.PROJECTOR.icon(),
             title=self.tr("Stream Info"),
             content=self.tr("Select the stream to be downloaded"),
             widget=self.streamInfoComboBox
         )
         self.saveFolderGroup = self.addGroup(
-            icon=Logo.FOLDER,
+            icon=Logo.FOLDER.icon(),
             title=self.tr("Save Folder"),
             content=cfg.get(cfg.saveFolder),
             widget=self.saveFolderButton
         )
         group = self.addGroup(
-            icon=Logo.KNOT,
+            icon=Logo.KNOT.icon(),
             title=self.tr("Download Threads"),
             content=self.tr("Set the number of concurrent download threads"),
             widget=self.threadCountSpinBox
@@ -248,14 +248,14 @@ class AdvanceConfigCard(M3U8GroupHeaderCardWidget):
 
     def _initLayout(self):
         self.addGroup(
-            icon=Logo.COOKIE,
+            icon=Logo.COOKIE.icon(),
             title=self.tr("Header"),
             content=self.tr("Set custom headers for HTTP requests"),
             widget=self.httpHeaderEdit
         )
 
         speedGroup = self.addGroup(
-            icon=Logo.ROCKET,
+            icon=Logo.ROCKET.icon(),
             title=self.tr("Max Speed"),
             content=self.tr("Set maximum download speed, -1 indicates no speed limit"),
             widget=self.speedSpinBox
@@ -263,13 +263,13 @@ class AdvanceConfigCard(M3U8GroupHeaderCardWidget):
         speedGroup.addWidget(self.speedComboBox)
 
         self.addGroup(
-            icon=Logo.HOURGLASS,
+            icon=Logo.HOURGLASS.icon(),
             title=self.tr("Request Timeout"),
             content=self.tr("Set timeout for HTTP requests (in seconds)"),
             widget=self.httpTimeoutSpinBox
         )
         self.addGroup(
-            icon=Logo.JOYSTICK,
+            icon=Logo.JOYSTICK.icon(),
             title=self.tr("Retry Count"),
             content=self.tr(
                 "Set the retry count for each shard download exception"),
@@ -277,45 +277,45 @@ class AdvanceConfigCard(M3U8GroupHeaderCardWidget):
         )
 
         self.addGroup(
-            icon=Logo.SCROLL,
+            icon=Logo.SCROLL.icon(),
             title=self.tr("Subtitle Format"),
             content=self.tr("Set the output type of subtitle"),
             widget=self.subtitleComboBox
         )
 
         self.addSwitchOption(
-            icon=Logo.ALEMBIC,
+            icon=Logo.ALEMBIC.icon(),
             title=self.tr("Auto Select"),
             content=self.tr("Automatically select the best track of all types"),
             config=M3U8DLCommand.AUTO_SELECT,
         )
         self.addSwitchOption(
-            icon=Logo.CARD_FILE_BOX,
+            icon=Logo.CARD_FILE_BOX.icon(),
             title=self.tr("Binary Merge"),
             content=self.tr("Merge ts files directly through binary copy connections"),
             config=M3U8DLCommand.BINARY_MERGE
         )
         self.addSwitchOption(
-            icon=Logo.WASTEBASKET,
+            icon=Logo.WASTEBASKET.icon(),
             title=self.tr("Delete After Done"),
             content=self.tr("Delete temporary files after downloading is complete"),
             config=M3U8DLCommand.DEL_AFTER_DONE,
             checked=True
         )
         self.addSwitchOption(
-            icon=Logo.LINK,
+            icon=Logo.LINK.icon(),
             title=self.tr("Append URL Params"),
             content=self.tr("Adding the Params of the input URL to the shard"),
             config=M3U8DLCommand.APPEND_URL_PARAMS,
         )
         self.addSwitchOption(
-            icon=Logo.CALENDAR,
+            icon=Logo.CALENDAR.icon(),
             title=self.tr("Date Info"),
             content=self.tr("Do not write date information when mixing"),
             config=M3U8DLCommand.NO_DATE_INFO,
         )
         self.addSwitchOption(
-            icon=Logo.INBOX,
+            icon=Logo.INBOX.icon(),
             title=self.tr("Concurrent"),
             content=self.tr("Concurrent download of selected audio, video, and subtitles"),
             config=M3U8DLCommand.CONCURRENT_DOWNLOAD,
@@ -367,14 +367,14 @@ class ProxyConfigCard(M3U8GroupHeaderCardWidget):
 
     def _initLayout(self):
         self.systemProxyButton = self.addSwitchOption(
-            icon=Logo.PLANET,
+            icon=Logo.PLANET.icon(),
             title=self.tr("System Proxy"),
             content=self.tr("Use system default proxy"),
             config=M3U8DLCommand.USE_SYSTEM_PROXY,
             checked=True
         )
         self.addGroup(
-            icon=Logo.AIRPLANE,
+            icon=Logo.AIRPLANE.icon(),
             title=self.tr("Custom Proxy"),
             content=self.tr("Set the http request proxy to be used"),
             widget=self.proxyLineEdit
