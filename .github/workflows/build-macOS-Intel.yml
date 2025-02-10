@@ -4,62 +4,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-macos-14-arm:
-    strategy:
-      matrix:
-        architecture: [arm64]
-    runs-on: macos-14
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-
-      - name: Build with Nuitka
-        run: |
-          VERSION=$(python3 -c "from app.common.setting import VERSION; print(VERSION)")
-          echo "VERSION=${VERSION}" >> $GITHUB_ENV
-          python deploy.py
-          chmod u+x "dist/Fluent-M3U8.app/Contents/MacOS/Fluent-M3U8"
-          rm -rf "dist/Fluent-M3U8.build"
-
-      - name: Download and extract tools
-        run: |
-          # Setup variables
-          ZIP_URL="https://github.com/zhiyiYo/Fluent-M3U8-Tools/releases/download/v0.1.0/macOS-${{ matrix.architecture }}.zip"
-          DEST_DIR="dist/Fluent-M3U8.app/Contents/MacOS"
-
-          # Download tools
-          echo "Downloading package from $ZIP_URL..."
-          curl -L "$ZIP_URL" -o "/tmp/package.zip"
-
-          # unzip
-          echo "Extracting package..."
-          unzip -o "/tmp/package.zip" -d "$DEST_DIR"
-
-          # delete zip
-          rm "/tmp/package.zip"
-
-          echo "Download and extraction complete!"
-
-      - name: Create DMG
-        run: |
-          ln -s /Applications dist/Applications
-          hdiutil create -srcfolder "dist/" -volname "Fluent-M3U8" -fs HFS+ -fsargs "-c c=64,a=16,e=16" -format UDZO -size 400m "Fluent-M3U8-v${{ env.VERSION }}-macOS-${{ matrix.architecture }}.dmg"
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: Fluent-M3U8-v${{ env.VERSION }}-macOS-${{ matrix.architecture }}
-          path: Fluent-M3U8-v${{ env.VERSION }}-macOS-${{ matrix.architecture }}.dmg
-
   build-macos-13-x86_64:
     strategy:
       matrix:
