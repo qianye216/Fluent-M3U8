@@ -35,6 +35,10 @@ jobs:
           chmod u+x "dist/Fluent-M3U8.app/Contents/MacOS/Fluent-M3U8"
           rm -rf "dist/Fluent-M3U8.build"
 
+      - name: Reinstall openssl libs
+        run: |
+          brew install openssl@3
+
       - name: Download and extract tools
         run: |
           # Setup variables
