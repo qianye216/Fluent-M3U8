@@ -1,22 +1,17 @@
-name: Build macOS Intel
+name: Build macOS Apple
 
 on:
   workflow_dispatch:
 
 jobs:
-  build-macos-13-x86_64:
+  build-macos-14-arm:
     strategy:
       matrix:
-        architecture: [x86_64]
-    runs-on: macos-13
+        architecture: [arm64]
+    runs-on: macos-14
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Remove problematic brew libs
-        run: |
-          brew remove --force --ignore-dependencies openssl@3
-          brew cleanup openssl@3
 
       - name: Set up Python 3.11
         uses: actions/setup-python@v4
