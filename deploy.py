@@ -50,8 +50,7 @@ else:
         '--assume-yes-for-downloads',
         '--show-memory',
         '--show-progress',
-        '--linux-onefile-icon=app/resource/images/logo.png',
-        '--linux-dependency-tree',
+        '--linux-icon=app/resource/images/logo.ico',
         '--output-dir=dist',
         'Fluent-M3U8.py',
     ]
