@@ -18,3 +18,8 @@ class TestM3U8DLService(TestCase):
         url = "https://sf1-cdn-tos.huoshanstatic.com/obj/media-fe/xgplayer_doc_video/hls/xgplayer-demo.m3u8"
         videos = self.service.getStreamInfos(url)
         self.assertEqual(len(videos), 0)
+
+    def test_get_timer_stream_infos(self):
+        url = "http://devimages.apple.com/iphone/samples/bipbop/gear1/prog_index.m3u8"
+        videos = self.service.getStreamInfos(url)
+        self.assertEqual(len(videos), 0)
