@@ -68,6 +68,13 @@ class DownloadProgressInfo:
     totalSize: str = ""
 
 
+def str2bool(value):
+    if isinstance(value, bool):
+        return value
+
+    return True if value.lower() == "true" else False
+
+
 class M3U8DLCommandLineParser(QObject):
     """ M3U8DL Command line parser """
 
@@ -81,6 +88,7 @@ class M3U8DLCommandLineParser(QObject):
         self._parser.add_argument('url', type=str, nargs='?', default=None)
         self._parser.add_argument(M3U8DLCommand.SAVE_NAME.value, type=str)
         self._parser.add_argument(M3U8DLCommand.SAVE_DIR.value, type=str)
+        self._parser.add_argument(M3U8DLCommand.BINARY_MERGE.value, type=str2bool, default=False)
 
     def parse(self, options: List[str]) -> Task:
         """ process args """
@@ -88,6 +96,7 @@ class M3U8DLCommandLineParser(QObject):
         task = Task(
             fileName=args.save_name,
             saveFolder=args.save_dir,
+            isBinaryMerge=args.binary_merge,
             command=" ".join(options),
         )
         return task
@@ -114,7 +123,7 @@ class M3U8DLService(QObject):
 
         # create task
         options = self.generateCommand(options)
-        task = self.cmdParser.parse([self.downloaderPath, *options])
+        task = self.cmdParser.parse(options)
 
         # auto rename
         currentTime = task.createTime.toString("yyyy-MM-dd_hh-mm-ss")

@@ -6,7 +6,7 @@ class TaskDao(DaoBase):
     """ Task DAO """
 
     table = 'tbl_task'
-    fields = ['id', 'fileName', "saveFolder", 'size', 'command', 'status', 'logFile', 'createTime']
+    fields = ['id', 'fileName', "saveFolder", 'size', 'isBinaryMerge', 'command', 'status', 'logFile', 'createTime']
 
     def createTable(self):
         success = self.query.exec(f"""
@@ -15,6 +15,7 @@ class TaskDao(DaoBase):
                 fileName TEXT,
                 saveFolder TEXT,
                 size TEXT,
+                isBinaryMerge INTEGER,
                 command TEXT,
                 status INTEGER,
                 logFile TEXT,
