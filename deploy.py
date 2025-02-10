@@ -41,6 +41,21 @@ elif sys.platform == "darwin":
         '--output-dir=dist',
         'Fluent-M3U8.py',
     ]
+else:
+    args = [
+        'nuitka',
+        '--standalone',
+        '--plugin-enable=pyside6',
+        '--include-qt-plugins=sensible,sqldrivers,platforms',
+        '--assume-yes-for-downloads',
+        '--show-memory',
+        '--show-progress',
+        '--linux-onefile-icon=app/resource/images/logo.png',
+        '--linux-dependency-tree',
+        '--output-dir=dist',
+        'Fluent-M3U8.py',
+    ]
+
 
 os.system(' '.join(args))
 
