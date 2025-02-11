@@ -55,7 +55,7 @@ jobs:
           echo "VERSION=$VERSION" >> $env:GITHUB_ENV
 
           $distPath = "dist/Fluent-M3U8.dist"
-          $zipFile = "Fluent-M3U8-v${{ env.VERSION }}-Windows-${{ matrix.architecture }}.zip"
+          $zipFile = "Fluent-M3U8-v$VERSION-Windows-${{ matrix.architecture }}.zip"
 
           # Create a zip file containing the contents of Fluent-M3U8.dist, without the folder itself
           Write-Output "Zipping contents of $distPath..."
