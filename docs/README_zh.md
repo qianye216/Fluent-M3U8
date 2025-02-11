@@ -5,7 +5,7 @@
   Fluent M3U8
 </h1>
 <p align="center">
-  基于 PySide6 的跨平台 m3u8 下载软件
+  基于 PySide6 和 QFluentWidgets 的跨平台 m3u8 下载软件
 </p>
 
 <p align="center">

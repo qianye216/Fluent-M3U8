@@ -5,7 +5,7 @@
   Fluent M3U8
 </h1>
 <p align="center">
-  A cross-platform m3u8 downloader based on PySide6
+  A cross-platform m3u8 downloader based on PySide6 and QFluentWidgets
 </p>
 
 <p align="center">
