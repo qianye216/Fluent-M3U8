@@ -6,7 +6,8 @@ from PySide6.QtWidgets import QWidget, QHBoxLayout, QFileDialog
 
 from qfluentwidgets import (IconWidget, BodyLabel, FluentIcon, InfoBarIcon, ComboBox,
                             PrimaryPushButton, LineEdit, GroupHeaderCardWidget, PushButton,
-                            CompactSpinBox, SwitchButton, IndicatorPosition, PlainTextEdit)
+                            CompactSpinBox, SwitchButton, IndicatorPosition, PlainTextEdit,
+                            ToolTipFilter)
 
 from m3u8.model import StreamInfo
 
@@ -15,7 +16,7 @@ from ..common.config import cfg
 from ..common.concurrent import TaskExecutor
 from ..common.utils import adjustFileName
 
-from ..service.m3u8dl_service import M3U8DLCommand, m3u8Service
+from ..service.m3u8dl_service import M3U8DLCommand, m3u8Service, BatchM3U8FileParser
 
 
 class M3U8GroupHeaderCardWidget(GroupHeaderCardWidget):
@@ -71,8 +72,11 @@ class BasicConfigCard(GroupHeaderCardWidget):
         self.urlLineEdit.setClearButtonEnabled(True)
         self.fileNameLineEdit.setClearButtonEnabled(True)
 
-        self.urlLineEdit.setPlaceholderText(self.tr("Please enter the url of m3u8 file"))
         self.fileNameLineEdit.setPlaceholderText(self.tr("Please enter the name of downloaded file"))
+        self.urlLineEdit.setPlaceholderText(self.tr("Please enter the path of m3u8 or txt"))
+        self.urlLineEdit.setToolTip(self.tr("The format of each line in the txt file is FileName,URL"))
+        self.urlLineEdit.setToolTipDuration(3000)
+        self.urlLineEdit.installEventFilter(ToolTipFilter(self.urlLineEdit))
 
         self.threadCountSpinBox.setRange(1, 1000)
         self.threadCountSpinBox.setValue(os.cpu_count())
@@ -85,7 +89,7 @@ class BasicConfigCard(GroupHeaderCardWidget):
         self.addGroup(
             icon=Logo.GLOBE.icon(),
             title=self.tr("Download URL"),
-            content=self.tr("The URL of m3u8 file"),
+            content=self.tr("The path of m3u8 or txt file, support drag and drop txt file"),
             widget=self.urlLineEdit
         )
         self.addGroup(
@@ -131,7 +135,7 @@ class BasicConfigCard(GroupHeaderCardWidget):
     def _onTextChanged(self):
         url = self.urlLineEdit.text().strip()
         fileName = self.fileNameLineEdit.text()
-        if url.endswith('m3u8') and fileName:
+        if (url.endswith('m3u8') and fileName) or url.endswith(".txt"):
             self.downloadButton.setEnabled(True)
         else:
             self.downloadButton.setEnabled(False)
@@ -139,17 +143,16 @@ class BasicConfigCard(GroupHeaderCardWidget):
     def _onUrlChanged(self, url: str):
         url = url.strip()
         if not url.endswith(".m3u8"):
-            return
+            return self._resetStreamInfo()
 
         TaskExecutor.runTask(m3u8Service.getStreamInfos, url).then(
             self._onStreamInfosFetched)
 
     def _onStreamInfosFetched(self, streamInfos: List[StreamInfo]):
-        self.streamInfoComboBox.clear()
-
         if not streamInfos:
-            self.streamInfoComboBox.addItem(self.tr("Default"))
-            return
+            return self._resetStreamInfo()
+
+        self.streamInfoComboBox.clear()
 
         for info in streamInfos:
             texts = []
@@ -173,17 +176,21 @@ class BasicConfigCard(GroupHeaderCardWidget):
         if folder:
             self.saveFolderGroup.setContent(folder)
 
+    def _resetStreamInfo(self):
+        self.streamInfoComboBox.clear()
+        self.streamInfoComboBox.addItem(self.tr("Default"))
+
     def _connectSignalToSlot(self):
         self.urlLineEdit.textChanged.connect(self._onUrlChanged)
         self.urlLineEdit.textChanged.connect(self._onTextChanged)
         self.fileNameLineEdit.textChanged.connect(self._onTextChanged)
         self.saveFolderButton.clicked.connect(self._chooseSaveFolder)
 
-    def parseOptions(self):
+    def parseOptions(self) -> List[List[str]]:
         """ Returns the m3u8dl options """
+        result = []
+
         options = [
-            self.urlLineEdit.text().strip(),
-            M3U8DLCommand.SAVE_NAME.command(adjustFileName(self.fileNameLineEdit.text())),
             M3U8DLCommand.SAVE_DIR.command(self.saveFolderGroup.content()),
             M3U8DLCommand.TMP_DIR.command(self.saveFolderGroup.content()),
             M3U8DLCommand.THREAD_COUNT.command(self.threadCountSpinBox.value()),
@@ -203,8 +210,24 @@ class BasicConfigCard(GroupHeaderCardWidget):
                 M3U8DLCommand.SELECT_VIDEO.command(),
                 ":".join(cmds)
             ])
+        else:
+            options.append(M3U8DLCommand.SELECT_VIDEO.command('best'))
 
-        return options
+        url = self.urlLineEdit.text().strip()
+        if url.endswith(".m3u8"):
+            fileName = adjustFileName(self.fileNameLineEdit.text())
+            result = [
+                [url, M3U8DLCommand.SAVE_NAME.command(fileName), *options]
+            ]
+        else:
+            tasks = BatchM3U8FileParser().parse(url)
+            for fileName, m3u8Url in tasks:
+                fileName = adjustFileName(fileName)
+                result.append([
+                    m3u8Url, M3U8DLCommand.SAVE_NAME.command(fileName), *options
+                ])
+
+        return result
 
 
 class AdvanceConfigCard(M3U8GroupHeaderCardWidget):

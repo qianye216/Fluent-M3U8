@@ -68,6 +68,34 @@ class DownloadProgressInfo:
     totalSize: str = ""
 
 
+class BatchM3U8FileParser:
+    """ Batch M3U8 File Parser """
+
+    @exceptionTracebackHandler('download', [])
+    def parse(self, file: Path | str):
+        """ parse txt file
+
+        Parameters
+        ----------
+        file: str | Path
+            txt file path, each line of file is `fileName,url`
+
+        Returns
+        -------
+        tasks: List[Tuple[str, str]]
+            `(fileName, url)` list
+        """
+        with open(file, encoding='utf-8') as f:
+            lines = f.readlines()
+
+        result = []
+        for line in lines:
+            fileName, url = line.split(",")
+            result.append((fileName, url))
+
+        return result
+
+
 def str2bool(value):
     if isinstance(value, bool):
         return value

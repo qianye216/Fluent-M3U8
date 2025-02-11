@@ -1,9 +1,9 @@
 # coding:utf-8
 from pathlib import Path
 from typing import List
-from PySide6.QtCore import Qt, Signal, QSize, QPoint, QRect, QUrl, QPropertyAnimation, QFileInfo
-from PySide6.QtGui import QPixmap, QPainter, QColor, QIcon, QAction, QFont, QStandardItem, QTextCursor, QTextOption
-from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QGraphicsOpacityEffect, QFileDialog, QGridLayout
+from PySide6.QtCore import Qt, QFileInfo
+from PySide6.QtGui import QDropEvent
+from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout
 
 from qfluentwidgets import ScrollArea, InfoBar, InfoBarPosition, PushButton
 
@@ -67,12 +67,27 @@ class HomeInterface(ScrollArea):
             )
             return
 
-        options = [
-            *self.basicSettingCard.parseOptions(),
-            *self.proxySettingCard.parseOptions(),
-            *self.advanceSettingCard.parseOptions(),
-        ]
-        success = m3u8Service.download(options)
+        basicOptions = self.basicSettingCard.parseOptions()
+        if not basicOptions:
+            InfoBar.warning(
+                self.tr("Task failed"),
+                self.tr("No available tasks found, please check the format of txt"),
+                duration=-1,
+                position=InfoBarPosition.BOTTOM,
+                parent=self
+            )
+            return
+
+        success = True
+
+        for basicOption in basicOptions:
+            options = [
+                *basicOption,
+                *self.proxySettingCard.parseOptions(),
+                *self.advanceSettingCard.parseOptions(),
+            ]
+            success = m3u8Service.download(options) and success
+
         button = PushButton(self.tr('Check'))
 
         if success:
@@ -96,6 +111,22 @@ class HomeInterface(ScrollArea):
 
         w.widgetLayout.insertSpacing(0, 10)
         w.addWidget(button)
+
+    def dragEnterEvent(self, e):
+        if not e.mimeData().hasUrls():
+            return e.ignore()
+
+        e.acceptProposedAction()
+
+    def dropEvent(self, e: QDropEvent):
+        if not e.mimeData().urls():
+            return
+
+        fileInfo = QFileInfo(e.mimeData().urls()[0].toLocalFile())
+        path = fileInfo.absoluteFilePath()
+
+        if fileInfo.isFile() and path.lower().endswith(".txt"):
+            self.basicSettingCard.urlLineEdit.setText(path)
 
     def _connectSignalToSlot(self):
         self.basicSettingCard.downloadButton.clicked.connect(self._onDownloadButtonClicked)
