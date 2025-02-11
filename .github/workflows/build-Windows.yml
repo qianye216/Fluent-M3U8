@@ -24,6 +24,9 @@ jobs:
 
       - name: Build with Nuitka
         run: |
+          $VERSION = python -c "from app.common.setting import VERSION; print(VERSION)"
+          Write-Host "VERSION=$VERSION"
+          echo "VERSION=$VERSION" >> $env:GITHUB_ENV
           python deploy.py
 
       - name: Download and extract tools
@@ -49,6 +52,6 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: Fluent-M3U8-v0.2.0-Windows-${{ matrix.architecture }}
+          name: Fluent-M3U8-v${{ env.VERSION }}-Windows-${{ matrix.architecture }}
           path: dist/Fluent-M3U8.dist
 
