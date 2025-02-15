@@ -49,8 +49,12 @@ jobs:
 
           Write-Output "Download and extraction complete!"
 
+      - name: Download Inno Setup Translation Files
+        run: |
+          Invoke-WebRequest -Uri "https://raw.githubusercontent.com/jrsoftware/issrc/main/Files/Languages/Unofficial/ChineseSimplified.isl" -OutFile "C:\Program Files (x86)\Inno Setup 6\Languages\ChineseSimplified.isl"
+
       - name: Build Installer
-        uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.5
         with:
           path: Fluent-M3U8.iss
 
