@@ -1,7 +1,9 @@
 # coding:utf-8
 import os
+import re
 from typing import List
-from PySide6.QtCore import Qt, Signal, QSize, QPoint, QRect, QUrl
+from PySide6.QtCore import Qt, Signal, QTime
+
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QFileDialog
 
 from qfluentwidgets import (IconWidget, BodyLabel, FluentIcon, InfoBarIcon, ComboBox,
@@ -415,5 +417,113 @@ class ProxyConfigCard(M3U8GroupHeaderCardWidget):
 
         if self.proxyLineEdit.text():
             options.append(M3U8DLCommand.CUSTOM_PROXY.command(self.proxyLineEdit.text().strip()))
+
+        return options
+
+
+class TimeSpinBox(QWidget):
+
+    def __init__(self, parent=None):
+        super().__init__(parent=parent)
+        self.hBoxLayout = QHBoxLayout(self)
+        self.hourSpinBox = CompactSpinBox(self)
+        self.minuteSpinBox = CompactSpinBox(self)
+        self.secondsSpinBox = CompactSpinBox(self)
+
+        self._initWidgets()
+
+    def _initWidgets(self):
+        self.hourSpinBox.setRange(0, 100000)
+        self.minuteSpinBox.setRange(0, 59)
+        self.secondsSpinBox.setRange(0, 59)
+
+        self._initLayout()
+
+    def _initLayout(self):
+        self.hBoxLayout.addWidget(self.hourSpinBox)
+        self.hBoxLayout.addWidget(BodyLabel(":"))
+        self.hBoxLayout.addWidget(self.minuteSpinBox)
+        self.hBoxLayout.addWidget(BodyLabel(":"))
+        self.hBoxLayout.addWidget(self.secondsSpinBox)
+        self.hBoxLayout.setContentsMargins(0, 0, 0, 0)
+        self.hBoxLayout.setSpacing(5)
+
+    def time(self):
+        h = self.hourSpinBox.value()
+        m = self.minuteSpinBox.value()
+        s = self.secondsSpinBox.value()
+
+        if h < 0 or h + m + s == 0:
+            return ""
+
+        return f"{h:02}:{m:02}:{s:02}"
+
+
+
+class LiveConfigCard(M3U8GroupHeaderCardWidget):
+    """ Live config card """
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setTitle(self.tr("Live Settings"))
+
+        self.timeSpinBox = TimeSpinBox()
+
+        self._initWidgets()
+
+    def _initWidgets(self):
+        self.setBorderRadius(8)
+        self._initLayout()
+        self._connectSignalToSlot()
+
+    def _initLayout(self):
+        self.realtimeMergeButton = self.addSwitchOption(
+            icon=Logo.PUZZLE.icon(),
+            title=self.tr("Real-time Merge"),
+            content=self.tr("Real-time merging during live streaming recording"),
+            config=M3U8DLCommand.LIVE_REAL_TIME_MERGE,
+            checked=True
+        )
+        self.keepSegmentButton = self.addSwitchOption(
+            icon=Logo.BROOM.icon(),
+            title=self.tr("Keep Segments"),
+            content=self.tr("Keep shards when enabling real-time merge"),
+            config=M3U8DLCommand.LIVE_KEEP_SEGMENTS,
+            checked=False
+        )
+        self.pipeMuxButton = self.addSwitchOption(
+            icon=Logo.SYRINGE.icon(),
+            title=self.tr("Pipe Mux"),
+            content=self.tr("Real-time mixing through pipes and ffmpeg to TS files"),
+            config=M3U8DLCommand.LIVE_PIPE_MUX,
+            checked=False
+        )
+        self.fixVttButton = self.addSwitchOption(
+            icon=Logo.BANDAGE.icon(),
+            title=self.tr("Fix VTT"),
+            content=self.tr("Correction of VTT subtitles based on the start time of audio file"),
+            config=M3U8DLCommand.LIVE_FIX_VTT_BY_AUDIO,
+            checked=False
+        )
+        self.addGroup(
+            icon=Logo.TIMER.icon(),
+            title=self.tr("Record Limit"),
+            content=self.tr("Recording time limit in HH:mm:ss format"),
+            widget=self.timeSpinBox
+        )
+
+    def _connectSignalToSlot(self):
+        pass
+
+    def parseOptions(self):
+        """ Returns the m3u8dl options """
+        options = []
+        for button in self.findChildren(SwitchButton):
+            config = button.property("config")
+            if config:
+                options.append(config.command(button.isChecked()))
+
+        if self.timeSpinBox.time():
+            options.append(M3U8DLCommand.LIVE_RECORD_LIMIT.command(self.timeSpinBox.time()))
 
         return options

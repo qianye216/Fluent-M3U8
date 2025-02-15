@@ -33,6 +33,7 @@ class Logo(FluentIconBase, Enum):
     WHALE = "Whale"
     LABEL = "Label"
     BROOM = "Broom"
+    TIMER = "Timer"
     INBOX = "Inbox"
     POSTAL = "Postal"
     PLANET = "Planet"
@@ -40,6 +41,7 @@ class Logo(FluentIconBase, Enum):
     HAMMER = "Hammer"
     OFFICE = "Office"
     PENCIL = "Pencil"
+    PUZZLE = "Puzzle"
     FFMPEG = "FFmpeg"
     MONKEY = "Monkey"
     FOLDER = "Folder"
@@ -48,7 +50,9 @@ class Logo(FluentIconBase, Enum):
     WINDOW = "Window"
     CONTROL = "Control"
     ALEMBIC = "Alembic"
+    BANDAGE = "Bandage"
     PACKAGE = "Package"
+    SYRINGE = "Syringe"
     AIRPLANE = "Airplane"
     CALENDAR = "Calendar"
     BOOKMARK = "Bookmark"
@@ -59,6 +63,7 @@ class Logo(FluentIconBase, Enum):
     HOURGLASS = "Hourglass"
     PROJECTOR = "Projector"
     WASTEBASKET = "Wastebasket"
+    VIDEO_CAMERA = "VideoCamera"
     CARD_FILE_BOX = "CardFileBox"
 
     def path(self, theme=Theme.AUTO) -> str:

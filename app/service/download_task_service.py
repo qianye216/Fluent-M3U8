@@ -29,6 +29,10 @@ class DownloadTaskService(QObject):
         if deleteFile:
             self._removeTmpFolder(task)
 
+    def finishLiveRecordingTask(self, task: Task):
+        m3u8Service.stopLiveTask(task)
+        self._removeTmpFolder(task)
+
     def removedSuccessTask(self, task: Task, deleteFile=True):
         """ remove success task """
         sqlRequest("taskService", "removeById", id=task.id)

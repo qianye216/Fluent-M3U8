@@ -23,3 +23,8 @@ class TestM3U8DLService(TestCase):
         url = "http://devimages.apple.com/iphone/samples/bipbop/gear1/prog_index.m3u8"
         videos = self.service.getStreamInfos(url)
         self.assertEqual(len(videos), 0)
+
+    def test_get_live_stream_infos(self):
+        url = "http://cdn3.toronto360.tv:8081/toronto360/hd/playlist.m3u8"
+        videos = self.service.getStreamInfos(url)
+        self.assertEqual(len(videos), 1)

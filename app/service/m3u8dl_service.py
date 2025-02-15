@@ -7,7 +7,7 @@ import re
 from typing import Dict, List
 import shutil
 
-from PySide6.QtCore import Qt, Signal, QProcess, QObject, QDateTime
+from PySide6.QtCore import Qt, Signal, QProcess, QObject, QDateTime, QEventLoop
 import m3u8
 
 from ..common.logger import Logger
@@ -44,6 +44,13 @@ class M3U8DLCommand(Enum):
     CONCURRENT_DOWNLOAD = "--concurrent-download"
     USE_SYSTEM_PROXY = "--use-system-proxy"
     CUSTOM_PROXY = "--custom-proxy"
+    LIVE_REAL_TIME_MERGE = "--live-real-time-merge"
+    LIVE_KEEP_SEGMENTS = "--live-keep-segments"
+    LIVE_PIPE_MUX = "--live-pipe-mux"
+    LIVE_FIX_VTT_BY_AUDIO = "--live-fix-vtt-by-audio"
+    LIVE_RECORD_LIMIT= "--live-record-limit"
+    LIVE_WAIT_TIME = "--live-wait-time"
+    LIVE_TAKE_COUNT = "--live-take-count"
 
     def command(self, value=None):
         if value is None:
@@ -57,8 +64,8 @@ class M3U8DLCommand(Enum):
 
 
 @dataclass
-class DownloadProgressInfo:
-    """ Download progress information """
+class VODDownloadProgressInfo:
+    """ VOD Download progress information """
 
     currentChunk: int = 0
     totalChunks: int = 0
@@ -66,6 +73,23 @@ class DownloadProgressInfo:
     remainTime: str = ""
     currentSize: str = ""
     totalSize: str = ""
+
+
+@dataclass
+class LiveDownloadProgressInfo:
+    """ VOD Download progress information """
+
+    status: str = ""
+    speed: str = ""
+    percent: int = 0
+    currentTime: str = ""
+    totalTime: str = ""
+
+
+class LiveDownloadStatus(Enum):
+
+    RECORDING = "Recording"
+    WAITING = "Waiting"
 
 
 class BatchM3U8FileParser:
@@ -117,14 +141,17 @@ class M3U8DLCommandLineParser(QObject):
         self._parser.add_argument(M3U8DLCommand.SAVE_NAME.value, type=str)
         self._parser.add_argument(M3U8DLCommand.SAVE_DIR.value, type=str)
         self._parser.add_argument(M3U8DLCommand.BINARY_MERGE.value, type=str2bool, default=False)
+        self._parser.add_argument(M3U8DLCommand.LIVE_REAL_TIME_MERGE.value, type=str2bool, default=False)
 
     def parse(self, options: List[str]) -> Task:
         """ process args """
         args, _ = self._parser.parse_known_args(options)
         task = Task(
+            url=args.url,
             fileName=args.save_name,
             saveFolder=args.save_dir,
             isBinaryMerge=args.binary_merge,
+            isLiveRealTimeMerge=args.live_real_time_merge,
             command=" ".join(options),
         )
         return task
@@ -133,7 +160,7 @@ class M3U8DLCommandLineParser(QObject):
 class M3U8DLService(QObject):
 
     downloadCreated = Signal(Task)
-    downloadProcessChanged = Signal(Task, DownloadProgressInfo)
+    downloadProcessChanged = Signal((Task, VODDownloadProgressInfo), (Task, LiveDownloadProgressInfo))
     downloadFinished = Signal(Task, bool, str)   # task, isSuccess, message
 
     coverSaved = Signal(Task)
@@ -152,6 +179,12 @@ class M3U8DLService(QObject):
         # create task
         options = self.generateCommand(options)
         task = self.cmdParser.parse(options)
+
+        # determine live recording
+        eventLoop = QEventLoop(self)
+        TaskExecutor.runTask(self.isLive, url=task.url, timeout=3).then(
+            lambda isLive: self._onLiveInfoFetched(isLive, task, eventLoop))
+        eventLoop.exec()
 
         # auto rename
         currentTime = task.createTime.toString("yyyy-MM-dd_hh-mm-ss")
@@ -195,23 +228,40 @@ class M3U8DLService(QObject):
             return
 
         # parse progress message
-        regex = r"(\d+)\/(\d+)\s+(\d+\.\d+)%\s+(\d+\.\d+)(KB|MB|GB)\/(\d+\.\d+)(KB|MB|GB)\s+(\d+\.\d+)(GBps|MBps|KBps|Bps)\s(.+)"
-        match = re.search(regex, message)
+        if not task.isLive:
+            regex = r"(\d+)\/(\d+)\s+(\d+\.\d+)%\s+(\d+\.\d+)(KB|MB|GB)\/(\d+\.\d+)(KB|MB|GB)\s+(\d+\.\d+)(GBps|MBps|KBps|Bps)\s(.+)"
+            match = re.search(regex, message)
 
-        if not match:
-            return
+            if not match:
+                return
 
-        info = DownloadProgressInfo(
-            currentChunk=int(match[1]),
-            totalChunks=int(match[2]),
-            currentSize=match[4]+match[5],
-            totalSize=match[6]+match[7],
-            speed=match[8]+match[9],
-            remainTime=match[10]
-        )
-        task.size = info.totalSize
-        info.speed = info.speed.replace("KBps", "KB/s").replace("MBps", "MB/s").replace("GBps", "GB/s")
-        self.downloadProcessChanged.emit(task, info)
+            info = VODDownloadProgressInfo(
+                currentChunk=int(match[1]),
+                totalChunks=int(match[2]),
+                currentSize=match[4]+match[5],
+                totalSize=match[6]+match[7],
+                speed=match[8]+match[9],
+                remainTime=match[10]
+            )
+            task.size = info.totalSize
+            info.speed = info.speed.replace("KBps", "KB/s").replace("MBps", "MB/s").replace("GBps", "GB/s")
+            self.downloadProcessChanged.emit(task, info)
+        else:
+            regex = r"(\d{2}m\d{2}s)/(\d{2}m\d{2}s)\s(\d+/\d+)\s(Recording|Waiting)\s+(\d+)%\s(-|(\d+\.\d+)(GBps|MBps|KBps|Bps))"
+            match = re.search(regex, message)
+
+            if not match:
+                return
+
+            info = LiveDownloadProgressInfo(
+                currentTime=match[1],
+                totalTime=match[2],
+                status=match[4],
+                percent=int(match[5]),
+                speed=match[6],
+            )
+            info.speed = info.speed.replace("KBps", "KB/s").replace("MBps", "MB/s").replace("GBps", "GB/s")
+            self.downloadProcessChanged.emit(task, info)
 
     def _onDownloadFinished(self, process: QProcess, task: Task, code, status: QProcess.ExitStatus):
         if task.pid not in self.processMap:
@@ -263,6 +313,15 @@ class M3U8DLService(QObject):
 
         return streamInfos
 
+    @exceptionTracebackHandler("download", False)
+    def isLive(self, url: str, timeout=10):
+        """ Returns the available streams information """
+        return not m3u8.load(url, timeout=timeout).is_endlist
+
+    def _onLiveInfoFetched(self, isLive: bool, task: Task, eventLoop: QEventLoop):
+        task.isLive = isLive
+        eventLoop.quit()
+
     @property
     def downloaderPath(self):
         return cfg.get(cfg.m3u8dlPath)
@@ -276,6 +335,14 @@ class M3U8DLService(QObject):
             return
 
         self.processMap.pop(task.pid)
+        process.terminate()
+
+    def stopLiveTask(self, task: Task):
+        process = self.processMap.get(task.pid)
+        if not process:
+            return
+
+        self._onDownloadFinished(process, task, 0, QProcess.ExitStatus.NormalExit)
         process.terminate()
 
     def showDownloadLog(self):

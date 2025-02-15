@@ -10,9 +10,9 @@ from ..common.database import sqlRequest
 from ..common.database.entity import TaskStatus
 from ..common.signal_bus import signalBus
 from ..service.download_task_service import downloadTaskService
-from ..service.m3u8dl_service import m3u8Service, DownloadProgressInfo
+from ..service.m3u8dl_service import m3u8Service, VODDownloadProgressInfo, LiveDownloadProgressInfo
 from ..components.interface import Interface
-from ..components.task_card import DownloadingTaskCard, Task, SuccessTaskCard, TaskCardBase, FailedTaskCard
+from ..components.task_card import VODDownloadingTaskCard, Task, SuccessTaskCard, TaskCardBase, FailedTaskCard, LiveDownloadingTaskCard
 from ..components.empty_status_widget import EmptyStatusWidget
 
 
@@ -67,7 +67,7 @@ class TaskInterface(Interface):
 
         self._updateEmptyStatus()
 
-    def _onDownloadProgressChanged(self, task: Task, info: DownloadProgressInfo):
+    def _onDownloadProgressChanged(self, task: Task, info):
         card = self.downloadingTaskView.findCard(task)
         if card:
             card.setInfo(info)
@@ -92,7 +92,8 @@ class TaskInterface(Interface):
         signalBus.redownloadTask.connect(self._redownload)
 
         m3u8Service.downloadCreated.connect(self._onTaskCreated)
-        m3u8Service.downloadProcessChanged.connect(self._onDownloadProgressChanged)
+        m3u8Service.downloadProcessChanged[Task, VODDownloadProgressInfo].connect(self._onDownloadProgressChanged)
+        m3u8Service.downloadProcessChanged[Task, LiveDownloadProgressInfo].connect(self._onDownloadProgressChanged)
         m3u8Service.downloadFinished.connect(self._onDownloadFinished)
         m3u8Service.coverSaved.connect(self._onCoverSaved)
 
@@ -200,7 +201,7 @@ class DownloadingTaskView(TaskCardView):
         self.setObjectName("downloading")
 
     def createCard(self, task: Task):
-        return DownloadingTaskCard(task, self)
+        return LiveDownloadingTaskCard(task) if task.isLive else VODDownloadingTaskCard(task)
 
 
 class SuccessTaskView(TaskCardView):

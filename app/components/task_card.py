@@ -8,14 +8,14 @@ from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QFileIconProvid
 from qfluentwidgets import (SimpleCardWidget, IconWidget, ToolButton, FluentIcon,
                             BodyLabel, CaptionLabel, ProgressBar, ImageLabel, setFont,
                             MessageBoxBase, SubtitleLabel, CheckBox, InfoBar, InfoBarPosition,
-                            PushButton, ToolTipFilter)
+                            PushButton, ToolTipFilter, InfoLevel, DotInfoBadge, MessageBox)
 
 from ..common.utils import showInFolder, removeFile, openUrl
 from ..common.database.entity import Task
 from ..common.signal_bus import signalBus
 from ..common.database import sqlRequest
 from ..service.download_task_service import downloadTaskService
-from ..service.m3u8dl_service import DownloadProgressInfo, m3u8Service
+from ..service.m3u8dl_service import VODDownloadProgressInfo, m3u8Service, LiveDownloadProgressInfo, LiveDownloadStatus
 
 
 class TaskCardBase(SimpleCardWidget):
@@ -24,8 +24,8 @@ class TaskCardBase(SimpleCardWidget):
     deleted = Signal(Task)
 
 
-class DownloadingTaskCard(TaskCardBase):
-    """ Task card """
+class VODDownloadingTaskCard(TaskCardBase):
+    """ VOD Downloading Task card """
 
     def __init__(self, task: Task, parent=None):
         super().__init__(parent=parent)
@@ -56,6 +56,13 @@ class DownloadingTaskCard(TaskCardBase):
         self.speedIcon.setFixedSize(16, 16)
         self.remainTimeIcon.setFixedSize(16, 16)
         self.sizeIcon.setFixedSize(16, 16)
+
+        self.openFolderButton.setToolTip(self.tr("Show in folder"))
+        self.openFolderButton.setToolTipDuration(3000)
+        self.openFolderButton.installEventFilter(ToolTipFilter(self.openFolderButton))
+        self.deleteButton.setToolTip(self.tr("Remove task"))
+        self.deleteButton.setToolTipDuration(3000)
+        self.deleteButton.installEventFilter(ToolTipFilter(self.deleteButton))
 
         setFont(self.fileNameLabel, 18, QFont.Weight.Bold)
         self.fileNameLabel.setWordWrap(True)
@@ -106,7 +113,7 @@ class DownloadingTaskCard(TaskCardBase):
 
         w.deleteLater()
 
-    def setInfo(self, info: DownloadProgressInfo):
+    def setInfo(self, info: VODDownloadProgressInfo):
         """ update progress info """
         self.speedLabel.setText(info.speed)
         self.remainTimeLabel.setText(info.remainTime)
@@ -148,6 +155,12 @@ class SuccessTaskCard(TaskCardBase):
         self.redownloadButton.setToolTip(self.tr("Restart"))
         self.redownloadButton.setToolTipDuration(3000)
         self.redownloadButton.installEventFilter(ToolTipFilter(self.redownloadButton))
+        self.openFolderButton.setToolTip(self.tr("Show in folder"))
+        self.openFolderButton.setToolTipDuration(3000)
+        self.openFolderButton.installEventFilter(ToolTipFilter(self.openFolderButton))
+        self.deleteButton.setToolTip(self.tr("Remove task"))
+        self.deleteButton.setToolTipDuration(3000)
+        self.deleteButton.installEventFilter(ToolTipFilter(self.deleteButton))
 
         setFont(self.fileNameLabel, 18, QFont.Weight.Bold)
         self.fileNameLabel.setWordWrap(True)
@@ -181,6 +194,10 @@ class SuccessTaskCard(TaskCardBase):
         self.infoLayout.addWidget(self.sizeIcon)
         self.infoLayout.addWidget(self.sizeLabel, 0, Qt.AlignmentFlag.AlignLeft)
         self.infoLayout.addStretch(1)
+
+        if self.task.isLive:
+            self.sizeIcon.hide()
+            self.sizeLabel.hide()
 
     def updateCover(self):
         self.imageLabel.setImage(str(self.task.coverPath))
@@ -284,6 +301,10 @@ class FailedTaskCard(TaskCardBase):
         self.infoLayout.addWidget(self.sizeLabel, 0, Qt.AlignmentFlag.AlignLeft)
         self.infoLayout.addStretch(1)
 
+        if self.task.isLive:
+            self.sizeIcon.hide()
+            self.sizeLabel.hide()
+
     def _onLogButtonClicked(self):
         openUrl(self.task.logFile)
 
@@ -333,3 +354,122 @@ class DeleteTaskDialog(MessageBoxBase):
         layout.addSpacing(10)
         layout.addWidget(self.deleteFileCheckBox)
         self.viewLayout.addLayout(layout)
+
+
+
+class LiveDownloadingTaskCard(TaskCardBase):
+    """ Live Downloading Task card """
+
+    def __init__(self, task: Task, parent=None):
+        super().__init__(parent=parent)
+        self.hBoxLayout = QHBoxLayout(self)
+        self.vBoxLayout = QVBoxLayout()
+        self.infoLayout = QHBoxLayout()
+
+        self.task = task
+        self.imageLabel = ImageLabel()
+        self.fileNameLabel = BodyLabel(task.fileName)
+        self.progressBar = ProgressBar()
+
+        self.speedIcon = IconWidget(FluentIcon.SPEED_HIGH)
+        self.speedLabel = CaptionLabel("0MB/s")
+        self.timeIcon = IconWidget(FluentIcon.STOP_WATCH)
+        self.timeLabel = CaptionLabel("00m00s/00m00s")
+        self.statusIcon = DotInfoBadge(self, InfoLevel.SUCCESS)
+        self.statusLabel = CaptionLabel(self.tr("Recording"))
+
+        self.openFolderButton = ToolButton(FluentIcon.FOLDER)
+        self.deleteButton = ToolButton(FluentIcon.DELETE)
+        self.stopButton = ToolButton(FluentIcon.ACCEPT)
+
+        self._initWidget()
+
+    def _initWidget(self):
+        self.imageLabel.setImage(QFileIconProvider().icon(
+            QFileInfo(self.task.videoPath)).pixmap(32, 32))
+        self.speedIcon.setFixedSize(16, 16)
+        self.timeIcon.setFixedSize(16, 16)
+        self.statusIcon.setFixedSize(10, 10)
+
+        self.openFolderButton.setToolTip(self.tr("Show in folder"))
+        self.openFolderButton.setToolTipDuration(3000)
+        self.openFolderButton.installEventFilter(ToolTipFilter(self.openFolderButton))
+        self.stopButton.setToolTip(self.tr("Stop recording"))
+        self.stopButton.setToolTipDuration(3000)
+        self.stopButton.installEventFilter(ToolTipFilter(self.stopButton))
+        self.deleteButton.setToolTip(self.tr("Remove task"))
+        self.deleteButton.setToolTipDuration(3000)
+        self.deleteButton.installEventFilter(ToolTipFilter(self.deleteButton))
+
+        setFont(self.fileNameLabel, 18, QFont.Weight.Bold)
+        self.fileNameLabel.setWordWrap(True)
+
+        self._initLayout()
+        self._connectSignalToSlot()
+
+    def _initLayout(self):
+        self.hBoxLayout.setContentsMargins(20, 11, 11, 11)
+        self.hBoxLayout.addWidget(self.imageLabel)
+        self.hBoxLayout.addSpacing(5)
+        self.hBoxLayout.addLayout(self.vBoxLayout)
+        self.hBoxLayout.addSpacing(20)
+        self.hBoxLayout.addWidget(self.openFolderButton)
+        self.hBoxLayout.addWidget(self.stopButton)
+        self.hBoxLayout.addWidget(self.deleteButton)
+
+        self.vBoxLayout.setSpacing(5)
+        self.vBoxLayout.setContentsMargins(0, 0, 0, 0)
+        self.vBoxLayout.addWidget(self.fileNameLabel)
+        self.vBoxLayout.addLayout(self.infoLayout)
+        self.vBoxLayout.addWidget(self.progressBar)
+
+        self.infoLayout.setContentsMargins(0, 0, 0, 0)
+        self.infoLayout.setSpacing(3)
+        self.infoLayout.addWidget(self.statusIcon, 0, Qt.AlignmentFlag.AlignVCenter)
+        self.infoLayout.addWidget(self.statusLabel, 0, Qt.AlignmentFlag.AlignLeft)
+        self.infoLayout.addSpacing(5)
+        self.infoLayout.addWidget(self.speedIcon, 0, Qt.AlignmentFlag.AlignVCenter)
+        self.infoLayout.addWidget(self.speedLabel, 0, Qt.AlignmentFlag.AlignLeft)
+        self.infoLayout.addSpacing(5)
+        self.infoLayout.addWidget(self.timeIcon, 0, Qt.AlignmentFlag.AlignVCenter)
+        self.infoLayout.addWidget(self.timeLabel, 0, Qt.AlignmentFlag.AlignLeft)
+        self.infoLayout.addStretch(1)
+
+    def _connectSignalToSlot(self):
+        self.openFolderButton.clicked.connect(self._onOpenButtonClicked)
+        self.deleteButton.clicked.connect(self._onDeleteButtonClicked)
+        self.stopButton.clicked.connect(self._onStopButtonClicked)
+
+    def _onOpenButtonClicked(self):
+        path = Path(self.task.saveFolder) / self.task.fileName
+        showInFolder(path)
+
+    def _onStopButtonClicked(self):
+        w = MessageBox(self.tr("Stop recording"), self.tr("Are you sure to stop recording the live stream?"), self.window())
+        w.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose, True)
+        if w.exec():
+            self.deleted.emit(self.task)
+            downloadTaskService.finishLiveRecordingTask(self.task)
+
+    def _onDeleteButtonClicked(self):
+        w = DeleteTaskDialog(self.window(), deleteOnClose=False)
+        if w.exec():
+            self.deleted.emit(self.task)
+            downloadTaskService.removeDownloadingTask(self.task, w.deleteFileCheckBox.isChecked())
+
+        w.deleteLater()
+
+    def setInfo(self, info: LiveDownloadProgressInfo):
+        """ update progress info """
+        self.speedLabel.setText(info.speed)
+        self.timeLabel.setText(f"{info.currentTime}/{info.totalTime}")
+        self.progressBar.setValue(info.percent)
+
+        if info.status == LiveDownloadStatus.RECORDING.value:
+            self.statusLabel.setText(self.tr("Recording"))
+            self.statusIcon.setLevel(InfoLevel.SUCCESS)
+            self.progressBar.resume()
+        else:
+            self.statusLabel.setText(self.tr("Waiting"))
+            self.statusIcon.setLevel(InfoLevel.WARNING)
+            self.progressBar.pause()
