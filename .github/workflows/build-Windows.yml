@@ -49,6 +49,17 @@ jobs:
 
           Write-Output "Download and extraction complete!"
 
+      - name: Build Installer
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
+        with:
+          path: Fluent-M3U8.iss
+
+      - name: Upload Installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: Fluent-M3U8-v${{ env.VERSION }}-Windows-${{ matrix.architecture }}-Setup
+          path: dist/Fluent-M3U8-v${{ env.VERSION }}-Windows-${{ matrix.architecture }}-Setup.exe
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
