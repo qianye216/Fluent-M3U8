@@ -2,8 +2,7 @@
 .vscode/
 .VSCodeCounter
 
-tools/ffmpeg
-tools/N_m3u8DL-RE
+tools/*
 
 # 忽略工作区文件
 *.code-workspace
