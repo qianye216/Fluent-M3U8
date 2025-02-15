@@ -18,10 +18,7 @@ RELEASE_URL = "https://github.com/zhiyiYo/Fluent-M3U8/releases"
 DOC_URL = "https://github.com/zhiyiYo/Fluent-M3U8/"
 
 
-if DEBUG:
-    CONFIG_FOLDER = Path('AppData').absolute()
-else:
-    CONFIG_FOLDER = Path(QStandardPaths.writableLocation(QStandardPaths.AppDataLocation)) / APP_NAME
+CONFIG_FOLDER = Path('AppData').absolute()
 
 CONFIG_FILE = CONFIG_FOLDER / "config.json"
 DB_PATH = CONFIG_FOLDER / "database.db"
