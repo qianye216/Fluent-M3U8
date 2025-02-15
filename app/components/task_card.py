@@ -132,7 +132,7 @@ class SuccessTaskCard(TaskCardBase):
         self.infoLayout = QHBoxLayout()
 
         self.task = task
-        self.imageLabel = ImageLabel()
+        self.imageLabel = ImageLabel(":/app/images/DefaultCover.jpg")
         self.fileNameLabel = BodyLabel(task.fileName)
 
         self.createTimeIcon = IconWidget(FluentIcon.DATE_TIME)
@@ -148,6 +148,7 @@ class SuccessTaskCard(TaskCardBase):
         self._initWidget()
 
     def _initWidget(self):
+        self.imageLabel.setScaledSize(QSize(112, 63))
         self.imageLabel.setBorderRadius(4, 4, 4, 4)
         self.createTimeIcon.setFixedSize(16, 16)
         self.sizeIcon.setFixedSize(16, 16)
