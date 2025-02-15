@@ -62,11 +62,22 @@ jobs:
           Compress-Archive -Path "$distPath\*" -DestinationPath $zipFile
           Write-Output "Zip created at $zipFile"
 
+      - name: Download Inno Setup Translation Files
+        run: |
+          Invoke-WebRequest -Uri "https://raw.githubusercontent.com/jrsoftware/issrc/main/Files/Languages/Unofficial/ChineseSimplified.isl" -OutFile "C:\Program Files (x86)\Inno Setup 6\Languages\ChineseSimplified.isl"
+
+      - name: Build Installer
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.5
+        with:
+          path: Fluent-M3U8.iss
+
       - name: Upload to release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: Fluent-M3U8-v${{ env.VERSION }}-Windows-${{ matrix.architecture }}.zip
+          files: |
+            Fluent-M3U8-v${{ env.VERSION }}-Windows-${{ matrix.architecture }}.zip
+            dist/Fluent-M3U8-v${{ env.VERSION }}-Windows-${{ matrix.architecture }}-Setup.exe
 
   build-macos-14-arm:
     strategy:
