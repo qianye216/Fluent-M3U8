@@ -1,10 +1,12 @@
 # coding:utf-8
+import os
 import sys
 from enum import Enum
 
 from PySide6.QtCore import QLocale, QStandardPaths
 from qfluentwidgets import (qconfig, QConfig, ConfigItem, OptionsConfigItem, BoolValidator,
-                            OptionsValidator, Theme, FolderValidator, ConfigSerializer)
+                            OptionsValidator, Theme, FolderValidator, ConfigSerializer, RangeConfigItem,
+                            RangeValidator)
 
 from .setting import CONFIG_FILE, EXE_SUFFIX
 from pathlib import Path
@@ -55,6 +57,27 @@ class Config(QConfig):
 
     # software update
     checkUpdateAtStartUp = ConfigItem("Update", "CheckUpdateAtStartUp", True, BoolValidator())
+
+    # m3u8dl
+    threadCount = RangeConfigItem("M3U8DL", "ThreadCount", os.cpu_count(), RangeValidator(1, 1000))
+    liveRealTimeMerge = ConfigItem("M3U8DL", "LiveRealTimeMerge", True, BoolValidator())
+    liveKeepSegments = ConfigItem("M3U8DL", "LiveKeepSegments", False, BoolValidator())
+    livePipeMux = ConfigItem("M3U8DL", "LivePipeMux", False, BoolValidator())
+    liveFixVtt = ConfigItem("M3U8DL", "LiveFixVtt", False, BoolValidator())
+    useSystemProxy = ConfigItem("M3U8DL", "UseSystemProxy", True, BoolValidator())
+    customProxy = ConfigItem("M3U8DL", "CustomProxy", "")
+    httpHeader = ConfigItem("M3U8DL", "HttpHeader", "")
+    maxSpeed = RangeConfigItem("M3U8DL", "MaxSpeed", -1, RangeValidator(-1, 1000000000))
+    speedUnit = OptionsConfigItem("M3U8DL", "SpeedUnit", "Mbps", OptionsValidator(["Mbps", "Kbps"]))
+    httpRequestTimeout = RangeConfigItem("M3U8DL", "HttpRequestTimeout", 100, RangeValidator(5, 100000))
+    retryCount = RangeConfigItem("M3U8DL", "RetryCount", 3, RangeValidator(1, 1000))
+    subtitleFormat = OptionsConfigItem("M3U8DL", "SubtitleFormat", "SRT", OptionsValidator(["SRT", "VTT"]))
+    autoSelect = ConfigItem("M3U8DL", "AutoSelect", False, BoolValidator())
+    binaryMerge = ConfigItem("M3U8DL", "BinaryMerge", False, BoolValidator())
+    delAfterDone = ConfigItem("M3U8DL", "DeleteAfterDone", True, BoolValidator())
+    appendURLParams = ConfigItem("M3U8DL", "AppendURLParams", False, BoolValidator())
+    noDateInfo = ConfigItem("M3U8DL", "NoDateInfo", False, BoolValidator())
+    concurrentDownload = ConfigItem("M3U8DL", "ConcurrentDownload", False, BoolValidator())
 
 
 cfg = Config()

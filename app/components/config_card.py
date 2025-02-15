@@ -9,7 +9,7 @@ from PySide6.QtWidgets import QWidget, QHBoxLayout, QFileDialog
 from qfluentwidgets import (IconWidget, BodyLabel, FluentIcon, InfoBarIcon, ComboBox,
                             PrimaryPushButton, LineEdit, GroupHeaderCardWidget, PushButton,
                             CompactSpinBox, SwitchButton, IndicatorPosition, PlainTextEdit,
-                            ToolTipFilter)
+                            ToolTipFilter, ConfigItem)
 
 from m3u8.model import StreamInfo
 
@@ -23,12 +23,14 @@ from ..service.m3u8dl_service import M3U8DLCommand, m3u8Service, BatchM3U8FilePa
 
 class M3U8GroupHeaderCardWidget(GroupHeaderCardWidget):
 
-    def addSwitchOption(self, icon, title, content, config: M3U8DLCommand, checked=False):
+    def addSwitchOption(self, icon, title, content, command: M3U8DLCommand, configItem: ConfigItem):
         button = SwitchButton(self.tr("Off"), self, IndicatorPosition.RIGHT)
         button.setOnText(self.tr("On"))
         button.setOffText(self.tr("Off"))
-        button.setProperty("config", config)
-        button.setChecked(checked)
+        button.setProperty("command", command)
+        button.setProperty("config", configItem)
+        button.setChecked(cfg.get(configItem))
+        button.checkedChanged.connect(lambda c: cfg.set(configItem, c))
 
         self.addGroup(icon, title, content, button)
         return button
@@ -80,8 +82,8 @@ class BasicConfigCard(GroupHeaderCardWidget):
         self.urlLineEdit.setToolTipDuration(3000)
         self.urlLineEdit.installEventFilter(ToolTipFilter(self.urlLineEdit))
 
-        self.threadCountSpinBox.setRange(1, 1000)
-        self.threadCountSpinBox.setValue(os.cpu_count())
+        self.threadCountSpinBox.setRange(*cfg.threadCount.range)
+        self.threadCountSpinBox.setValue(cfg.get(cfg.threadCount))
 
         self._initLayout()
         self._connectSignalToSlot()
@@ -187,6 +189,7 @@ class BasicConfigCard(GroupHeaderCardWidget):
         self.urlLineEdit.textChanged.connect(self._onTextChanged)
         self.fileNameLineEdit.textChanged.connect(self._onTextChanged)
         self.saveFolderButton.clicked.connect(self._chooseSaveFolder)
+        self.threadCountSpinBox.valueChanged.connect(lambda v: cfg.set(cfg.threadCount, v))
 
     def parseOptions(self) -> List[List[str]]:
         """ Returns the m3u8dl options """
@@ -252,24 +255,28 @@ class AdvanceConfigCard(M3U8GroupHeaderCardWidget):
         self.setBorderRadius(8)
 
         self.retryCountSpinBox.setFixedWidth(120)
-        self.retryCountSpinBox.setRange(1, 1000)
-        self.retryCountSpinBox.setValue(3)
+        self.retryCountSpinBox.setRange(*cfg.retryCount.range)
+        self.retryCountSpinBox.setValue(cfg.get(cfg.retryCount))
 
-        self.httpTimeoutSpinBox.setRange(5, 100000)
-        self.httpTimeoutSpinBox.setValue(100)
+        self.httpTimeoutSpinBox.setRange(*cfg.httpRequestTimeout.range)
+        self.httpTimeoutSpinBox.setValue(cfg.get(cfg.httpRequestTimeout))
         self.httpTimeoutSpinBox.setFixedWidth(120)
 
         self.httpHeaderEdit.setFixedSize(300, 56)
+        self.httpHeaderEdit.setPlainText(cfg.get(cfg.httpHeader))
         self.httpHeaderEdit.setPlaceholderText("User-Agent: iOS\nCookie: mycookie")
 
-        self.speedSpinBox.setRange(-1, 1000000000)
-        self.speedSpinBox.setValue(-1)
-        self.speedComboBox.addItems(["Mbps", "Kbps"])
+        self.speedSpinBox.setRange(*cfg.maxSpeed.range)
+        self.speedSpinBox.setValue(cfg.get(cfg.maxSpeed))
+        self.speedComboBox.addItems(cfg.speedUnit.options)
+        self.speedComboBox.setCurrentText(cfg.get(cfg.speedUnit))
 
         self.subtitleComboBox.setFixedWidth(120)
-        self.subtitleComboBox.addItems(["SRT", "VTT"])
+        self.subtitleComboBox.addItems(cfg.subtitleFormat.options)
+        self.subtitleComboBox.setCurrentText(cfg.get(cfg.subtitleFormat))
 
         self._initLayout()
+        self._connectSignalToSlot()
 
     def _initLayout(self):
         self.addGroup(
@@ -312,38 +319,43 @@ class AdvanceConfigCard(M3U8GroupHeaderCardWidget):
             icon=Logo.ALEMBIC.icon(),
             title=self.tr("Auto Select"),
             content=self.tr("Automatically select the best track of all types"),
-            config=M3U8DLCommand.AUTO_SELECT,
+            command=M3U8DLCommand.AUTO_SELECT,
+            configItem=cfg.autoSelect
         )
         self.addSwitchOption(
             icon=Logo.CARD_FILE_BOX.icon(),
             title=self.tr("Binary Merge"),
             content=self.tr("Merge ts files directly through binary copy connections"),
-            config=M3U8DLCommand.BINARY_MERGE
+            command=M3U8DLCommand.BINARY_MERGE,
+            configItem=cfg.binaryMerge
         )
         self.addSwitchOption(
             icon=Logo.WASTEBASKET.icon(),
             title=self.tr("Delete After Done"),
             content=self.tr("Delete temporary files after downloading is complete"),
-            config=M3U8DLCommand.DEL_AFTER_DONE,
-            checked=True
+            command=M3U8DLCommand.DEL_AFTER_DONE,
+            configItem=cfg.delAfterDone
         )
         self.addSwitchOption(
             icon=Logo.LINK.icon(),
             title=self.tr("Append URL Params"),
             content=self.tr("Adding the Params of the input URL to the shard"),
-            config=M3U8DLCommand.APPEND_URL_PARAMS,
+            command=M3U8DLCommand.APPEND_URL_PARAMS,
+            configItem=cfg.appendURLParams
         )
         self.addSwitchOption(
             icon=Logo.CALENDAR.icon(),
             title=self.tr("Date Info"),
             content=self.tr("Do not write date information when mixing"),
-            config=M3U8DLCommand.NO_DATE_INFO,
+            command=M3U8DLCommand.NO_DATE_INFO,
+            configItem=cfg.noDateInfo
         )
         self.addSwitchOption(
             icon=Logo.INBOX.icon(),
             title=self.tr("Concurrent"),
             content=self.tr("Concurrent download of selected audio, video, and subtitles"),
-            config=M3U8DLCommand.CONCURRENT_DOWNLOAD,
+            command=M3U8DLCommand.CONCURRENT_DOWNLOAD,
+            configItem=cfg.concurrentDownload
         )
 
     def parseOptions(self):
@@ -362,11 +374,19 @@ class AdvanceConfigCard(M3U8GroupHeaderCardWidget):
             options.append(M3U8DLCommand.MAX_SPEED.command(speed))
 
         for button in self.findChildren(SwitchButton):
-            config = button.property("config")
-            if config:
-                options.append(config.command(button.isChecked()))
+            command = button.property("command")
+            if command:
+                options.append(command.command(button.isChecked()))
 
         return options
+
+    def _connectSignalToSlot(self):
+        self.speedSpinBox.valueChanged.connect(lambda v: cfg.set(cfg.maxSpeed, v))
+        self.httpTimeoutSpinBox.valueChanged.connect(lambda v: cfg.set(cfg.httpRequestTimeout, v))
+        self.retryCountSpinBox.valueChanged.connect(lambda v: cfg.set(cfg.retryCount, v))
+        self.speedComboBox.currentTextChanged.connect(lambda t: cfg.set(cfg.speedUnit, t))
+        self.subtitleComboBox.currentTextChanged.connect(lambda t: cfg.set(cfg.subtitleFormat, t))
+        self.httpHeaderEdit.textChanged.connect(lambda: cfg.set(cfg.httpHeader, self.httpHeaderEdit.toPlainText()))
 
 
 class ProxyConfigCard(M3U8GroupHeaderCardWidget):
@@ -385,7 +405,8 @@ class ProxyConfigCard(M3U8GroupHeaderCardWidget):
 
         self.proxyLineEdit.setFixedWidth(300)
         self.proxyLineEdit.setPlaceholderText("http://127.0.0.1:8080")
-        self.proxyLineEdit.setEnabled(False)
+        self.proxyLineEdit.setDisabled(cfg.get(cfg.useSystemProxy))
+        self.proxyLineEdit.setText(cfg.get(cfg.customProxy))
 
         self._initLayout()
         self._connectSignalToSlot()
@@ -395,8 +416,8 @@ class ProxyConfigCard(M3U8GroupHeaderCardWidget):
             icon=Logo.PLANET.icon(),
             title=self.tr("System Proxy"),
             content=self.tr("Use system default proxy"),
-            config=M3U8DLCommand.USE_SYSTEM_PROXY,
-            checked=True
+            command=M3U8DLCommand.USE_SYSTEM_PROXY,
+            configItem=cfg.useSystemProxy
         )
         self.addGroup(
             icon=Logo.AIRPLANE.icon(),
@@ -415,8 +436,10 @@ class ProxyConfigCard(M3U8GroupHeaderCardWidget):
 
         options = [M3U8DLCommand.USE_SYSTEM_PROXY.command(False)]
 
-        if self.proxyLineEdit.text():
-            options.append(M3U8DLCommand.CUSTOM_PROXY.command(self.proxyLineEdit.text().strip()))
+        proxy = self.proxyLineEdit.text().strip()
+        if proxy:
+            options.append(M3U8DLCommand.CUSTOM_PROXY.command(proxy))
+            cfg.set(cfg.customProxy, proxy)
 
         return options
 
@@ -481,29 +504,29 @@ class LiveConfigCard(M3U8GroupHeaderCardWidget):
             icon=Logo.PUZZLE.icon(),
             title=self.tr("Real-time Merge"),
             content=self.tr("Real-time merging during live streaming recording"),
-            config=M3U8DLCommand.LIVE_REAL_TIME_MERGE,
-            checked=True
+            command=M3U8DLCommand.LIVE_REAL_TIME_MERGE,
+            configItem=cfg.liveRealTimeMerge
         )
         self.keepSegmentButton = self.addSwitchOption(
             icon=Logo.BROOM.icon(),
             title=self.tr("Keep Segments"),
             content=self.tr("Keep shards when enabling real-time merge"),
-            config=M3U8DLCommand.LIVE_KEEP_SEGMENTS,
-            checked=False
+            command=M3U8DLCommand.LIVE_KEEP_SEGMENTS,
+            configItem=cfg.liveKeepSegments
         )
         self.pipeMuxButton = self.addSwitchOption(
             icon=Logo.SYRINGE.icon(),
             title=self.tr("Pipe Mux"),
             content=self.tr("Real-time mixing through pipes and ffmpeg to TS files"),
-            config=M3U8DLCommand.LIVE_PIPE_MUX,
-            checked=False
+            command=M3U8DLCommand.LIVE_PIPE_MUX,
+            configItem=cfg.livePipeMux
         )
         self.fixVttButton = self.addSwitchOption(
             icon=Logo.BANDAGE.icon(),
             title=self.tr("Fix VTT"),
             content=self.tr("Correction of VTT subtitles based on the start time of audio file"),
-            config=M3U8DLCommand.LIVE_FIX_VTT_BY_AUDIO,
-            checked=False
+            command=M3U8DLCommand.LIVE_FIX_VTT_BY_AUDIO,
+            configItem=cfg.liveFixVtt
         )
         self.addGroup(
             icon=Logo.TIMER.icon(),
@@ -519,9 +542,9 @@ class LiveConfigCard(M3U8GroupHeaderCardWidget):
         """ Returns the m3u8dl options """
         options = []
         for button in self.findChildren(SwitchButton):
-            config = button.property("config")
-            if config:
-                options.append(config.command(button.isChecked()))
+            command = button.property("command")
+            if command:
+                options.append(command.command(button.isChecked()))
 
         if self.timeSpinBox.time():
             options.append(M3U8DLCommand.LIVE_RECORD_LIMIT.command(self.timeSpinBox.time()))
