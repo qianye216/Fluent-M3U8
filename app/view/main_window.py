@@ -19,7 +19,7 @@ from ..common.utils import openUrl
 from ..common.concurrent import TaskExecutor
 from ..service.version_service import VersionService
 from ..common.signal_bus import signalBus
-from ..common.setting import DOC_URL, FEEDBACK_URL, RELEASE_URL
+from ..common.setting import DOC_URL, FEEDBACK_URL, RELEASE_URL, AFDIAN_URL
 from ..service.m3u8dl_service import m3u8Service, Task
 from ..components.system_tray_icon import SystemTrayIcon
 from ..common import resource
@@ -64,7 +64,7 @@ class MainWindow(MSFluentWindow):
         self.addSubInterface(self.taskInterface, Icon.CLOUD_DOWNLOAD, self.tr('Task'), Icon.CLOUD_DOWNLOAD_FILLED)
 
         self.navigationInterface.addItem(
-            'help', FIF.HELP, self.tr("Help"), lambda: openUrl(DOC_URL), False, position=NavigationItemPosition.BOTTOM)
+            'sponsor', FIF.HEART, self.tr("Sponsor"), lambda: openUrl(AFDIAN_URL), False, position=NavigationItemPosition.BOTTOM)
         self.addSubInterface(
             self.settingInterface, Icon.SETTINGS, self.tr('Settings'), Icon.SETTINGS_FILLED, NavigationItemPosition.BOTTOM)
 

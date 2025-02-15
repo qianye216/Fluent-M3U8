@@ -16,7 +16,7 @@ REPO_URL = "https://github.com/zhiyiYo/Fluent-M3U8"
 FEEDBACK_URL = "https://github.com/zhiyiYo/Fluent-M3U8/issues"
 RELEASE_URL = "https://github.com/zhiyiYo/Fluent-M3U8/releases"
 DOC_URL = "https://github.com/zhiyiYo/Fluent-M3U8/"
-
+AFDIAN_URL = "https://afdian.com/a/zhiyiYo"
 
 CONFIG_FOLDER = Path('AppData').absolute()
 
