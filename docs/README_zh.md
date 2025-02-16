@@ -79,4 +79,4 @@
 ## 许可证
 Fluent-M3U8 使用 GPLv3 许可证进行授权。
 
-版权所有 © 2025 by zhiyiYo.
+版权所有 © 2025 zhiyiYo.
