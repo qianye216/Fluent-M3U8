@@ -349,5 +349,9 @@ class M3U8DLService(QObject):
         """ show download log """
         openUrl(str(self.logger.logFile))
 
+    def isSupport(self, url: str):
+        """ Returns whether the format is supported """
+        return url.lower().endswith((".m3u8", ".m3u"))
+
 
 m3u8Service = M3U8DLService()

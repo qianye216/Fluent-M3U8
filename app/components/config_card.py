@@ -139,14 +139,14 @@ class BasicConfigCard(GroupHeaderCardWidget):
     def _onTextChanged(self):
         url = self.urlLineEdit.text().strip()
         fileName = self.fileNameLineEdit.text()
-        if (url.endswith('m3u8') and fileName) or url.endswith(".txt"):
+        if (m3u8Service.isSupport(url) and fileName) or url.endswith(".txt"):
             self.downloadButton.setEnabled(True)
         else:
             self.downloadButton.setEnabled(False)
 
     def _onUrlChanged(self, url: str):
         url = url.strip()
-        if not url.endswith(".m3u8"):
+        if not m3u8Service.isSupport(url):
             return self._resetStreamInfo()
 
         TaskExecutor.runTask(m3u8Service.getStreamInfos, url).then(
@@ -219,7 +219,7 @@ class BasicConfigCard(GroupHeaderCardWidget):
             options.append(M3U8DLCommand.SELECT_VIDEO.command('best'))
 
         url = self.urlLineEdit.text().strip()
-        if url.endswith(".m3u8"):
+        if m3u8Service.isSupport(url):
             fileName = adjustFileName(self.fileNameLineEdit.text())
             result = [
                 [url, M3U8DLCommand.SAVE_NAME.command(fileName), *options]
