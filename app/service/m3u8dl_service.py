@@ -270,12 +270,16 @@ class M3U8DLService(QObject):
         self.processMap.pop(task.pid)
 
         if status == QProcess.ExitStatus.NormalExit:
-            # save cover
-            TaskExecutor.runTask(ffmpegService.saveVideoCover, task.videoPath, task.coverPath).then(
-                lambda: self.coverSaved.emit(task), lambda e: self.logger.error(e))
+            if task.videoPath.exists():
+                # save cover
+                TaskExecutor.runTask(ffmpegService.saveVideoCover, task.videoPath, task.coverPath).then(
+                    lambda: self.coverSaved.emit(task), lambda e: self.logger.error(e))
 
-            self.downloadFinished.emit(task, True, "")
-            task.success()
+                self.downloadFinished.emit(task, True, "")
+                task.success()
+            else:
+                self.downloadFinished.emit(task, False, "")
+                task.error()
         else:
             self.downloadFinished.emit(task, False, process.errorString())
             task.error()
