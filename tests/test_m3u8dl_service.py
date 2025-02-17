@@ -28,3 +28,9 @@ class TestM3U8DLService(TestCase):
         url = "http://cdn3.toronto360.tv:8081/toronto360/hd/playlist.m3u8"
         videos = self.service.getStreamInfos(url)
         self.assertEqual(len(videos), 1)
+
+    def test_get_encrypted_live_stream_infos(self):
+        url = "https://bcovlive-a.akamaihd.net/17789746e9e8477dbcdf8ceb96926d3b/ap-northeast-1/6160987587001/profile_0/chunklist_wv.m3u8"
+        key = "98fe2cc47352f0170a03d2eeb41d0488:9b35588ce16dc0894af4fdd5a01abcb5"
+        videos = self.service.getStreamInfos(url)
+        self.assertEqual(len(videos), 0)

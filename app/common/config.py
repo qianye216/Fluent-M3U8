@@ -78,6 +78,7 @@ class Config(QConfig):
     appendURLParams = ConfigItem("M3U8DL", "AppendURLParams", False, BoolValidator())
     noDateInfo = ConfigItem("M3U8DL", "NoDateInfo", False, BoolValidator())
     concurrentDownload = ConfigItem("M3U8DL", "ConcurrentDownload", False, BoolValidator())
+    checkSegmentsCount = ConfigItem("M3U8DL", "CheckSegmentsCount", True, BoolValidator())
 
 
 cfg = Config()

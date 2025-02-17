@@ -51,6 +51,8 @@ class M3U8DLCommand(Enum):
     LIVE_RECORD_LIMIT= "--live-record-limit"
     LIVE_WAIT_TIME = "--live-wait-time"
     LIVE_TAKE_COUNT = "--live-take-count"
+    CHECK_SEGMENTS_COUNT = "--check-segments-count"
+    KEY = "--key"
 
     def command(self, value=None):
         if value is None:

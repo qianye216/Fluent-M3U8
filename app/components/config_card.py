@@ -337,6 +337,13 @@ class AdvanceConfigCard(M3U8GroupHeaderCardWidget):
             configItem=cfg.delAfterDone
         )
         self.addSwitchOption(
+            icon=Logo.CONTROL.icon(),
+            title=self.tr("Check Segments Count"),
+            content=self.tr("Check if downloaded shards matches the expected number"),
+            command=M3U8DLCommand.CHECK_SEGMENTS_COUNT,
+            configItem=cfg.checkSegmentsCount
+        )
+        self.addSwitchOption(
             icon=Logo.LINK.icon(),
             title=self.tr("Append URL Params"),
             content=self.tr("Adding the Params of the input URL to the shard"),
