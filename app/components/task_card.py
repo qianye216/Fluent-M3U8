@@ -205,7 +205,7 @@ class SuccessTaskCard(TaskCardBase):
         self.imageLabel.setScaledSize(QSize(112, 63))
 
     def _onOpenButtonClicked(self):
-        exist = showInFolder(self.task.videoPath)
+        exist = downloadTaskService.showInFolder(self.task)
         if not exist:
             InfoBar.error(
                 title=self.tr("Open failed"),

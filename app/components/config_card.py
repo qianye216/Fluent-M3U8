@@ -13,7 +13,7 @@ from qfluentwidgets import (IconWidget, BodyLabel, FluentIcon, InfoBarIcon, Comb
 
 from m3u8.model import StreamInfo
 
-from ..common.icon import Logo
+from ..common.icon import Logo, PNG
 from ..common.config import cfg
 from ..common.concurrent import TaskExecutor
 from ..common.utils import adjustFileName
@@ -374,7 +374,9 @@ class AdvanceConfigCard(M3U8GroupHeaderCardWidget):
         ]
 
         if self.httpHeaderEdit.toPlainText():
-            options.append(M3U8DLCommand.HEADER.command(self.httpHeaderEdit.toPlainText()))
+            headers = self.httpHeaderEdit.toPlainText().split("\n")
+            for header in headers:
+                options.append(M3U8DLCommand.HEADER.command(header))
 
         if self.speedSpinBox.value() > 0:
             speed = str(self.speedSpinBox.value()) + self.speedComboBox.currentText()
@@ -555,5 +557,120 @@ class LiveConfigCard(M3U8GroupHeaderCardWidget):
 
         if self.timeSpinBox.time():
             options.append(M3U8DLCommand.LIVE_RECORD_LIMIT.command(self.timeSpinBox.time()))
+
+        return options
+
+
+
+class DecryptionConfigCard(M3U8GroupHeaderCardWidget):
+    """ Decryption config card """
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setTitle(self.tr("Decryption Settings"))
+
+        self.keyTextFilePath = None
+
+        self.keyEdit = PlainTextEdit()
+        self.engineComboBox = ComboBox()
+        self.chooseKeyTextFileButton = PushButton(self.tr("Choose"))
+        self.chooseEngineBinaryButton = PushButton(self.tr("Choose"))
+
+        self._initWidgets()
+
+    def _initWidgets(self):
+        self.setBorderRadius(8)
+
+        self.keyEdit.setFixedSize(300, 56)
+        self.keyEdit.setPlaceholderText("KID1:KEY1\nKID2:KEY2")
+
+        self.engineComboBox.addItem("FFmpeg", userData="FFMPEG")
+        self.engineComboBox.addItem("MP4Decrypt", userData="MP4DECRYPT")
+        self.engineComboBox.addItem("Shaka Packager", userData="SHAKA_PACKAGER")
+
+        self.engineComboBox.setMinimumWidth(120)
+        self.chooseKeyTextFileButton.setFixedWidth(120)
+        self.chooseEngineBinaryButton.setFixedWidth(120)
+
+        self._initLayout()
+        self._connectSignalToSlot()
+
+        self.engineComboBox.setCurrentText(cfg.get(cfg.decryptionEngine))
+
+    def _initLayout(self):
+        self.mp4RealTimeDecryptionButton = self.addSwitchOption(
+            icon=Logo.UNLOCKED.icon(),
+            title=self.tr("Real-time Decryption"),
+            content=self.tr("Real time decryption of MP4 shards"),
+            command=M3U8DLCommand.MP4_REAL_TIME_DECRYPTION,
+            configItem=cfg.mp4RealTimeDecryption
+        )
+        self.engineGroup = self.addGroup(
+            icon=Logo.FFMPEG.icon(),
+            title=self.tr("Decryption Engine"),
+            content=self.tr("Third party program used for decryption"),
+            widget=self.engineComboBox
+        )
+        self.enginePathGroup = self.addGroup(
+            icon=Logo.GEAR.icon(),
+            title=self.tr("Engine Binary Path"),
+            content=cfg.get(cfg.decryptionBinaryPath),
+            widget=self.chooseEngineBinaryButton
+        )
+        self.keyFileGroup = self.addGroup(
+            icon=Logo.LEDGER.icon(),
+            title=self.tr("Key Text File"),
+            content=self.tr("Search for KEY from text file by KID to decrypt"),
+            widget=self.chooseKeyTextFileButton
+        )
+        self.addGroup(
+            icon=Logo.KEY.icon(),
+            title=self.tr("Key"),
+            content=self.tr("Use the key to call engine for decryption"),
+            widget=self.keyEdit
+        )
+
+    def _onEngineChanged(self):
+        icons = [Logo.FFMPEG, Logo.BENTO, PNG.SHAKA_PACKAGER]
+        self.engineGroup.setIcon(icons[self.engineComboBox.currentIndex()].icon())
+        cfg.set(cfg.decryptionEngine, self.engineComboBox.currentText())
+
+    def _onChooseEngineButtonClicked(self):
+        path, _ = QFileDialog.getOpenFileName(self, self.tr("Choose"))
+
+        if not path or cfg.get(cfg.decryptionBinaryPath) == path:
+            return
+
+        cfg.set(cfg.decryptionBinaryPath, path)
+        self.enginePathGroup.setContent(path)
+
+    def _onChooseKeyTextFileButtonClicked(self):
+        path, _ = QFileDialog.getOpenFileName(self, self.tr("Choose"))
+        if not path:
+            return
+
+        self.keyTextFilePath = path
+        self.keyFileGroup.setContent(path)
+
+    def _connectSignalToSlot(self):
+        self.engineComboBox.currentIndexChanged.connect(self._onEngineChanged)
+        self.chooseEngineBinaryButton.clicked.connect(self._onChooseEngineButtonClicked)
+        self.chooseKeyTextFileButton.clicked.connect(self._onChooseKeyTextFileButtonClicked)
+
+    def parseOptions(self):
+        """ Returns the m3u8dl options """
+        options = [
+            M3U8DLCommand.MP4_REAL_TIME_DECRYPTION.command(self.mp4RealTimeDecryptionButton.isChecked()),
+            M3U8DLCommand.DECRYPTION_ENGINE.command(self.engineComboBox.currentData()),
+            M3U8DLCommand.DECRYPTION_BINARY_PATH.command(cfg.get(cfg.decryptionBinaryPath)),
+        ]
+
+        if self.keyTextFilePath:
+            options.append(M3U8DLCommand.KEY_TEXT_FILE.command(self.keyTextFilePath))
+
+        if self.keyEdit.toPlainText():
+            keys = self.keyEdit.toPlainText().split("\n")
+            for key in keys:
+                options.append(M3U8DLCommand.KEY.command(key))
 
         return options

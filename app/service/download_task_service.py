@@ -7,7 +7,7 @@ from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout
 
 from ..common.database import sqlRequest
 from ..common.database.entity import Task
-from ..common.utils import removeFile
+from ..common.utils import removeFile, showInFolder
 from .m3u8dl_service import m3u8Service
 
 
@@ -19,8 +19,12 @@ class DownloadTaskService(QObject):
 
     def redownload(self, task: Task):
         """ redownload task """
-        options = task.command.split(" ")[1:]
+        options = task.command.split(" ")
         return m3u8Service.download(options)
+
+    def showInFolder(self, task: Task):
+        """ Show downloaded file in folder """
+        return showInFolder(task.availableVideoPath())
 
     def removeDownloadingTask(self, task: Task, deleteFile=True):
         """ remove downloading task """
@@ -38,7 +42,7 @@ class DownloadTaskService(QObject):
         sqlRequest("taskService", "removeById", id=task.id)
 
         if deleteFile:
-            removeFile(task.videoPath)
+            removeFile(task.availableVideoPath())
 
     def removeFailedTask(self, task: Task, deleteFile=True):
         """ remove failed task """

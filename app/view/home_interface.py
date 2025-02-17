@@ -8,7 +8,7 @@ from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout
 from qfluentwidgets import ScrollArea, InfoBar, InfoBarPosition, PushButton
 
 from ..components.info_card import M3U8DLInfoCard
-from ..components.config_card import BasicConfigCard, AdvanceConfigCard, ProxyConfigCard, LiveConfigCard
+from ..components.config_card import BasicConfigCard, AdvanceConfigCard, ProxyConfigCard, LiveConfigCard, DecryptionConfigCard
 
 from ..service.m3u8dl_service import m3u8Service
 from ..common.signal_bus import signalBus
@@ -28,6 +28,7 @@ class HomeInterface(ScrollArea):
         self.advanceSettingCard = AdvanceConfigCard()
         self.proxySettingCard = ProxyConfigCard()
         self.liveSettingCard = LiveConfigCard()
+        self.decryptionCard = DecryptionConfigCard()
 
         self.vBoxLayout = QVBoxLayout(self.view)
 
@@ -48,6 +49,8 @@ class HomeInterface(ScrollArea):
             self.basicSettingCard, 0, Qt.AlignmentFlag.AlignTop)
         self.vBoxLayout.addWidget(
             self.liveSettingCard, 0, Qt.AlignmentFlag.AlignTop)
+        self.vBoxLayout.addWidget(
+            self.decryptionCard, 0, Qt.AlignmentFlag.AlignTop)
         self.vBoxLayout.addWidget(
             self.proxySettingCard, 0, Qt.AlignmentFlag.AlignTop)
         self.vBoxLayout.addWidget(
@@ -89,6 +92,7 @@ class HomeInterface(ScrollArea):
                 *self.proxySettingCard.parseOptions(),
                 *self.advanceSettingCard.parseOptions(),
                 *self.liveSettingCard.parseOptions(),
+                *self.decryptionCard.parseOptions(),
             ]
             success = m3u8Service.download(options) and success
 

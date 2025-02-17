@@ -53,6 +53,10 @@ class M3U8DLCommand(Enum):
     LIVE_TAKE_COUNT = "--live-take-count"
     CHECK_SEGMENTS_COUNT = "--check-segments-count"
     KEY = "--key"
+    KEY_TEXT_FILE = "--key-text-file"
+    DECRYPTION_ENGINE = "--decryption-engine"
+    DECRYPTION_BINARY_PATH = "--decryption-binary-path"
+    MP4_REAL_TIME_DECRYPTION = "--mp4-real-time-decryption"
 
     def command(self, value=None):
         if value is None:
@@ -190,7 +194,7 @@ class M3U8DLService(QObject):
 
         # auto rename
         currentTime = task.createTime.toString("yyyy-MM-dd_hh-mm-ss")
-        if task.videoPath.exists():
+        if task.hasAvailableVideo():
             task.fileName += '_' + currentTime
             options = [M3U8DLCommand.SAVE_NAME.command(task.fileName) if i.startswith(M3U8DLCommand.SAVE_NAME.value) else i for i in options]
             task.command = " ".join([self.downloaderPath, *options])
@@ -272,9 +276,9 @@ class M3U8DLService(QObject):
         self.processMap.pop(task.pid)
 
         if status == QProcess.ExitStatus.NormalExit:
-            if task.videoPath.exists():
-                # save cover
-                TaskExecutor.runTask(ffmpegService.saveVideoCover, task.videoPath, task.coverPath).then(
+            if task.hasAvailableVideo():
+                # save cover:
+                TaskExecutor.runTask(ffmpegService.saveVideoCover, task.availableVideoPath(), task.coverPath).then(
                     lambda: self.coverSaved.emit(task), lambda e: self.logger.error(e))
 
                 self.downloadFinished.emit(task, True, "")

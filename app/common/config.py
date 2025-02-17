@@ -79,7 +79,10 @@ class Config(QConfig):
     noDateInfo = ConfigItem("M3U8DL", "NoDateInfo", False, BoolValidator())
     concurrentDownload = ConfigItem("M3U8DL", "ConcurrentDownload", False, BoolValidator())
     checkSegmentsCount = ConfigItem("M3U8DL", "CheckSegmentsCount", True, BoolValidator())
-
+    mp4RealTimeDecryption = ConfigItem("M3U8DL", "MP4RealTimeDecryption", True, BoolValidator())
+    decryptionEngine = OptionsConfigItem("M3U8DL", "DecryptionEngine", "FFmpeg", OptionsValidator([
+                                         "FFmpeg", "MP4Decrypt", "Shaka Packager"]))
+    decryptionBinaryPath = ConfigItem("M3U8DL", "DecryptionBinaryPath", str(Path(f"tools/ffmpeg{EXE_SUFFIX}").absolute()))
 
 cfg = Config()
 cfg.themeMode.value = Theme.AUTO

@@ -239,6 +239,65 @@
     </message>
 </context>
 <context>
+    <name>DecryptionConfigCard</name>
+    <message>
+        <location filename="../../components/config_card.py" line="570"/>
+        <source>Decryption Settings</source>
+        <translation>解密設置</translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="576"/>
+        <location filename="../../components/config_card.py" line="577"/>
+        <source>Choose</source>
+        <translation>選擇</translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="598"/>
+        <source>Real-time Decryption</source>
+        <translation>實時解密</translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="599"/>
+        <source>Real time decryption of MP4 shards</source>
+        <translation>實時解密 MP4 分片</translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="605"/>
+        <source>Key</source>
+        <translation>密鑰</translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="606"/>
+        <source>Use the key to call engine for decryption</source>
+        <translation>設置解密密鑰並調用引擎進行解密</translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="611"/>
+        <source>Key Text File</source>
+        <translation>密鑰文件</translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="612"/>
+        <source>Search for KEY from text file by KID to decrypt</source>
+        <translation>在文件中按 KID 蒐尋 KEY 以解密</translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="617"/>
+        <source>Decryption Engine</source>
+        <translation>解密引擎</translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="618"/>
+        <source>Third party program used for decryption</source>
+        <translation>解密時使用的第三方程序</translation>
+    </message>
+    <message>
+        <location filename="../../components/config_card.py" line="623"/>
+        <source>Engine Binary Path</source>
+        <translation>引擎路徑</translation>
+    </message>
+</context>
+<context>
     <name>DeleteTaskDialog</name>
     <message>
         <location filename="../../components/task_card.py" line="333"/>
@@ -272,39 +331,39 @@
 <context>
     <name>HomeInterface</name>
     <message>
-        <location filename="../../view/home_interface.py" line="99"/>
+        <location filename="../../view/home_interface.py" line="102"/>
         <source>Task created</source>
         <translation>任務創建成功</translation>
     </message>
     <message>
-        <location filename="../../view/home_interface.py" line="100"/>
+        <location filename="../../view/home_interface.py" line="103"/>
         <source>Please check the download task</source>
         <translation>請查收下載任務</translation>
     </message>
     <message>
-        <location filename="../../view/home_interface.py" line="95"/>
+        <location filename="../../view/home_interface.py" line="98"/>
         <source>Check</source>
         <translation>查看</translation>
     </message>
     <message>
-        <location filename="../../view/home_interface.py" line="65"/>
-        <location filename="../../view/home_interface.py" line="76"/>
-        <location filename="../../view/home_interface.py" line="108"/>
+        <location filename="../../view/home_interface.py" line="68"/>
+        <location filename="../../view/home_interface.py" line="79"/>
+        <location filename="../../view/home_interface.py" line="111"/>
         <source>Task failed</source>
         <translation>任務創建失敗</translation>
     </message>
     <message>
-        <location filename="../../view/home_interface.py" line="66"/>
+        <location filename="../../view/home_interface.py" line="69"/>
         <source>Please choose N_m3u8DL-RE binary file in setting interface</source>
         <translation>請在設置中選擇有效的 N_m3u8DL-RE 路徑</translation>
     </message>
     <message>
-        <location filename="../../view/home_interface.py" line="77"/>
+        <location filename="../../view/home_interface.py" line="80"/>
         <source>No available tasks found, please check the format of txt</source>
         <translation>未找到可用任務，請檢查 txt 文件格式</translation>
     </message>
     <message>
-        <location filename="../../view/home_interface.py" line="109"/>
+        <location filename="../../view/home_interface.py" line="112"/>
         <source>Please check the error log</source>
         <translation>請檢查報錯日誌</translation>
     </message>
@@ -312,57 +371,57 @@
 <context>
     <name>LiveConfigCard</name>
     <message>
-        <location filename="../../components/config_card.py" line="498"/>
+        <location filename="../../components/config_card.py" line="500"/>
         <source>Live Settings</source>
         <translation>直播設置</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="512"/>
+        <location filename="../../components/config_card.py" line="514"/>
         <source>Real-time Merge</source>
         <translation>實時合並</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="513"/>
+        <location filename="../../components/config_card.py" line="515"/>
         <source>Real-time merging during live streaming recording</source>
         <translation>錄製直播時實時合並</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="519"/>
+        <location filename="../../components/config_card.py" line="521"/>
         <source>Keep Segments</source>
         <translation>保留分片</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="520"/>
+        <location filename="../../components/config_card.py" line="522"/>
         <source>Keep shards when enabling real-time merge</source>
         <translation>開啟實時合並時依然保留分片</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="526"/>
+        <location filename="../../components/config_card.py" line="528"/>
         <source>Pipe Mux</source>
         <translation>管道混流</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="527"/>
+        <location filename="../../components/config_card.py" line="529"/>
         <source>Real-time mixing through pipes and ffmpeg to TS files</source>
         <translation>通過管道和 FFmpeg 實時混流到 TS 文件</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="533"/>
+        <location filename="../../components/config_card.py" line="535"/>
         <source>Fix VTT</source>
         <translation>字幕修複</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="534"/>
+        <location filename="../../components/config_card.py" line="536"/>
         <source>Correction of VTT subtitles based on the start time of audio file</source>
         <translation>通過讀取音頻文件的起始時間修正 VTT 字幕</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="540"/>
+        <location filename="../../components/config_card.py" line="542"/>
         <source>Record Limit</source>
         <translation>錄製限時</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="541"/>
+        <location filename="../../components/config_card.py" line="543"/>
         <source>Recording time limit in HH:mm:ss format</source>
         <translation>錄製時長限製，格式爲 時:分:秒</translation>
     </message>
@@ -540,27 +599,27 @@
 <context>
     <name>ProxyConfigCard</name>
     <message>
-        <location filename="../../components/config_card.py" line="404"/>
+        <location filename="../../components/config_card.py" line="406"/>
         <source>Proxy Settings</source>
         <translation>代理設置</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="424"/>
+        <location filename="../../components/config_card.py" line="426"/>
         <source>System Proxy</source>
         <translation>繫統代理</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="425"/>
+        <location filename="../../components/config_card.py" line="427"/>
         <source>Use system default proxy</source>
         <translation>使用繫統默認代理</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="431"/>
+        <location filename="../../components/config_card.py" line="433"/>
         <source>Custom Proxy</source>
         <translation>自定義代理</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="432"/>
+        <location filename="../../components/config_card.py" line="434"/>
         <source>Set the http request proxy to be used</source>
         <translation>設置自定義的代理地址</translation>
     </message>

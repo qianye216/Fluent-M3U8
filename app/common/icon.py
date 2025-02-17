@@ -23,8 +23,18 @@ class Ico(FluentIconBase, Enum):
         return f":/app/images/icos/{self.value}.ico"
 
 
+class PNG(FluentIconBase, Enum):
+
+    SHAKA_PACKAGER = "ShakaPackager"
+
+    def path(self, theme=Theme.AUTO):
+        return f":/app/images/png/{self.value}.png"
+
+
 class Logo(FluentIconBase, Enum):
 
+    KEY = "Key"
+    GEAR = "Gear"
     FILM = "Film"
     MOON = "Moon"
     KNOT = "Knot"
@@ -35,6 +45,8 @@ class Logo(FluentIconBase, Enum):
     BROOM = "Broom"
     TIMER = "Timer"
     INBOX = "Inbox"
+    BENTO = "Bento"
+    LEDGER = "Ledger"
     POSTAL = "Postal"
     PLANET = "Planet"
     COOKIE = "Cookie"
@@ -53,6 +65,7 @@ class Logo(FluentIconBase, Enum):
     BANDAGE = "Bandage"
     PACKAGE = "Package"
     SYRINGE = "Syringe"
+    UNLOCKED = "Unlocked"
     AIRPLANE = "Airplane"
     CALENDAR = "Calendar"
     BOOKMARK = "Bookmark"

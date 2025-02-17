@@ -54,8 +54,14 @@
         <file>images/logo/Syringe.svg</file>
         <file>images/logo/Bandage.svg</file>
         <file>images/logo/Timer.svg</file>
+        <file>images/logo/Key.svg</file>
+        <file>images/logo/Ledger.svg</file>
+        <file>images/logo/Gear.svg</file>
+        <file>images/logo/Unlocked.svg</file>
+        <file>images/logo/Bento.svg</file>
 
         <file>images/ico/M3U8DL.ico</file>
+        <file>images/png/ShakaPackager.png</file>
 
     </qresource>
 </RCC>

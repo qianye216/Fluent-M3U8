@@ -50,6 +50,19 @@ class Task(Entity):
 
         return Path(self.saveFolder) / (self.fileName + suffix)
 
+    def hasAvailableVideo(self):
+        return self.availableVideoPath().exists()
+
+    def availableVideoPath(self):
+        suffixes = [".mp4", ".ts"]
+
+        for suffix in suffixes:
+            file = self.videoPath.with_suffix(suffix)
+            if file.exists():
+                return file
+
+        return self.videoPath
+
     @property
     def coverPath(self):
         return COVER_FOLDER / (self.fileName + ".jpg")
