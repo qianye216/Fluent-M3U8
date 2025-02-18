@@ -214,13 +214,13 @@
     </message>
     <message>
         <location filename="../../components/config_card.py" line="80"/>
-        <source>Please enter the path of m3u8 or txt</source>
-        <translation>請輸入 m3u8 或本地 txt 文件路徑</translation>
+        <source>Please enter the path of m3u8, mpd or txt</source>
+        <translation>請輸入 m3u8、mpd 或 txt 文件路徑</translation>
     </message>
     <message>
         <location filename="../../components/config_card.py" line="96"/>
-        <source>The path of m3u8 or txt file, support drag and drop txt file</source>
-        <translation>設置 m3u8 或 txt 文件路徑，支持拖拽本地 txt 文件</translation>
+        <source>The path of m3u8, mpd or txt file, support drag and drop txt file</source>
+        <translation>設置 m3u8、mpd 或 txt 文件路徑，支持拖拽 txt 文件</translation>
     </message>
     <message>
         <location filename="../../components/config_card.py" line="108"/>

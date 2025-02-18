@@ -1,4 +1,5 @@
 # coding:utf-8
+import re
 import logging
 import weakref
 
@@ -7,6 +8,14 @@ from .setting import CONFIG_FOLDER
 
 LOG_FOLDER = CONFIG_FOLDER / "Log"
 _loggers = weakref.WeakValueDictionary()
+
+
+class NoColorFormatter(logging.Formatter):
+
+    def format(self, record):
+        ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
+        record.msg = ansi_escape.sub('', record.msg)
+        return super().format(record)
 
 
 def loggerCache(cls):
@@ -56,12 +65,14 @@ class Logger:
         # set log format
         fmt = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
         self.__consoleHandler.setFormatter(fmt)
-        self.__fileHandler.setFormatter(fmt)
+
+        formatter = NoColorFormatter('%(asctime)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+        self.__fileHandler.setFormatter(formatter)
 
         if not self.__logger.hasHandlers():
             if printConsole:
                 self.__logger.addHandler(self.__consoleHandler)
-                
+
             self.__logger.addHandler(self.__fileHandler)
 
     def info(self, msg):

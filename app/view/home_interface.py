@@ -94,7 +94,7 @@ class HomeInterface(ScrollArea):
                 *self.liveSettingCard.parseOptions(),
                 *self.decryptionCard.parseOptions(),
             ]
-            success = m3u8Service.download(options) and success
+            success = m3u8Service.download(options, self.basicSettingCard.mediaParser) and success
 
         button = PushButton(self.tr('Check'))
 

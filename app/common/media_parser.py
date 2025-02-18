@@ -33,7 +33,7 @@ class MediaParser:
         raise NotImplementedError
 
     @classmethod
-    def canRead(cls, url: str) -> bool:
+    def canParse(cls, url: str) -> bool:
         """ determine whether song information of the file can be read """
         return url.lower().endswith(tuple(cls.formats))
 
@@ -61,7 +61,7 @@ class MediaParser:
     @classmethod
     def parse(cls, url: str) -> 'MediaParser':
         for Parser in cls.parsers:
-            if Parser.canRead(url):
+            if Parser.canParse(url):
                 return Parser(url)
 
         Logger("download").warning(f"No media parser available for `{url}`")

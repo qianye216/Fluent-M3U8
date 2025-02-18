@@ -17,7 +17,7 @@ from ..common.icon import Logo, PNG
 from ..common.config import cfg
 from ..common.concurrent import TaskExecutor
 from ..common.utils import adjustFileName
-
+from ..common.media_parser import MediaParser
 from ..service.m3u8dl_service import M3U8DLCommand, m3u8Service, BatchM3U8FileParser
 
 
@@ -42,6 +42,7 @@ class BasicConfigCard(GroupHeaderCardWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setTitle(self.tr("Basic Settings"))
+        self.mediaParser = None
 
         self.urlLineEdit = LineEdit()
         self.fileNameLineEdit = LineEdit()
@@ -77,7 +78,7 @@ class BasicConfigCard(GroupHeaderCardWidget):
         self.fileNameLineEdit.setClearButtonEnabled(True)
 
         self.fileNameLineEdit.setPlaceholderText(self.tr("Please enter the name of downloaded file"))
-        self.urlLineEdit.setPlaceholderText(self.tr("Please enter the path of m3u8 or txt"))
+        self.urlLineEdit.setPlaceholderText(self.tr("Please enter the path of m3u8, mpd or txt"))
         self.urlLineEdit.setToolTip(self.tr("The format of each line in the txt file is FileName,URL"))
         self.urlLineEdit.setToolTipDuration(3000)
         self.urlLineEdit.installEventFilter(ToolTipFilter(self.urlLineEdit))
@@ -93,7 +94,7 @@ class BasicConfigCard(GroupHeaderCardWidget):
         self.addGroup(
             icon=Logo.GLOBE.icon(),
             title=self.tr("Download URL"),
-            content=self.tr("The path of m3u8 or txt file, support drag and drop txt file"),
+            content=self.tr("The path of m3u8, mpd or txt file, support drag and drop txt file"),
             widget=self.urlLineEdit
         )
         self.addGroup(
@@ -147,10 +148,11 @@ class BasicConfigCard(GroupHeaderCardWidget):
     def _onUrlChanged(self, url: str):
         url = url.strip()
         if not m3u8Service.isSupport(url):
-            return self._resetStreamInfo()
-
-        TaskExecutor.runTask(m3u8Service.getStreamInfos, url).then(
-            self._onStreamInfosFetched)
+            self.mediaParser = None
+            self._resetStreamInfo()
+        else:
+            self.mediaParser = MediaParser.parse(url)
+            TaskExecutor.runTask(self.mediaParser.getStreamInfos).then(self._onStreamInfosFetched)
 
     def _onStreamInfosFetched(self, streamInfos: List[StreamInfo]):
         if not streamInfos:

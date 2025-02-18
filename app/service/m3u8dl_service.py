@@ -18,6 +18,7 @@ from ..common.signal_bus import signalBus
 from ..common.concurrent import TaskExecutor
 from ..common.exception_handler import exceptionTracebackHandler
 from ..common.database import sqlRequest
+from ..common.media_parser import MediaParser
 from .ffmpeg_service import ffmpegService
 
 
@@ -57,6 +58,9 @@ class M3U8DLCommand(Enum):
     DECRYPTION_ENGINE = "--decryption-engine"
     DECRYPTION_BINARY_PATH = "--decryption-binary-path"
     MP4_REAL_TIME_DECRYPTION = "--mp4-real-time-decryption"
+    NO_ASCII_COLOR = "--no-ansi-color"
+    DISABLE_UPDATE_CHECK = "--disable-update-check"
+    UI_LANGUAGE = "--ui-language"
 
     def command(self, value=None):
         if value is None:
@@ -178,7 +182,7 @@ class M3U8DLService(QObject):
         self.processMap = {}    # type: Dict[str, QProcess]
 
     @exceptionTracebackHandler("download", False)
-    def download(self, options: List[str]):
+    def download(self, options: List[str], parser: MediaParser = None):
         if not self.isAvailable():
             return False
 
@@ -187,9 +191,11 @@ class M3U8DLService(QObject):
         task = self.cmdParser.parse(options)
 
         # determine live recording
+        if not parser:
+            parser = MediaParser.parse(task.url)
+
         eventLoop = QEventLoop(self)
-        TaskExecutor.runTask(self.isLive, url=task.url, timeout=3).then(
-            lambda isLive: self._onLiveInfoFetched(isLive, task, eventLoop))
+        TaskExecutor.runTask(parser.isLive).then(lambda isLive: self._onLiveInfoFetched(isLive, task, eventLoop))
         eventLoop.exec()
 
         # auto rename
@@ -293,12 +299,10 @@ class M3U8DLService(QObject):
         sqlRequest("taskService", "add", task=task)
 
     def generateCommand(self, options):
-        # options.extend([
-        #     M3U8DLCommand.SELECT_AUDIO.command(),
-        #     'for=best',
-        #     M3U8DLCommand.SELECT_SUBTITLE.command(),
-        #     'for=all'
-        # ])
+        options.extend([
+            M3U8DLCommand.NO_ASCII_COLOR.command(),
+            M3U8DLCommand.DISABLE_UPDATE_CHECK.command(),
+        ])
         return options
 
     @exceptionTracebackHandler("download")
@@ -308,25 +312,6 @@ class M3U8DLService(QObject):
                 process.terminate()
 
         self.processMap.clear()
-
-    @exceptionTracebackHandler("download", [])
-    def getStreamInfos(self, url: str, timeout=10):
-        """ Returns the available streams information """
-        response = m3u8.load(url, timeout=timeout)
-
-        if not response.playlists:
-            return []
-
-        streamInfos = []
-        for playlist in response.playlists:
-            streamInfos.append(playlist.stream_info)
-
-        return streamInfos
-
-    @exceptionTracebackHandler("download", False)
-    def isLive(self, url: str, timeout=10):
-        """ Returns the available streams information """
-        return not m3u8.load(url, timeout=timeout).is_endlist
 
     def _onLiveInfoFetched(self, isLive: bool, task: Task, eventLoop: QEventLoop):
         task.isLive = isLive
@@ -361,7 +346,7 @@ class M3U8DLService(QObject):
 
     def isSupport(self, url: str):
         """ Returns whether the format is supported """
-        return url.lower().endswith((".m3u8", ".m3u"))
+        return MediaParser.canParse(url)
 
 
 m3u8Service = M3U8DLService()
