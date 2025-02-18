@@ -141,8 +141,7 @@ class TaskInterface(Interface):
         super().resizeEvent(e)
         self.emptyStatusWidget.adjustSize()
         w, h = self.emptyStatusWidget.width(), self.emptyStatusWidget.height()
-        top = self.pivot.geometry().bottom()
-        y = top + (self.height() - top) // 2 - h //2
+        y = self.height() // 2 - h //2
         self.emptyStatusWidget.move(int(self.width()/2 - w/2), y)
 
 
