@@ -30,7 +30,7 @@ English | <a href="docs/README_zh.md">简体中文</a>
 ![界面](docs/screenshot/主界面.png)
 
 ## Features
-
+* Fully compatible with M3U8 and MPD video downloads
 * Multi-threaded M3U8 download support
 * Task management for downloads
 * Sleek and user-friendly GUI
