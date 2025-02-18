@@ -124,7 +124,7 @@ class BatchM3U8FileParser:
 
         result = []
         for line in lines:
-            fileName, url = line.split(",")
+            fileName, url = line.strip().split(",")
             result.append((fileName, url))
 
         return result
@@ -194,9 +194,10 @@ class M3U8DLService(QObject):
         if not parser:
             parser = MediaParser.parse(task.url)
 
-        eventLoop = QEventLoop(self)
-        TaskExecutor.runTask(parser.isLive).then(lambda isLive: self._onLiveInfoFetched(isLive, task, eventLoop))
-        eventLoop.exec()
+        if parser:
+            eventLoop = QEventLoop(self)
+            TaskExecutor.runTask(parser.isLive).then(lambda isLive: self._onLiveInfoFetched(isLive, task, eventLoop))
+            eventLoop.exec()
 
         # auto rename
         currentTime = task.createTime.toString("yyyy-MM-dd_hh-mm-ss")
