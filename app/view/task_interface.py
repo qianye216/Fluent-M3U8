@@ -1,18 +1,21 @@
 # coding:utf-8
 from typing import Dict, List
-from PySide6.QtCore import Qt, Signal, Property
-from PySide6.QtWidgets import QWidget, QStackedWidget, QVBoxLayout
+from PySide6.QtCore import Qt, Signal, Property, QSize
+from PySide6.QtGui import QColor
+from PySide6.QtWidgets import QWidget, QStackedWidget, QVBoxLayout, QGraphicsDropShadowEffect
 
-from qfluentwidgets import Pivot, FluentIcon, SegmentedWidget, InfoBar, InfoBarPosition, PushButton
+from qfluentwidgets import (Action, FluentIcon, SegmentedWidget, InfoBar, InfoBarPosition,
+                            PushButton, Flyout, CommandBarView, isDarkTheme)
 
-from ..common.icon import Logo
+from ..common.icon import Logo, Icon
 from ..common.database import sqlRequest
 from ..common.database.entity import TaskStatus
 from ..common.signal_bus import signalBus
 from ..service.download_task_service import downloadTaskService
 from ..service.m3u8dl_service import m3u8Service, VODDownloadProgressInfo, LiveDownloadProgressInfo
 from ..components.interface import Interface
-from ..components.task_card import VODDownloadingTaskCard, Task, SuccessTaskCard, TaskCardBase, FailedTaskCard, LiveDownloadingTaskCard
+from ..components.task_card import (VODDownloadingTaskCard, Task, SuccessTaskCard, TaskCardBase, FailedTaskCard,
+                                    LiveDownloadingTaskCard, DeleteTaskDialog)
 from ..components.empty_status_widget import EmptyStatusWidget
 
 
@@ -78,6 +81,9 @@ class TaskInterface(Interface):
             card.updateCover()
 
     def _onCurrentWidgetChanged(self):
+        for i in range(self.stackedWidget.count()):
+            self.stackedWidget.widget(i).setSelectionMode(False)
+
         view = self.stackedWidget.currentWidget()   # type: TaskCardView
         self.pivot.setCurrentItem(view.objectName())
         self.emptyStatusWidget.setVisible(view.count() == 0)
@@ -153,6 +159,9 @@ class TaskCardView(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
         self.cards = []     # type: List[TaskCardBase]
+        self.selectionCount = 0
+        self.isSelectionMode = False
+        self.commandView = TaskCommandBarView(self.window())
 
         # id ---> task card
         self.cardMap = {}  # type: Dict[str, TaskCardBase]
@@ -162,12 +171,19 @@ class TaskCardView(QWidget):
         self.vBoxLayout.setContentsMargins(30, 0, 30, 0)
         self.vBoxLayout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
+        self.commandView.hide()
+        self._connectSignalToSlot()
+
     def createCard(self, task: Task) -> TaskCardBase:
         raise NotImplementedError
 
     def addTask(self, task: Task) -> TaskCardBase:
         card = self.createCard(task)
         card.deleted.connect(self.removeTask)
+        card.checkedChanged.connect(self._onCardCheckedChanged)
+
+        if self.isSelectionMode:
+            card.setSelectionMode(True)
 
         self.vBoxLayout.insertWidget(0, card, 0, Qt.AlignmentFlag.AlignTop)
         self.cards.insert(0, card)
@@ -180,6 +196,10 @@ class TaskCardView(QWidget):
         card = self.cardMap.pop(task.id)
         self.cards.remove(card)
         self.vBoxLayout.removeWidget(card)
+
+        if card.isSelectionMode:
+            self._onCardCheckedChanged(False)
+
         card.hide()
         card.deleteLater()
 
@@ -191,6 +211,64 @@ class TaskCardView(QWidget):
     def count(self):
         return len(self.cards)
 
+    def _onCardCheckedChanged(self, checked: bool):
+        if checked:
+            self.selectionCount += 1
+            self.setSelectionMode(True)
+        else:
+            self.selectionCount -= 1
+            if self.selectionCount == 0:
+                self.setSelectionMode(False)
+
+    def setSelectionMode(self, enter: bool):
+        if self.isSelectionMode == enter:
+            return
+
+        self.isSelectionMode = enter
+
+        for card in self.cards:
+            card.setSelectionMode(enter)
+
+        if enter:
+            self.commandView.setVisible(True)
+            self.commandView.raise_()
+        else:
+            self.commandView.setVisible(False)
+            self.selectionCount = 0
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        x = self.window().width() // 2 - self.commandView.width() // 2
+        y = self.window().height() - self.commandView.sizeHint().height() - 20
+        self.commandView.move(x, y)
+
+    def selectAll(self):
+        for card in self.cards:
+            card.setChecked(True)
+
+    def _removeSelectedTasks(self):
+        w = DeleteTaskDialog(self.window(), deleteOnClose=False)
+        w.contentLabel.setText(self.tr("Are you sure to delete these selected tasks?"))
+        w.deleteFileCheckBox.setChecked(False)
+
+        if w.exec():
+            for card in self.cards.copy():
+                if card.isChecked():
+                    card.removeTask(w.deleteFileCheckBox.isChecked())
+
+        w.deleteLater()
+
+    def _restartSelectedTasks(self):
+        for card in self.cards.copy():
+            if card.isChecked():
+                card.redownload()
+
+    def _connectSignalToSlot(self):
+        self.commandView.redownloadAction.triggered.connect(self._restartSelectedTasks)
+        self.commandView.deleteAction.triggered.connect(self._removeSelectedTasks)
+        self.commandView.selectAllAction.triggered.connect(self.selectAll)
+        self.commandView.cancelAction.triggered.connect(lambda: self.setSelectionMode(False))
+
 
 class DownloadingTaskView(TaskCardView):
     """ Downloading task view """
@@ -198,6 +276,7 @@ class DownloadingTaskView(TaskCardView):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
         self.setObjectName("downloading")
+        self.commandView.bar.commandButtons[0].hide()
 
     def createCard(self, task: Task):
         return LiveDownloadingTaskCard(task) if task.isLive else VODDownloadingTaskCard(task)
@@ -270,3 +349,29 @@ class TaskStackedWidget(QStackedWidget):
 
     def minimumSizeHint(self):
         return self.currentWidget().minimumSizeHint()
+
+
+class TaskCommandBarView(CommandBarView):
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.redownloadAction = Action(FluentIcon.UPDATE, self.tr("Restart"), self)
+        self.deleteAction = Action(FluentIcon.DELETE, self.tr("Delete"), self)
+        self.selectAllAction = Action(Icon.SELECT, self.tr("Select All"), self)
+        self.cancelAction = Action(FluentIcon.CLEAR_SELECTION, self.tr("Cancel"), self)
+
+        self.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextUnderIcon)
+        self.setIconSize(QSize(18, 18))
+        self.addActions([self.redownloadAction, self.deleteAction, self.selectAllAction, self.cancelAction])
+        self.resizeToSuitableWidth()
+        self.setShadowEffect()
+
+    def setShadowEffect(self, blurRadius=35, offset=(0, 8)):
+        """ add shadow to dialog """
+        color = QColor(0, 0, 0, 80 if isDarkTheme() else 30)
+        self.shadowEffect = QGraphicsDropShadowEffect(self)
+        self.shadowEffect.setBlurRadius(blurRadius)
+        self.shadowEffect.setOffset(*offset)
+        self.shadowEffect.setColor(color)
+        self.setGraphicsEffect(None)
+        self.setGraphicsEffect(self.shadowEffect)

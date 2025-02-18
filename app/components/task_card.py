@@ -2,13 +2,14 @@
 from pathlib import Path
 import sys
 from PySide6.QtCore import Qt, Signal, Property, QFileInfo, QSize
-from PySide6.QtGui import QPixmap, QPainter, QFont
+from PySide6.QtGui import QPixmap, QPainter, QFont, QColor, QPen
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QFileIconProvider
 
-from qfluentwidgets import (SimpleCardWidget, IconWidget, ToolButton, FluentIcon,
+from qfluentwidgets import (CardWidget, IconWidget, ToolButton, FluentIcon,
                             BodyLabel, CaptionLabel, ProgressBar, ImageLabel, setFont,
                             MessageBoxBase, SubtitleLabel, CheckBox, InfoBar, InfoBarPosition,
-                            PushButton, ToolTipFilter, InfoLevel, DotInfoBadge, MessageBox)
+                            PushButton, ToolTipFilter, InfoLevel, DotInfoBadge, MessageBox,
+                            isDarkTheme, themeColor, RoundMenu, Action, MenuAnimationType)
 
 from ..common.utils import showInFolder, removeFile, openUrl
 from ..common.database.entity import Task
@@ -18,10 +19,73 @@ from ..service.download_task_service import downloadTaskService
 from ..service.m3u8dl_service import VODDownloadProgressInfo, m3u8Service, LiveDownloadProgressInfo, LiveDownloadStatus
 
 
-class TaskCardBase(SimpleCardWidget):
+class TaskCardBase(CardWidget):
     """ Task card base class """
 
     deleted = Signal(Task)
+    checkedChanged = Signal(bool)
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.checkBox = CheckBox()
+        self.checkBox.setFixedSize(23, 23)
+        self.setSelectionMode(False)
+
+        self.checkBox.stateChanged.connect(self._onCheckedChanged)
+
+    def setSelectionMode(self, enter: bool):
+        self.isSelectionMode = enter
+        self.checkBox.setVisible(enter)
+        if not enter:
+            self.checkBox.setChecked(False)
+
+        self.update()
+
+    def isChecked(self):
+        return self.checkBox.isChecked()
+
+    def setChecked(self, checked):
+        if checked == self.isChecked():
+            return
+
+        self.checkBox.setChecked(checked)
+        self.update()
+
+    def removeTask(self, deleteFile=False):
+        raise NotImplementedError
+
+    def mouseReleaseEvent(self, e):
+        super().mouseReleaseEvent(e)
+        if self.isSelectionMode:
+            self.setChecked(not self.isChecked())
+        else:
+            self.setSelectionMode(True)
+            self.setChecked(True)
+
+    def _onDeleteButtonClicked(self):
+        w = DeleteTaskDialog(self.window(), deleteOnClose=False)
+        w.deleteFileCheckBox.setChecked(False)
+
+        if w.exec():
+            self.removeTask(w.deleteFileCheckBox.isChecked())
+
+        w.deleteLater()
+
+    def _onCheckedChanged(self):
+        self.setChecked(self.checkBox.isChecked())
+        self.checkedChanged.emit(self.checkBox.isChecked())
+
+    def paintEvent(self, e):
+        if not (self.isSelectionMode and self.isChecked()):
+            return super().paintEvent(e)
+
+        painter = QPainter(self)
+        painter.setRenderHints(QPainter.Antialiasing)
+
+        r = self.borderRadius
+        painter.setPen(QPen(themeColor(), 2))
+        painter.setBrush(QColor(255, 255, 255, 15) if isDarkTheme() else QColor(0, 0, 0, 8))
+        painter.drawRoundedRect(self.rect().adjusted(2, 2, -2, -2), r, r)
 
 
 class VODDownloadingTaskCard(TaskCardBase):
@@ -71,7 +135,9 @@ class VODDownloadingTaskCard(TaskCardBase):
         self._connectSignalToSlot()
 
     def _initLayout(self):
-        self.hBoxLayout.setContentsMargins(20, 11, 11, 11)
+        self.hBoxLayout.setContentsMargins(20, 11, 20, 11)
+        self.hBoxLayout.addWidget(self.checkBox)
+        self.hBoxLayout.addSpacing(5)
         self.hBoxLayout.addWidget(self.imageLabel)
         self.hBoxLayout.addSpacing(5)
         self.hBoxLayout.addLayout(self.vBoxLayout)
@@ -105,13 +171,9 @@ class VODDownloadingTaskCard(TaskCardBase):
         path = Path(self.task.saveFolder) / self.task.fileName
         showInFolder(path)
 
-    def _onDeleteButtonClicked(self):
-        w = DeleteTaskDialog(self.window(), deleteOnClose=False)
-        if w.exec():
-            self.deleted.emit(self.task)
-            downloadTaskService.removeDownloadingTask(self.task, w.deleteFileCheckBox.isChecked())
-
-        w.deleteLater()
+    def removeTask(self, deleteFile=False):
+        self.deleted.emit(self.task)
+        downloadTaskService.removeDownloadingTask(self.task, deleteFile)
 
     def setInfo(self, info: VODDownloadProgressInfo):
         """ update progress info """
@@ -173,7 +235,9 @@ class SuccessTaskCard(TaskCardBase):
         self._connectSignalToSlot()
 
     def _initLayout(self):
-        self.hBoxLayout.setContentsMargins(20, 11, 11, 11)
+        self.hBoxLayout.setContentsMargins(20, 11, 20, 11)
+        self.hBoxLayout.addWidget(self.checkBox)
+        self.hBoxLayout.addSpacing(5)
         self.hBoxLayout.addWidget(self.imageLabel)
         self.hBoxLayout.addSpacing(5)
         self.hBoxLayout.addLayout(self.vBoxLayout)
@@ -214,23 +278,17 @@ class SuccessTaskCard(TaskCardBase):
                 parent=self.window().taskInterface
             )
 
-    def _onDeleteButtonClicked(self):
-        w = DeleteTaskDialog(self.window(), deleteOnClose=False)
-        w.deleteFileCheckBox.setChecked(False)
+    def removeTask(self, deleteFile=False):
+        self.deleted.emit(self.task)
+        downloadTaskService.removedSuccessTask(self.task, deleteFile)
 
-        if w.exec():
-            self.deleted.emit(self.task)
-            downloadTaskService.removedSuccessTask(self.task, w.deleteFileCheckBox.isChecked())
-
-        w.deleteLater()
-
-    def _onRedownloadButtonClicked(self):
+    def redownload(self):
         signalBus.redownloadTask.emit(self.task)
 
     def _connectSignalToSlot(self):
         self.openFolderButton.clicked.connect(self._onOpenButtonClicked)
         self.deleteButton.clicked.connect(self._onDeleteButtonClicked)
-        self.redownloadButton.clicked.connect(self._onRedownloadButtonClicked)
+        self.redownloadButton.clicked.connect(self.redownload)
 
 
 class FailedTaskCard(TaskCardBase):
@@ -279,7 +337,9 @@ class FailedTaskCard(TaskCardBase):
         self._connectSignalToSlot()
 
     def _initLayout(self):
-        self.hBoxLayout.setContentsMargins(20, 11, 11, 11)
+        self.hBoxLayout.setContentsMargins(20, 11, 20, 11)
+        self.hBoxLayout.addWidget(self.checkBox)
+        self.hBoxLayout.addSpacing(5)
         self.hBoxLayout.addWidget(self.imageLabel)
         self.hBoxLayout.addSpacing(5)
         self.hBoxLayout.addLayout(self.vBoxLayout)
@@ -309,21 +369,17 @@ class FailedTaskCard(TaskCardBase):
     def _onLogButtonClicked(self):
         openUrl(self.task.logFile)
 
-    def _onDeleteButtonClicked(self):
-        w = DeleteTaskDialog(self.window(), deleteOnClose=False)
-        if w.exec():
-            self.deleted.emit(self.task)
-            downloadTaskService.removeFailedTask(self.task, w.deleteFileCheckBox.isChecked())
+    def removeTask(self, deleteFile=False):
+        self.deleted.emit(self.task)
+        downloadTaskService.removeFailedTask(self.task, deleteFile)
 
-        w.deleteLater()
-
-    def _onRedownloadButtonClicked(self):
+    def redownload(self):
         signalBus.redownloadTask.emit(self.task)
 
     def _connectSignalToSlot(self):
         self.logButton.clicked.connect(self._onLogButtonClicked)
         self.deleteButton.clicked.connect(self._onDeleteButtonClicked)
-        self.redownloadButton.clicked.connect(self._onRedownloadButtonClicked)
+        self.redownloadButton.clicked.connect(self.redownload)
 
 
 class DeleteTaskDialog(MessageBoxBase):
@@ -409,7 +465,9 @@ class LiveDownloadingTaskCard(TaskCardBase):
         self._connectSignalToSlot()
 
     def _initLayout(self):
-        self.hBoxLayout.setContentsMargins(20, 11, 11, 11)
+        self.hBoxLayout.setContentsMargins(20, 11, 20, 11)
+        self.hBoxLayout.addWidget(self.checkBox)
+        self.hBoxLayout.addSpacing(5)
         self.hBoxLayout.addWidget(self.imageLabel)
         self.hBoxLayout.addSpacing(5)
         self.hBoxLayout.addLayout(self.vBoxLayout)
@@ -452,13 +510,9 @@ class LiveDownloadingTaskCard(TaskCardBase):
             self.deleted.emit(self.task)
             downloadTaskService.finishLiveRecordingTask(self.task)
 
-    def _onDeleteButtonClicked(self):
-        w = DeleteTaskDialog(self.window(), deleteOnClose=False)
-        if w.exec():
-            self.deleted.emit(self.task)
-            downloadTaskService.removeDownloadingTask(self.task, w.deleteFileCheckBox.isChecked())
-
-        w.deleteLater()
+    def removeTask(self, deleteFile=False):
+        self.deleted.emit(self.task)
+        downloadTaskService.removeDownloadingTask(self.task, deleteFile)
 
     def setInfo(self, info: LiveDownloadProgressInfo):
         """ update progress info """
