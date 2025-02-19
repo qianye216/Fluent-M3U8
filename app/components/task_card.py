@@ -74,6 +74,7 @@ class TaskCardBase(CardWidget):
     def _onCheckedChanged(self):
         self.setChecked(self.checkBox.isChecked())
         self.checkedChanged.emit(self.checkBox.isChecked())
+        self.update()
 
     def paintEvent(self, e):
         if not (self.isSelectionMode and self.isChecked()):
