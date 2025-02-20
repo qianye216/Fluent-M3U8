@@ -24,7 +24,7 @@
 </p>
 
 <p align="center">
-English | <a href="docs/README_zh.md">简体中文</a>
+English | <a href="docs/README_zh.md">简体中文</a> | <a href="https://fluent-m3u8.org">官网</a>
 </p>
 
 ![界面](docs/screenshot/主界面.png)
