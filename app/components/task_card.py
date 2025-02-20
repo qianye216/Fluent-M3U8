@@ -173,8 +173,11 @@ class VODDownloadingTaskCard(TaskCardBase):
         showInFolder(path)
 
     def removeTask(self, deleteFile=False):
-        self.deleted.emit(self.task)
+        if not self.task.isRunning():
+            return
+
         downloadTaskService.removeDownloadingTask(self.task, deleteFile)
+        self.deleted.emit(self.task)
 
     def setInfo(self, info: VODDownloadProgressInfo):
         """ update progress info """
@@ -280,8 +283,8 @@ class SuccessTaskCard(TaskCardBase):
             )
 
     def removeTask(self, deleteFile=False):
-        self.deleted.emit(self.task)
         downloadTaskService.removedSuccessTask(self.task, deleteFile)
+        self.deleted.emit(self.task)
 
     def redownload(self):
         signalBus.redownloadTask.emit(self.task)
@@ -371,8 +374,8 @@ class FailedTaskCard(TaskCardBase):
         openUrl(self.task.logFile)
 
     def removeTask(self, deleteFile=False):
-        self.deleted.emit(self.task)
         downloadTaskService.removeFailedTask(self.task, deleteFile)
+        self.deleted.emit(self.task)
 
     def redownload(self):
         signalBus.redownloadTask.emit(self.task)

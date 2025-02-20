@@ -35,6 +35,9 @@ class Task(Entity):
     logFile: str = None                 # 日志文件路径
     createTime: QDateTime = field(default_factory=QDateTime.currentDateTime)
 
+    def isRunning(self):
+        return self.status == TaskStatus.RUNNING
+
     def error(self):
         self.status = TaskStatus.FAILED
 

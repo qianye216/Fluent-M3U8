@@ -246,6 +246,7 @@ class AdvanceConfigCard(M3U8GroupHeaderCardWidget):
 
         self.httpTimeoutSpinBox = CompactSpinBox()
         self.httpHeaderEdit = PlainTextEdit()
+        self.adLineEdit = LineEdit()
         self.speedSpinBox = CompactSpinBox()
         self.speedComboBox = ComboBox()
         self.retryCountSpinBox = CompactSpinBox()
@@ -268,6 +269,9 @@ class AdvanceConfigCard(M3U8GroupHeaderCardWidget):
         self.httpHeaderEdit.setPlainText(cfg.get(cfg.httpHeader))
         self.httpHeaderEdit.setPlaceholderText("User-Agent: iOS\nCookie: mycookie")
 
+        self.adLineEdit.setFixedWidth(300)
+        self.adLineEdit.setPlaceholderText(self.tr("Please enter a regular expression"))
+
         self.speedSpinBox.setRange(*cfg.maxSpeed.range)
         self.speedSpinBox.setValue(cfg.get(cfg.maxSpeed))
         self.speedComboBox.addItems(cfg.speedUnit.options)
@@ -286,6 +290,12 @@ class AdvanceConfigCard(M3U8GroupHeaderCardWidget):
             title=self.tr("Header"),
             content=self.tr("Set custom headers for HTTP requests"),
             widget=self.httpHeaderEdit
+        )
+        self.addGroup(
+            icon=Logo.SHIELD.icon(),
+            title=self.tr("Ad filtering"),
+            content=self.tr("Set URL keywords for advertising shards"),
+            widget=self.adLineEdit
         )
 
         speedGroup = self.addGroup(
@@ -375,7 +385,7 @@ class AdvanceConfigCard(M3U8GroupHeaderCardWidget):
             M3U8DLCommand.SUB_FORMAT.command(self.subtitleComboBox.currentText()),
         ]
 
-        if self.httpHeaderEdit.toPlainText():
+        if self.httpHeaderEdit.toPlainText().strip():
             headers = self.httpHeaderEdit.toPlainText().split("\n")
             for header in headers:
                 options.append(M3U8DLCommand.HEADER.command(header))
@@ -383,6 +393,9 @@ class AdvanceConfigCard(M3U8GroupHeaderCardWidget):
         if self.speedSpinBox.value() > 0:
             speed = str(self.speedSpinBox.value()) + self.speedComboBox.currentText()
             options.append(M3U8DLCommand.MAX_SPEED.command(speed))
+
+        if self.adLineEdit.text().strip():
+            options.append(M3U8DLCommand.AD_KEYWORD.command(self.adLineEdit.text().strip()))
 
         for button in self.findChildren(SwitchButton):
             command = button.property("command")

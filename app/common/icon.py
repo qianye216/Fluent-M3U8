@@ -50,6 +50,7 @@ class Logo(FluentIconBase, Enum):
     LEDGER = "Ledger"
     POSTAL = "Postal"
     PLANET = "Planet"
+    SHIELD = "Shield"
     COOKIE = "Cookie"
     HAMMER = "Hammer"
     OFFICE = "Office"

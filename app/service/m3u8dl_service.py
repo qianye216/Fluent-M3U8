@@ -61,6 +61,7 @@ class M3U8DLCommand(Enum):
     NO_ASCII_COLOR = "--no-ansi-color"
     DISABLE_UPDATE_CHECK = "--disable-update-check"
     UI_LANGUAGE = "--ui-language"
+    AD_KEYWORD = "--ad-keyword"
 
     def command(self, value=None):
         if value is None:
