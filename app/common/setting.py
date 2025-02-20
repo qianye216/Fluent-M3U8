@@ -9,13 +9,13 @@ DEBUG = "__compiled__" not in globals()
 
 YEAR = 2025
 AUTHOR = "zhiyiYo"
-VERSION = "0.5.0"
+VERSION = "0.6.0"
 APP_NAME = "Fluent-M3U8"
-HELP_URL = "https://github.com/zhiyiYo/Fluent-M3U8"
+HELP_URL = "https://fluent-m3u8.org"
 REPO_URL = "https://github.com/zhiyiYo/Fluent-M3U8"
 FEEDBACK_URL = "https://github.com/zhiyiYo/Fluent-M3U8/issues"
 RELEASE_URL = "https://github.com/zhiyiYo/Fluent-M3U8/releases"
-DOC_URL = "https://github.com/zhiyiYo/Fluent-M3U8/"
+DOC_URL = "https://fluent-m3u8.org"
 AFDIAN_URL = "https://afdian.com/a/zhiyiYo"
 VIDEO_URL = "https://www.bilibili.com/video/BV1SHNDebE2d"
 KOFI_URL = "https://ko-fi.com/zhiyiyo"
