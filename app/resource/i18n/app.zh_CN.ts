@@ -302,17 +302,17 @@
 <context>
     <name>DeleteTaskDialog</name>
     <message>
-        <location filename="../../components/task_card.py" line="389"/>
+        <location filename="../../components/task_card.py" line="390"/>
         <source>Delete task</source>
         <translation>删除任务</translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="391"/>
+        <location filename="../../components/task_card.py" line="392"/>
         <source>Are you sure to delete this task?</source>
         <translation>是否确定要删除此下载任务？</translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="392"/>
+        <location filename="../../components/task_card.py" line="393"/>
         <source>Remove file</source>
         <translation>同时删除文件</translation>
     </message>
@@ -320,12 +320,12 @@
 <context>
     <name>FailedTaskCard</name>
     <message>
-        <location filename="../../components/task_card.py" line="324"/>
+        <location filename="../../components/task_card.py" line="325"/>
         <source>Restart</source>
         <translation>重新下载</translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="329"/>
+        <location filename="../../components/task_card.py" line="330"/>
         <source>View log</source>
         <translation>查看报错日志</translation>
     </message>
@@ -431,34 +431,34 @@
 <context>
     <name>LiveDownloadingTaskCard</name>
     <message>
-        <location filename="../../components/task_card.py" line="436"/>
-        <location filename="../../components/task_card.py" line="522"/>
+        <location filename="../../components/task_card.py" line="437"/>
+        <location filename="../../components/task_card.py" line="525"/>
         <source>Recording</source>
         <translation>正在录制</translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="451"/>
+        <location filename="../../components/task_card.py" line="452"/>
         <source>Show in folder</source>
         <translation>显示文件</translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="454"/>
-        <location filename="../../components/task_card.py" line="505"/>
+        <location filename="../../components/task_card.py" line="455"/>
+        <location filename="../../components/task_card.py" line="508"/>
         <source>Stop recording</source>
         <translation>停止录制</translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="457"/>
+        <location filename="../../components/task_card.py" line="458"/>
         <source>Remove task</source>
         <translation>删除任务</translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="505"/>
+        <location filename="../../components/task_card.py" line="508"/>
         <source>Are you sure to stop recording the live stream?</source>
         <translation>是否确认停止录制直播？</translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="526"/>
+        <location filename="../../components/task_card.py" line="529"/>
         <source>Waiting</source>
         <translation>正在等待</translation>
     </message>
@@ -518,84 +518,137 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../view/main_window.py" line="63"/>
+        <location filename="../../view/main_window.py" line="72"/>
         <source>Home</source>
         <translation>主页</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="64"/>
+        <location filename="../../view/main_window.py" line="73"/>
         <source>Task</source>
         <translation>下载任务</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="67"/>
+        <location filename="../../view/main_window.py" line="76"/>
         <source>Sponsor</source>
         <translation>支持</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="69"/>
+        <location filename="../../view/main_window.py" line="78"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="109"/>
+        <location filename="../../view/main_window.py" line="121"/>
         <source>Unhandled exception occurred</source>
         <translation>发生未处理异常</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="110"/>
+        <location filename="../../view/main_window.py" line="122"/>
         <source>The error message has been written to the paste board and log. Do you want to report?</source>
         <translation>报错信息已写入系统粘贴板和日志文件，是否立即反馈？</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="132"/>
+        <location filename="../../view/main_window.py" line="144"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="153"/>
+        <location filename="../../view/main_window.py" line="165"/>
         <source>Updates available</source>
         <translation>发现可用更新</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="154"/>
+        <location filename="../../view/main_window.py" line="166"/>
         <source>A new version</source>
         <translation>新版本</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="154"/>
+        <location filename="../../view/main_window.py" line="166"/>
         <source>is available. Do you want to download this version?</source>
         <translation>已发布，是否立即下载此版本？</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="160"/>
+        <location filename="../../view/main_window.py" line="172"/>
         <source>No updates available</source>
         <translation>无可用更新</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="162"/>
+        <location filename="../../view/main_window.py" line="174"/>
         <source>Fluent M3U8 has been updated to the latest version, feel free to use it.</source>
         <translation>Fluent M3U8 已更新到最新版，请放心食用~</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="168"/>
+        <location filename="../../view/main_window.py" line="180"/>
         <source>Task finished</source>
         <translation>任务完成</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="169"/>
+        <location filename="../../view/main_window.py" line="181"/>
         <source>download successfully</source>
         <translation>已下载成功</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="177"/>
+        <location filename="../../view/main_window.py" line="189"/>
         <source>Task failed</source>
         <translation>任务失败</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="174"/>
+        <location filename="../../view/main_window.py" line="219"/>
+        <source>Open File</source>
+        <translation>打开文件</translation>
+    </message>
+    <message>
+        <location filename="../../view/main_window.py" line="186"/>
         <source>download failed</source>
         <translation>下载发生错误</translation>
+    </message>
+</context>
+<context>
+    <name>MenuBar</name>
+    <message>
+        <location filename="../../components/menu_bar.py" line="13"/>
+        <source>File</source>
+        <translation>文件</translation>
+    </message>
+    <message>
+        <location filename="../../components/menu_bar.py" line="14"/>
+        <source>Open File</source>
+        <translation>打开文件</translation>
+    </message>
+    <message>
+        <location filename="../../components/menu_bar.py" line="15"/>
+        <source>Preferences</source>
+        <translation>首选项</translation>
+    </message>
+    <message>
+        <location filename="../../components/menu_bar.py" line="16"/>
+        <source>Close Window</source>
+        <translation>关闭窗口</translation>
+    </message>
+    <message>
+        <location filename="../../components/menu_bar.py" line="22"/>
+        <source>Help</source>
+        <translation>帮助</translation>
+    </message>
+    <message>
+        <location filename="../../components/menu_bar.py" line="23"/>
+        <source>Documention</source>
+        <translation>帮助文档</translation>
+    </message>
+    <message>
+        <location filename="../../components/menu_bar.py" line="24"/>
+        <source>Video Tutorials</source>
+        <translation>视频教程</translation>
+    </message>
+    <message>
+        <location filename="../../components/menu_bar.py" line="25"/>
+        <source>Feedback</source>
+        <translation>反馈问题</translation>
+    </message>
+    <message>
+        <location filename="../../components/menu_bar.py" line="26"/>
+        <source>Support Us</source>
+        <translation>支持我们</translation>
     </message>
 </context>
 <context>
@@ -819,27 +872,27 @@
 <context>
     <name>SuccessTaskCard</name>
     <message>
-        <location filename="../../components/task_card.py" line="218"/>
+        <location filename="../../components/task_card.py" line="219"/>
         <source>Restart</source>
         <translation>重新下载</translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="221"/>
+        <location filename="../../components/task_card.py" line="222"/>
         <source>Show in folder</source>
         <translation>显示文件</translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="224"/>
+        <location filename="../../components/task_card.py" line="225"/>
         <source>Remove task</source>
         <translation>删除任务</translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="275"/>
+        <location filename="../../components/task_card.py" line="276"/>
         <source>Open failed</source>
         <translation>打开失败</translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="276"/>
+        <location filename="../../components/task_card.py" line="277"/>
         <source>Video file have been deleted</source>
         <translation>视频文件不存在</translation>
     </message>
@@ -860,7 +913,7 @@
 <context>
     <name>TaskCardView</name>
     <message>
-        <location filename="../../view/task_interface.py" line="248"/>
+        <location filename="../../view/task_interface.py" line="251"/>
         <source>Are you sure to delete these selected tasks?</source>
         <translation>是否确定要删除所有选中的下载任务？</translation>
     </message>
@@ -868,22 +921,22 @@
 <context>
     <name>TaskCommandBarView</name>
     <message>
-        <location filename="../../view/task_interface.py" line="355"/>
+        <location filename="../../view/task_interface.py" line="358"/>
         <source>Restart</source>
         <translation>重新下载</translation>
     </message>
     <message>
-        <location filename="../../view/task_interface.py" line="356"/>
+        <location filename="../../view/task_interface.py" line="359"/>
         <source>Delete</source>
         <translation>删除任务</translation>
     </message>
     <message>
-        <location filename="../../view/task_interface.py" line="357"/>
+        <location filename="../../view/task_interface.py" line="360"/>
         <source>Select All</source>
         <translation>全选</translation>
     </message>
     <message>
-        <location filename="../../view/task_interface.py" line="358"/>
+        <location filename="../../view/task_interface.py" line="361"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -950,12 +1003,12 @@
 <context>
     <name>VODDownloadingTaskCard</name>
     <message>
-        <location filename="../../components/task_card.py" line="124"/>
+        <location filename="../../components/task_card.py" line="125"/>
         <source>Show in folder</source>
         <translation>显示文件</translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="127"/>
+        <location filename="../../components/task_card.py" line="128"/>
         <source>Remove task</source>
         <translation>删除任务</translation>
     </message>

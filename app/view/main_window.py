@@ -1,9 +1,9 @@
 # coding: utf-8
 import sys
 
-from PySide6.QtCore import QUrl, QSize, Qt
+from PySide6.QtCore import QUrl, QSize, Qt, QLocale
 from PySide6.QtGui import QIcon, QColor, QGuiApplication
-from PySide6.QtWidgets import QApplication
+from PySide6.QtWidgets import QApplication, QFileDialog
 from PySide6.QtSql import QSqlDatabase
 
 from qfluentwidgets import NavigationItemPosition, MSFluentWindow, SplashScreen, MessageBox, InfoBarIcon
@@ -19,9 +19,10 @@ from ..common.utils import openUrl
 from ..common.concurrent import TaskExecutor
 from ..service.version_service import VersionService
 from ..common.signal_bus import signalBus
-from ..common.setting import DOC_URL, FEEDBACK_URL, RELEASE_URL, AFDIAN_URL
+from ..common.setting import DOC_URL, FEEDBACK_URL, RELEASE_URL, AFDIAN_URL, VIDEO_URL, KOFI_URL
 from ..service.m3u8dl_service import m3u8Service, Task
 from ..components.system_tray_icon import SystemTrayIcon
+from ..components.menu_bar import MenuBar
 from ..common import resource
 
 
@@ -43,6 +44,7 @@ class MainWindow(MSFluentWindow):
         self.connectSignalToSlot()
 
         # add items to navigation interface
+        self.initMenuBar()
         self.initNavigation()
 
         # check for updates
@@ -64,7 +66,7 @@ class MainWindow(MSFluentWindow):
         self.addSubInterface(self.taskInterface, Icon.CLOUD_DOWNLOAD, self.tr('Task'), Icon.CLOUD_DOWNLOAD_FILLED)
 
         self.navigationInterface.addItem(
-            'sponsor', FIF.HEART, self.tr("Sponsor"), lambda: openUrl(AFDIAN_URL), False, position=NavigationItemPosition.BOTTOM)
+            'sponsor', FIF.HEART, self.tr("Sponsor"), self.support, False, position=NavigationItemPosition.BOTTOM)
         self.addSubInterface(
             self.settingInterface, Icon.SETTINGS, self.tr('Settings'), Icon.SETTINGS_FILLED, NavigationItemPosition.BOTTOM)
 
@@ -97,6 +99,19 @@ class MainWindow(MSFluentWindow):
             QSqlDatabase.database(DBInitializer.CONNECTION_NAME), self)
 
         sqlSignalBus.dataFetched.connect(self.onDataFetched)
+
+    def initMenuBar(self):
+        if sys.platform != "darwin":
+            return
+
+        self.menuBar = MenuBar(self)
+        self.menuBar.openFileAct.triggered.connect(self.openFile)
+        self.menuBar.closeWindowAct.triggered.connect(self.close)
+        self.menuBar.donateAct.triggered.connect(self.support)
+        self.menuBar.docAct.triggered.connect(lambda: openUrl(DOC_URL))
+        self.menuBar.settingsAct.triggered.connect(lambda: self.switchTo(self.settingInterface))
+        self.menuBar.videoTutorialAct.triggered.connect(lambda: openUrl(VIDEO_URL))
+        self.menuBar.feedbackAct.triggered.connect(lambda: openUrl(FEEDBACK_URL))
 
     def onDataFetched(self, response: SqlResponse):
         if response.slot:
@@ -173,7 +188,7 @@ class MainWindow(MSFluentWindow):
             content = f'"{task.fileName}"' + self.tr("download failed")
             if errorMsg:
                 content += (": " + errorMsg)
-                
+
             self.systemTrayIcon.showMessage(self.tr("Task failed"), content, InfoBarIcon.ERROR.icon())
 
     def onSystemTrayMessageClicked(self):
@@ -199,6 +214,22 @@ class MainWindow(MSFluentWindow):
 
         if cfg.get(cfg.checkUpdateAtStartUp):
             self.checkUpdate(True)
+
+    def support(self):
+        language = cfg.get(cfg.language).value
+        if language.name() == "zh_CN":
+            openUrl(AFDIAN_URL)
+        else:
+            openUrl(KOFI_URL)
+
+    def openFile(self):
+        path, _ = QFileDialog.getOpenFileName(self, self.tr("Open File"), cfg.get(
+            cfg.saveFolder), "Text Files (*.txt);;M3U8 Files (*.m3u8,*.m3u);;MPD Files (*.mpd)")
+        if not path:
+            return
+
+        self.homeInterface.setDownloadLink(path)
+        self.switchTo(self.homeInterface)
 
     def onExit(self):
         """ exit main window """

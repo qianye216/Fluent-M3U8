@@ -6,6 +6,7 @@ SOURCES += app/view/main_window.py \
         app/components/config_card.py \
         app/components/task_card.py \
         app/components/system_tray_icon.py \
+        app/components/menu_bar.py \
 
 TRANSLATIONS += app/resource/i18n/app.zh_CN.ts \
                 app/resource/i18n/app.zh_HK.ts

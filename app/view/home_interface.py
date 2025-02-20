@@ -134,7 +134,10 @@ class HomeInterface(ScrollArea):
         path = fileInfo.absoluteFilePath()
 
         if fileInfo.isFile() and path.lower().endswith(".txt"):
-            self.basicSettingCard.urlLineEdit.setText(path)
+            self.setDownloadLink(path)
+
+    def setDownloadLink(self, url: str):
+        self.basicSettingCard.urlLineEdit.setText(url)
 
     def _connectSignalToSlot(self):
         self.basicSettingCard.downloadButton.clicked.connect(self._onDownloadButtonClicked)

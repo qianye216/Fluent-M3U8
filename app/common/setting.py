@@ -17,6 +17,8 @@ FEEDBACK_URL = "https://github.com/zhiyiYo/Fluent-M3U8/issues"
 RELEASE_URL = "https://github.com/zhiyiYo/Fluent-M3U8/releases"
 DOC_URL = "https://github.com/zhiyiYo/Fluent-M3U8/"
 AFDIAN_URL = "https://afdian.com/a/zhiyiYo"
+VIDEO_URL = "https://www.bilibili.com/video/BV1SHNDebE2d"
+KOFI_URL = "https://ko-fi.com/zhiyiyo"
 
 CONFIG_FOLDER = Path('AppData').absolute()
 
