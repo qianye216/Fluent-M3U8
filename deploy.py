@@ -45,8 +45,8 @@ else:
     args = [
         'nuitka',
         '--standalone',
-        '--plugin-enable=pyside6',
-        '--include-qt-plugins=sensible,sqldrivers',
+        '--enable-plugin=pyside6',
+        '--include-qt-plugins=styles,sqldrivers',
         '--assume-yes-for-downloads',
         '--show-memory',
         '--show-progress',
