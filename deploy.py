@@ -46,7 +46,7 @@ else:
         'nuitka',
         '--standalone',
         '--plugin-enable=pyside6',
-        '--include-qt-plugins=sensible,sqldrivers,platforms',
+        '--include-qt-plugins=sensible,sqldrivers',
         '--assume-yes-for-downloads',
         '--show-memory',
         '--show-progress',
