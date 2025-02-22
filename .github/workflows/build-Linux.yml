@@ -20,10 +20,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          #sudo apt-get update
-          #sudo apt-get install -y libegl1-mesa
           pip install -r requirements.txt
           pip install nuitka==2.4.10
+          pip install PySide6==6.8.0.1
 
       - name: Build with Nuitka
         run: |
