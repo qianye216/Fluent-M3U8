@@ -105,3 +105,27 @@ def runDetachedProcess(executable: Union[str, Path], args=None, cwd=None):
         process.setWorkingDirectory(str(cwd))
 
     process.startDetached(str(executable).replace("\\", "/"), args or [])
+
+def getSystemProxy():
+    """ get system proxy """
+    if sys.platform == "win32":
+        try:
+            import winreg
+
+            with winreg.OpenKey(winreg.HKEY_CURRENT_USER, r'Software\Microsoft\Windows\CurrentVersion\Internet Settings') as key:
+                enabled, _ = winreg.QueryValueEx(key, 'ProxyEnable')
+
+                if enabled:
+                    return "http://" + winreg.QueryValueEx(key, 'ProxyServer')
+        except:
+            pass
+    elif sys.platform == "darwin":
+        s = os.popen('scutil --proxy').read()
+        info = dict(re.findall('(?m)^\s+([A-Z]\w+)\s+:\s+(\S+)', s))
+
+        if info.get('HTTPEnable') == '1':
+            return f"http://{info['HTTPProxy']}:{info['HTTPPort']}"
+        elif info.get('ProxyAutoConfigEnable') == '1':
+            return info['ProxyAutoConfigURLString']
+
+    return os.environ.get("http_proxy")

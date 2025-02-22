@@ -166,7 +166,7 @@ class MainWindow(MSFluentWindow):
         if success:
             self.showMessageBox(
                 self.tr('Updates available'),
-                self.tr('A new version')+f" {self.versionManager.lastestVersion[1:]} " +self.tr('is available. Do you want to download this version?'),
+                self.tr('A new version')+f" {self.versionManager.lastestVersion} " +self.tr('is available. Do you want to download this version?'),
                 True,
                 lambda: openUrl(RELEASE_URL)
             )

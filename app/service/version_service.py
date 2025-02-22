@@ -5,6 +5,7 @@ import requests
 from PySide6.QtCore import QVersionNumber
 
 from ..common.setting import VERSION
+from ..common.utils import getSystemProxy
 from ..common.exception_handler import exceptionHandler
 
 
@@ -20,7 +21,17 @@ class VersionService:
     def getLatestVersion(self):
         """ get latest version """
         url = "https://api.github.com/repos/zhiyiYo/Fluent-M3U8/releases/latest"
-        response = requests.get(url, timeout=2)
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.64"
+        }
+
+        proxy = getSystemProxy()
+        proxies = {
+            "http": proxy,
+            "https": proxy
+        }
+
+        response = requests.get(url, headers=headers, timeout=5, allow_redirects=True, proxies=proxies)
         response.raise_for_status()
 
         # parse version
