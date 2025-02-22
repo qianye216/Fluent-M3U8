@@ -39,12 +39,10 @@ class Config(QConfig):
     """ Config of application """
 
     # download
-    saveFolder = ConfigItem("Download", "SaveFolder", QStandardPaths.writableLocation(
-        QStandardPaths.DownloadLocation), FolderValidator())
-    m3u8dlPath = ConfigItem("Download", "M3U8DLPath", str(Path(
-        f"tools/N_m3u8DL-RE{EXE_SUFFIX}").absolute()))
-    ffmpegPath = ConfigItem("Download", "FFmpegPath", str(Path(
-        f"tools/ffmpeg{EXE_SUFFIX}").absolute()))
+    saveFolder = ConfigItem("Download", "SaveFolder", QStandardPaths.writableLocation(QStandardPaths.DownloadLocation), FolderValidator())
+    m3u8dlPath = ConfigItem("Download", "M3U8DLPath", str(Path(f"tools/N_m3u8DL-RE{EXE_SUFFIX}").absolute()))
+    ffmpegPath = ConfigItem("Download", "FFmpegPath", str(Path(f"tools/ffmpeg{EXE_SUFFIX}").absolute()))
+    autoResetLink = ConfigItem("Download", "AutoResetLink", False, BoolValidator())
 
     # main window
     micaEnabled = ConfigItem("MainWindow", "MicaEnabled", isWin11(), BoolValidator())

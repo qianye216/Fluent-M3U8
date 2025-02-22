@@ -256,60 +256,60 @@
 <context>
     <name>DecryptionConfigCard</name>
     <message>
-        <location filename="../../components/config_card.py" line="582"/>
+        <location filename="../../components/config_card.py" line="585"/>
         <source>Decryption Settings</source>
         <translation>解密设置</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="588"/>
-        <location filename="../../components/config_card.py" line="589"/>
-        <location filename="../../components/config_card.py" line="651"/>
-        <location filename="../../components/config_card.py" line="660"/>
+        <location filename="../../components/config_card.py" line="591"/>
+        <location filename="../../components/config_card.py" line="592"/>
+        <location filename="../../components/config_card.py" line="654"/>
+        <location filename="../../components/config_card.py" line="663"/>
         <source>Choose</source>
         <translation>选择</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="615"/>
+        <location filename="../../components/config_card.py" line="618"/>
         <source>Real-time Decryption</source>
         <translation>实时解密</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="616"/>
+        <location filename="../../components/config_card.py" line="619"/>
         <source>Real time decryption of MP4 shards</source>
         <translation>实时解密 MP4 分片</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="640"/>
+        <location filename="../../components/config_card.py" line="643"/>
         <source>Key</source>
         <translation>密钥</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="641"/>
+        <location filename="../../components/config_card.py" line="644"/>
         <source>Use the key to call engine for decryption</source>
         <translation>设置解密密钥并调用引擎进行解密</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="634"/>
+        <location filename="../../components/config_card.py" line="637"/>
         <source>Key Text File</source>
         <translation>密钥文件</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="635"/>
+        <location filename="../../components/config_card.py" line="638"/>
         <source>Search for KEY from text file by KID to decrypt</source>
         <translation>在文件中按 KID 搜寻 KEY 以解密</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="622"/>
+        <location filename="../../components/config_card.py" line="625"/>
         <source>Decryption Engine</source>
         <translation>解密引擎</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="623"/>
+        <location filename="../../components/config_card.py" line="626"/>
         <source>Third party program used for decryption</source>
         <translation>解密时使用的第三方程序</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="628"/>
+        <location filename="../../components/config_card.py" line="631"/>
         <source>Engine Binary Path</source>
         <translation>引擎路径</translation>
     </message>
@@ -317,17 +317,17 @@
 <context>
     <name>DeleteTaskDialog</name>
     <message>
-        <location filename="../../components/task_card.py" line="390"/>
+        <location filename="../../components/task_card.py" line="393"/>
         <source>Delete task</source>
         <translation>删除任务</translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="392"/>
+        <location filename="../../components/task_card.py" line="395"/>
         <source>Are you sure to delete this task?</source>
         <translation>是否确定要删除此下载任务？</translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="393"/>
+        <location filename="../../components/task_card.py" line="396"/>
         <source>Remove file</source>
         <translation>同时删除文件</translation>
     </message>
@@ -335,12 +335,12 @@
 <context>
     <name>FailedTaskCard</name>
     <message>
-        <location filename="../../components/task_card.py" line="325"/>
+        <location filename="../../components/task_card.py" line="328"/>
         <source>Restart</source>
         <translation>重新下载</translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="330"/>
+        <location filename="../../components/task_card.py" line="333"/>
         <source>View log</source>
         <translation>查看报错日志</translation>
     </message>
@@ -388,57 +388,57 @@
 <context>
     <name>LiveConfigCard</name>
     <message>
-        <location filename="../../components/config_card.py" line="512"/>
+        <location filename="../../components/config_card.py" line="515"/>
         <source>Live Settings</source>
         <translation>直播设置</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="526"/>
+        <location filename="../../components/config_card.py" line="529"/>
         <source>Real-time Merge</source>
         <translation>实时合并</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="527"/>
+        <location filename="../../components/config_card.py" line="530"/>
         <source>Real-time merging during live streaming recording</source>
         <translation>录制直播时实时合并</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="533"/>
+        <location filename="../../components/config_card.py" line="536"/>
         <source>Keep Segments</source>
         <translation>保留分片</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="534"/>
+        <location filename="../../components/config_card.py" line="537"/>
         <source>Keep shards when enabling real-time merge</source>
         <translation>开启实时合并时依然保留分片</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="540"/>
+        <location filename="../../components/config_card.py" line="543"/>
         <source>Pipe Mux</source>
         <translation>管道混流</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="541"/>
+        <location filename="../../components/config_card.py" line="544"/>
         <source>Real-time mixing through pipes and ffmpeg to TS files</source>
         <translation>通过管道和 FFmpeg 实时混流到 TS 文件</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="547"/>
+        <location filename="../../components/config_card.py" line="550"/>
         <source>Fix VTT</source>
         <translation>字幕修复</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="548"/>
+        <location filename="../../components/config_card.py" line="551"/>
         <source>Correction of VTT subtitles based on the start time of audio file</source>
         <translation>通过读取音频文件的起始时间修正 VTT 字幕</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="554"/>
+        <location filename="../../components/config_card.py" line="557"/>
         <source>Record Limit</source>
         <translation>录制限时</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="555"/>
+        <location filename="../../components/config_card.py" line="558"/>
         <source>Recording time limit in HH:mm:ss format</source>
         <translation>录制时长限制，格式为 时:分:秒</translation>
     </message>
@@ -446,34 +446,34 @@
 <context>
     <name>LiveDownloadingTaskCard</name>
     <message>
-        <location filename="../../components/task_card.py" line="437"/>
-        <location filename="../../components/task_card.py" line="525"/>
+        <location filename="../../components/task_card.py" line="440"/>
+        <location filename="../../components/task_card.py" line="528"/>
         <source>Recording</source>
         <translation>正在录制</translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="452"/>
+        <location filename="../../components/task_card.py" line="455"/>
         <source>Show in folder</source>
         <translation>显示文件</translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="455"/>
-        <location filename="../../components/task_card.py" line="508"/>
+        <location filename="../../components/task_card.py" line="458"/>
+        <location filename="../../components/task_card.py" line="511"/>
         <source>Stop recording</source>
         <translation>停止录制</translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="458"/>
+        <location filename="../../components/task_card.py" line="461"/>
         <source>Remove task</source>
         <translation>删除任务</translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="508"/>
+        <location filename="../../components/task_card.py" line="511"/>
         <source>Are you sure to stop recording the live stream?</source>
         <translation>是否确认停止录制直播？</translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="529"/>
+        <location filename="../../components/task_card.py" line="532"/>
         <source>Waiting</source>
         <translation>正在等待</translation>
     </message>
@@ -669,27 +669,27 @@
 <context>
     <name>ProxyConfigCard</name>
     <message>
-        <location filename="../../components/config_card.py" line="418"/>
+        <location filename="../../components/config_card.py" line="421"/>
         <source>Proxy Settings</source>
         <translation>代理设置</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="438"/>
+        <location filename="../../components/config_card.py" line="441"/>
         <source>System Proxy</source>
         <translation>系统代理</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="439"/>
+        <location filename="../../components/config_card.py" line="442"/>
         <source>Use system default proxy</source>
         <translation>使用系统默认代理</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="445"/>
+        <location filename="../../components/config_card.py" line="448"/>
         <source>Custom Proxy</source>
         <translation>自定义代理</translation>
     </message>
     <message>
-        <location filename="../../components/config_card.py" line="446"/>
+        <location filename="../../components/config_card.py" line="449"/>
         <source>Set the http request proxy to be used</source>
         <translation>设置自定义的代理地址</translation>
     </message>
@@ -707,107 +707,107 @@
         <translation>个性化</translation>
     </message>
     <message>
-        <location filename="../../view/setting_interface.py" line="46"/>
-        <source>Mica effect</source>
-        <translation>云母效果</translation>
-    </message>
-    <message>
         <location filename="../../view/setting_interface.py" line="47"/>
-        <source>Apply semi transparent to windows and surfaces</source>
-        <translation>窗口和表面呈现半透明</translation>
-    </message>
-    <message>
-        <location filename="../../view/setting_interface.py" line="54"/>
         <source>Application theme</source>
         <translation>应用主题</translation>
     </message>
     <message>
-        <location filename="../../view/setting_interface.py" line="55"/>
+        <location filename="../../view/setting_interface.py" line="48"/>
         <source>Change the appearance of your application</source>
         <translation>调整应用的外观</translation>
     </message>
     <message>
-        <location filename="../../view/setting_interface.py" line="57"/>
+        <location filename="../../view/setting_interface.py" line="50"/>
         <source>Light</source>
         <translation>浅色</translation>
     </message>
     <message>
-        <location filename="../../view/setting_interface.py" line="57"/>
+        <location filename="../../view/setting_interface.py" line="50"/>
         <source>Dark</source>
         <translation>深色</translation>
     </message>
     <message>
-        <location filename="../../view/setting_interface.py" line="59"/>
-        <location filename="../../view/setting_interface.py" line="70"/>
-        <location filename="../../view/setting_interface.py" line="81"/>
-        <location filename="../../view/setting_interface.py" line="89"/>
+        <location filename="../../view/setting_interface.py" line="52"/>
+        <location filename="../../view/setting_interface.py" line="63"/>
+        <location filename="../../view/setting_interface.py" line="74"/>
+        <location filename="../../view/setting_interface.py" line="82"/>
         <source>Use system setting</source>
         <translation>跟随系统设置</translation>
     </message>
     <message>
-        <location filename="../../view/setting_interface.py" line="65"/>
+        <location filename="../../view/setting_interface.py" line="58"/>
         <source>Accent color</source>
         <translation>主题色</translation>
     </message>
     <message>
-        <location filename="../../view/setting_interface.py" line="66"/>
+        <location filename="../../view/setting_interface.py" line="59"/>
         <source>Change the accent color of your application</source>
         <translation>调整应用的主题颜色</translation>
     </message>
     <message>
-        <location filename="../../view/setting_interface.py" line="68"/>
+        <location filename="../../view/setting_interface.py" line="61"/>
         <source>Sea foam green</source>
         <translation>海沫绿</translation>
     </message>
     <message>
-        <location filename="../../view/setting_interface.py" line="76"/>
+        <location filename="../../view/setting_interface.py" line="69"/>
         <source>Interface zoom</source>
         <translation>界面缩放</translation>
     </message>
     <message>
-        <location filename="../../view/setting_interface.py" line="77"/>
+        <location filename="../../view/setting_interface.py" line="70"/>
         <source>Change the size of widgets and fonts</source>
         <translation>调整组件和字体的大小</translation>
     </message>
     <message>
-        <location filename="../../view/setting_interface.py" line="87"/>
+        <location filename="../../view/setting_interface.py" line="80"/>
         <source>Language</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="../../view/setting_interface.py" line="88"/>
+        <location filename="../../view/setting_interface.py" line="81"/>
         <source>Set your preferred language for UI</source>
         <translation>设置界面的首选语言</translation>
     </message>
     <message>
-        <location filename="../../view/setting_interface.py" line="94"/>
+        <location filename="../../view/setting_interface.py" line="87"/>
         <source>Download</source>
         <translation>下载</translation>
     </message>
     <message>
-        <location filename="../../view/setting_interface.py" line="96"/>
+        <location filename="../../view/setting_interface.py" line="89"/>
         <location filename="../../view/setting_interface.py" line="103"/>
         <location filename="../../view/setting_interface.py" line="110"/>
         <source>Choose</source>
         <translation>选择</translation>
     </message>
     <message>
-        <location filename="../../view/setting_interface.py" line="98"/>
+        <location filename="../../view/setting_interface.py" line="91"/>
         <source>Save folder</source>
         <translation>保存目录</translation>
     </message>
     <message>
-        <location filename="../../view/setting_interface.py" line="217"/>
+        <location filename="../../view/setting_interface.py" line="97"/>
+        <source>Auto reset link</source>
+        <translation>重置链接</translation>
+    </message>
+    <message>
+        <location filename="../../view/setting_interface.py" line="98"/>
+        <source>The url and name of line edit will be cleared after download</source>
+        <translation>创建下载任务后自动清空输入框中的下载链接和文件名</translation>
+    </message>
+    <message>
+        <location filename="../../view/setting_interface.py" line="215"/>
         <source>Choose folder</source>
         <translation>选择文件夹</translation>
     </message>
     <message>
-        <location filename="../../view/setting_interface.py" line="226"/>
+        <location filename="../../view/setting_interface.py" line="224"/>
         <source>Choose N_m3u8DL-RE</source>
         <translation>选择 N_m3u8DL-RE</translation>
     </message>
     <message>
-        <location filename="../../view/setting_interface.py" line="235"/>
+        <location filename="../../view/setting_interface.py" line="233"/>
         <source>Choose ffmpeg</source>
         <translation>选择 ffmpeg</translation>
     </message>
@@ -874,12 +874,12 @@
         <translation>当前版本</translation>
     </message>
     <message>
-        <location filename="../../view/setting_interface.py" line="209"/>
+        <location filename="../../view/setting_interface.py" line="207"/>
         <source>Updated successfully</source>
         <translation>更新成功</translation>
     </message>
     <message>
-        <location filename="../../view/setting_interface.py" line="210"/>
+        <location filename="../../view/setting_interface.py" line="208"/>
         <source>Configuration takes effect after restart</source>
         <translation>配置在重启软件后生效</translation>
     </message>
@@ -887,27 +887,27 @@
 <context>
     <name>SuccessTaskCard</name>
     <message>
-        <location filename="../../components/task_card.py" line="219"/>
+        <location filename="../../components/task_card.py" line="222"/>
         <source>Restart</source>
         <translation>重新下载</translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="222"/>
+        <location filename="../../components/task_card.py" line="225"/>
         <source>Show in folder</source>
         <translation>显示文件</translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="225"/>
+        <location filename="../../components/task_card.py" line="228"/>
         <source>Remove task</source>
         <translation>删除任务</translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="276"/>
+        <location filename="../../components/task_card.py" line="279"/>
         <source>Open failed</source>
         <translation>打开失败</translation>
     </message>
     <message>
-        <location filename="../../components/task_card.py" line="277"/>
+        <location filename="../../components/task_card.py" line="280"/>
         <source>Video file have been deleted</source>
         <translation>视频文件不存在</translation>
     </message>

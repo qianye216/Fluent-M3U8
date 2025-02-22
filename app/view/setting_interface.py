@@ -92,6 +92,13 @@ class SettingInterface(ScrollArea):
             cfg.get(cfg.saveFolder),
             self.downloadGroup
         )
+        self.autoResetLinkCard = SwitchSettingCard(
+            FIF.CLEAR_SELECTION,
+            self.tr('Auto reset link'),
+            self.tr('The url and name of line edit will be cleared after download'),
+            configItem=cfg.autoResetLink,
+            parent=self.downloadGroup
+        )
         self.m3u8dlPathCard = PushSettingCard(
             self.tr("Choose"),
             ":/app/images/M3U8DL.png",
@@ -174,6 +181,7 @@ class SettingInterface(ScrollArea):
         self.downloadGroup.addSettingCard(self.saveFolderCard)
         self.downloadGroup.addSettingCard(self.m3u8dlPathCard)
         self.downloadGroup.addSettingCard(self.ffmpegPathCard)
+        self.downloadGroup.addSettingCard(self.autoResetLinkCard)
 
         self.updateSoftwareGroup.addSettingCard(self.updateOnStartUpCard)
 

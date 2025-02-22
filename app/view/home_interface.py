@@ -11,6 +11,7 @@ from ..components.info_card import M3U8DLInfoCard
 from ..components.config_card import BasicConfigCard, AdvanceConfigCard, ProxyConfigCard, LiveConfigCard, DecryptionConfigCard
 
 from ..service.m3u8dl_service import m3u8Service
+from ..common.config import cfg
 from ..common.signal_bus import signalBus
 
 
@@ -107,6 +108,10 @@ class HomeInterface(ScrollArea):
                 parent=self
             )
             button.clicked.connect(signalBus.switchToTaskInterfaceSig)
+
+            if cfg.get(cfg.autoResetLink):
+                self.basicSettingCard.urlLineEdit.clear()
+                self.basicSettingCard.fileNameLineEdit.clear()
         else:
             w = InfoBar.error(
                 self.tr("Task failed"),
