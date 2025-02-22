@@ -78,7 +78,7 @@ class MainWindow(MSFluentWindow):
         QApplication.setQuitOnLastWindowClosed(False)
 
         self.setCustomBackgroundColor(QColor(240, 244, 249), QColor(32, 32, 32))
-        self.setMicaEffectEnabled(cfg.get(cfg.micaEnabled))
+        self.setMicaEffectEnabled(False)
 
         # create splash screen
         self.splashScreen = SplashScreen(self.windowIcon(), self)

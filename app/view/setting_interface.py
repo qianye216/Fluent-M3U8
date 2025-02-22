@@ -41,13 +41,6 @@ class SettingInterface(ScrollArea):
         # personalization
         self.personalGroup = SettingCardGroup(
             self.tr('Personalization'), self.scrollWidget)
-        self.micaCard = SwitchSettingCard(
-            FIF.TRANSPARENT,
-            self.tr('Mica effect'),
-            self.tr('Apply semi transparent to windows and surfaces'),
-            cfg.micaEnabled,
-            self.personalGroup
-        )
         self.themeCard = ComboBoxSettingCard(
             cfg.themeMode,
             FIF.BRUSH,
@@ -166,8 +159,6 @@ class SettingInterface(ScrollArea):
         setFont(self.settingLabel, 23, QFont.Weight.DemiBold)
         self.enableTransparentBackground()
 
-        self.micaCard.setEnabled(isWin11())
-
         # initialize layout
         self.__initLayout()
         self._connectSignalToSlot()
@@ -175,7 +166,6 @@ class SettingInterface(ScrollArea):
     def __initLayout(self):
         self.settingLabel.move(36, 50)
 
-        self.personalGroup.addSettingCard(self.micaCard)
         self.personalGroup.addSettingCard(self.themeCard)
         self.personalGroup.addSettingCard(self.zoomCard)
         self.personalGroup.addSettingCard(self.languageCard)
@@ -262,7 +252,6 @@ class SettingInterface(ScrollArea):
 
         # personalization
         cfg.themeChanged.connect(setTheme)
-        self.micaCard.checkedChanged.connect(signalBus.micaEnableChanged)
         cfg.accentColor.valueChanged.connect(self._onAccentColorChanged)
 
         # check update
