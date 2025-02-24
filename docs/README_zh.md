@@ -73,7 +73,7 @@
 
 ## 致谢
 
-- [zhiyiYo/PyQt-Fluent-Widgets](https://qfluentwidgets.com/zh/)：强大、可扩展、美观优雅的 Fluent Design 风格组件库
+- [zhiyiYo/QFluentWidgets](https://qfluentwidgets.com/zh/)：强大、可扩展、美观优雅的 Fluent Design 风格组件库
 - [nilaoda/N_m3u8DL-RE](https://github.com/nilaoda/N_m3u8DL-RE)：跨平台且功能强大的 MPD/M3U8/ISM 下载器
 - [AresConnor/pyqt5_concurrent](https://github.com/AresConnor/pyqt5-concurrent)：基于 QThreadPool 的并发框架
 
