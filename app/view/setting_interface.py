@@ -85,13 +85,6 @@ class SettingInterface(ScrollArea):
 
         # download
         self.downloadGroup = SettingCardGroup(self.tr("Download"), self.scrollWidget)
-        self.saveFolderCard = PushSettingCard(
-            self.tr("Choose"),
-            FIF.FOLDER,
-            self.tr("Save folder"),
-            cfg.get(cfg.saveFolder),
-            self.downloadGroup
-        )
         self.autoResetLinkCard = SwitchSettingCard(
             FIF.CLEAR_SELECTION,
             self.tr('Auto reset link'),
@@ -157,7 +150,7 @@ class SettingInterface(ScrollArea):
     def __initWidget(self):
         self.resize(1000, 800)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.setViewportMargins(0, 100, 0, 20)
+        self.setViewportMargins(0, 90, 0, 20)
         self.setWidget(self.scrollWidget)
         self.setWidgetResizable(True)
         self.setObjectName('settingInterface')
@@ -171,14 +164,13 @@ class SettingInterface(ScrollArea):
         self._connectSignalToSlot()
 
     def __initLayout(self):
-        self.settingLabel.move(36, 50)
+        self.settingLabel.move(36, 40)
 
         self.personalGroup.addSettingCard(self.themeCard)
         self.personalGroup.addSettingCard(self.zoomCard)
         self.personalGroup.addSettingCard(self.languageCard)
         self.personalGroup.addSettingCard(self.accentColorCard)
 
-        self.downloadGroup.addSettingCard(self.saveFolderCard)
         self.downloadGroup.addSettingCard(self.m3u8dlPathCard)
         self.downloadGroup.addSettingCard(self.ffmpegPathCard)
         self.downloadGroup.addSettingCard(self.autoResetLinkCard)
@@ -190,7 +182,7 @@ class SettingInterface(ScrollArea):
         self.aboutGroup.addSettingCard(self.aboutCard)
 
         # add setting card group to layout
-        self.expandLayout.setSpacing(28)
+        self.expandLayout.setSpacing(26)
         self.expandLayout.setContentsMargins(36, 10, 36, 0)
         self.expandLayout.addWidget(self.personalGroup)
         self.expandLayout.addWidget(self.downloadGroup)
@@ -209,16 +201,6 @@ class SettingInterface(ScrollArea):
             duration=1500,
             parent=self
         )
-
-    def _onSaveFolderCardClicked(self):
-        folder = QFileDialog.getExistingDirectory(
-            self, self.tr("Choose folder"), QStandardPaths.writableLocation(QStandardPaths.DownloadLocation))
-
-        if not folder or cfg.get(cfg.saveFolder) == folder:
-            return
-
-        cfg.set(cfg.saveFolder, folder)
-        self.saveFolderCard.setContent(folder)
 
     def _onM3U8DLPathCardClicked(self):
         path, _ = QFileDialog.getOpenFileName(self, self.tr("Choose N_m3u8DL-RE"))
@@ -254,7 +236,6 @@ class SettingInterface(ScrollArea):
         cfg.appRestartSig.connect(self._showRestartTooltip)
 
         # download
-        self.saveFolderCard.clicked.connect(self._onSaveFolderCardClicked)
         self.m3u8dlPathCard.clicked.connect(self._onM3U8DLPathCardClicked)
         self.ffmpegPathCard.clicked.connect(self._onFFmpegPathCardClicked)
 

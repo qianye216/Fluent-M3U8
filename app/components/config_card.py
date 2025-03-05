@@ -180,6 +180,8 @@ class BasicConfigCard(GroupHeaderCardWidget):
             self, self.tr("Choose folder"), self.saveFolderGroup.content())
 
         if folder:
+            folder = folder.replace("\\", "/")
+            cfg.set(cfg.saveFolder, folder)
             self.saveFolderGroup.setContent(folder)
 
     def _resetStreamInfo(self):
