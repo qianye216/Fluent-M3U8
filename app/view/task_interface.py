@@ -363,7 +363,9 @@ class TaskCommandBarView(CommandBarView):
 
         self.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextUnderIcon)
         self.setIconSize(QSize(18, 18))
-        self.addActions([self.redownloadAction, self.deleteAction, self.selectAllAction, self.cancelAction])
+        self.addActions([self.redownloadAction, self.deleteAction])
+        self.addSeparator()
+        self.addActions([self.selectAllAction, self.cancelAction])
         self.resizeToSuitableWidth()
         self.setShadowEffect()
 

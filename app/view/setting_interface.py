@@ -86,7 +86,7 @@ class SettingInterface(ScrollArea):
         # download
         self.downloadGroup = SettingCardGroup(self.tr("Download"), self.scrollWidget)
         self.autoResetLinkCard = SwitchSettingCard(
-            FIF.CLEAR_SELECTION,
+            FIF.CANCEL,
             self.tr('Auto reset link'),
             self.tr('The url and name of line edit will be cleared after download'),
             configItem=cfg.autoResetLink,
