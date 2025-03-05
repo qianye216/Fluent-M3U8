@@ -92,6 +92,7 @@ class TaskInterface(Interface):
         self.pivot.currentItemChanged.connect(
             lambda k: self.stackedWidget.setCurrentWidget(self.findChild(QWidget, k)))
         self.stackedWidget.currentChanged.connect(self._onCurrentWidgetChanged)
+        self.downloadingTaskView.cardCountChanged.connect(self._updateEmptyStatus)
         self.successTaskView.cardCountChanged.connect(self._updateEmptyStatus)
         self.failedTaskView.cardCountChanged.connect(self._updateEmptyStatus)
 
