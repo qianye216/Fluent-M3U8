@@ -62,6 +62,8 @@ class M3U8DLCommand(Enum):
     DISABLE_UPDATE_CHECK = "--disable-update-check"
     UI_LANGUAGE = "--ui-language"
     AD_KEYWORD = "--ad-keyword"
+    MUX_AFTER_DONE = "--mux-after-done"
+    MUX_IMPORT = "--mux-import"
 
     def command(self, value=None):
         if value is None:

@@ -63,6 +63,7 @@ class Logo(FluentIconBase, Enum):
     SCROLL = "Scroll"
     WINDOW = "Window"
     CONTROL = "Control"
+    CYCLONE = "Cyclone"
     ALEMBIC = "Alembic"
     BANDAGE = "Bandage"
     PACKAGE = "Package"
@@ -80,6 +81,7 @@ class Logo(FluentIconBase, Enum):
     WASTEBASKET = "Wastebasket"
     VIDEO_CAMERA = "VideoCamera"
     CARD_FILE_BOX = "CardFileBox"
+    VIDEOCASSETTE = "Videocassette"
 
     def path(self, theme=Theme.AUTO) -> str:
         return f":/app/images/logo/{self.value}.svg"

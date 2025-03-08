@@ -691,3 +691,61 @@ class DecryptionConfigCard(M3U8GroupHeaderCardWidget):
                 options.append(M3U8DLCommand.KEY.command(key))
 
         return options
+
+
+class MuxConfigCard(M3U8GroupHeaderCardWidget):
+    """ Mux config card """
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setTitle(self.tr("Mux Settings"))
+
+        self.keyTextFilePath = None
+
+        self.muxAfterDoneLineEdit = LineEdit()
+        self.muxImportEdit = PlainTextEdit()
+
+        self._initWidgets()
+
+    def _initWidgets(self):
+        self.setBorderRadius(8)
+
+        self.muxAfterDoneLineEdit.setFixedWidth(300)
+        self.muxAfterDoneLineEdit.setPlaceholderText("format=mp4")
+        self.muxAfterDoneLineEdit.setText(cfg.get(cfg.muxAfterDone))
+
+        self.muxImportEdit.setFixedSize(300, 56)
+        self.muxImportEdit.setPlaceholderText(
+            'path="aud.m4a":lang=eng:name="Audio"\npath="eng.vtt":lang=eng:name="English"')
+
+        self._initLayout()
+
+    def _initLayout(self):
+        self.addGroup(
+            icon=Logo.CYCLONE.icon(),
+            title=self.tr("Mux After Done"),
+            content=self.tr("Attempt to mux audio and video when downloads are completed"),
+            widget=self.muxAfterDoneLineEdit
+        )
+        self.addGroup(
+            icon=Logo.VIDEOCASSETTE.icon(),
+            title=self.tr("Mux Import"),
+            content=self.tr("Introducing external media files during muxing"),
+            widget=self.muxImportEdit
+        )
+
+    def parseOptions(self):
+        """ Returns the m3u8dl options """
+        options = []
+
+        muxAfterDone = self.muxAfterDoneLineEdit.text().strip()
+        if muxAfterDone:
+            cfg.set(cfg.muxAfterDone, muxAfterDone)
+            options.append(M3U8DLCommand.MUX_AFTER_DONE.command(muxAfterDone))
+
+        if self.muxImportEdit.toPlainText():
+            options = self.muxImportEdit.toPlainText().split("\n")
+            for opt in options:
+                options.append(M3U8DLCommand.MUX_IMPORT.command(opt))
+
+        return options

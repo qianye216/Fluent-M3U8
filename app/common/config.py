@@ -81,6 +81,7 @@ class Config(QConfig):
     decryptionEngine = OptionsConfigItem("M3U8DL", "DecryptionEngine", "FFmpeg", OptionsValidator([
                                          "FFmpeg", "MP4Decrypt", "Shaka Packager"]))
     decryptionBinaryPath = ConfigItem("M3U8DL", "DecryptionBinaryPath", str(Path(f"tools/ffmpeg{EXE_SUFFIX}").absolute()))
+    muxAfterDone = ConfigItem("M3U8DL", "MuxAfterDone", "")
 
 cfg = Config()
 cfg.themeMode.value = Theme.AUTO
