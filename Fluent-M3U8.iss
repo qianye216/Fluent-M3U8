@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Fluent M3U8"
-#define MyAppVersion "0.8.0"
+#define MyAppVersion "0.9.0"
 #define MyAppPublisher "Shokokawaii, Inc."
 #define MyAppURL "https://fluent-m3u8.org"
 #define MyAppExeName "Fluent-M3U8.exe"

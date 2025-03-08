@@ -9,7 +9,7 @@ DEBUG = "__compiled__" not in globals()
 
 YEAR = 2025
 AUTHOR = "zhiyiYo"
-VERSION = "0.8.0"
+VERSION = "0.9.0"
 APP_NAME = "Fluent-M3U8"
 HELP_URL = "https://fluent-m3u8.org"
 REPO_URL = "https://github.com/zhiyiYo/Fluent-M3U8"
