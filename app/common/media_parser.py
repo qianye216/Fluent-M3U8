@@ -132,8 +132,7 @@ class MPDMediaParser(MediaParser):
 
         for adaptation_set in self.mpd.periods[0].adaptation_sets:
             for represent in adaptation_set.representations:
-                # represent : Representation
-                if not represent.mime_type.lower().startswith("video"):
+                if not self._isVideo(adaptation_set, represent):
                     continue
 
                 # parse frame rate
@@ -145,13 +144,27 @@ class MPDMediaParser(MediaParser):
                     else:
                         frame_rate = float(frame_rate)
 
-                streamInfos.append(StreamInfo(
-                    resolution=(represent.width, represent.height),
-                    codecs=represent.codecs,
-                    frame_rate=frame_rate,
-                ))
+                if represent.width:
+                    streamInfos.append(StreamInfo(
+                        resolution=(represent.width, represent.height),
+                        codecs=represent.codecs,
+                        frame_rate=frame_rate,
+                    ))
 
         return streamInfos
+
+    def _isVideo(self, adaptation_set: AdaptationSet, represent: Representation):
+        if adaptation_set.content_type and adaptation_set.content_type.lower() == "video":
+            return True
+
+        mime_type = adaptation_set.mime_type or represent.mime_type
+        if mime_type and mime_type.lower().startswith("video"):
+            return True
+
+        if represent.id and represent.id.find("video") >= 0:
+            return True
+
+        return False
 
     @exceptionTracebackHandler("download", False)
     def isLive(self):

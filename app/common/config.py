@@ -82,6 +82,7 @@ class Config(QConfig):
                                          "FFmpeg", "MP4Decrypt", "Shaka Packager"]))
     decryptionBinaryPath = ConfigItem("M3U8DL", "DecryptionBinaryPath", str(Path(f"tools/ffmpeg{EXE_SUFFIX}").absolute()))
     muxAfterDone = ConfigItem("M3U8DL", "MuxAfterDone", "")
+    keepImageSegments = ConfigItem("M3U8DL", "KeepImageSegments", False, BoolValidator())
 
 cfg = Config()
 cfg.themeMode.value = Theme.AUTO

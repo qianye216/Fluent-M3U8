@@ -76,6 +76,11 @@ class M3U8DLCommand(Enum):
         return f'{self.value}="{value}"' if value.find(" ") >= 0 else f'{self.value}={value}'
 
 
+class M3U8DLEnvVariable:
+
+    RE_KEEP_IMAGE_SEGMENTS = "RE_KEEP_IMAGE_SEGMENTS"
+
+
 @dataclass
 class VODDownloadProgressInfo:
     """ VOD Download progress information """
@@ -219,6 +224,7 @@ class M3U8DLService(QObject):
 
         # create N_m3u8dl-RE process
         process = QProcess()
+        self._setupEnv(process)
         process.setWorkingDirectory(str(Path(self.downloaderPath).parent))
         process.setProcessChannelMode(QProcess.ProcessChannelMode.MergedChannels)
 
@@ -231,6 +237,14 @@ class M3U8DLService(QObject):
         self.processMap[task.pid] = process
         self.downloadCreated.emit(task)
         return True
+
+    def _setupEnv(self, process: QProcess):
+        env = process.systemEnvironment()
+
+        if cfg.get(cfg.keepImageSegments):
+            env.append(f"{M3U8DLEnvVariable.RE_KEEP_IMAGE_SEGMENTS}=1")
+
+        process.setEnvironment(env)
 
     def _onDownloadMessage(self, process: QProcess, task: Task, logger: Logger):
         try:
@@ -306,6 +320,8 @@ class M3U8DLService(QObject):
         options.extend([
             M3U8DLCommand.NO_ASCII_COLOR.command(),
             M3U8DLCommand.DISABLE_UPDATE_CHECK.command(),
+            M3U8DLCommand.SELECT_AUDIO.command("all"),
+            M3U8DLCommand.SELECT_SUBTITLE.command("all"),
         ])
         return options
 

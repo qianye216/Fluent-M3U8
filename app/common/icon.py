@@ -47,6 +47,7 @@ class Logo(FluentIconBase, Enum):
     TIMER = "Timer"
     INBOX = "Inbox"
     BENTO = "Bento"
+    PIZZA = "Pizza"
     LEDGER = "Ledger"
     POSTAL = "Postal"
     PLANET = "Planet"

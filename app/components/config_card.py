@@ -210,10 +210,10 @@ class BasicConfigCard(GroupHeaderCardWidget):
             cmds = []
 
             if info.resolution:
-                cmds.append(f"res={info.resolution[0]}*")
+                cmds.append(f'res="{info.resolution[0]}*"')
 
             if info.frame_rate:
-                cmds.append(f"frame={int(info.frame_rate)}*")
+                cmds.append(f'frame="{int(info.frame_rate)}*"')
 
             options.extend([
                 M3U8DLCommand.SELECT_VIDEO.command(),
@@ -328,7 +328,13 @@ class AdvanceConfigCard(M3U8GroupHeaderCardWidget):
             content=self.tr("Set the output type of subtitle"),
             widget=self.subtitleComboBox
         )
-
+        self.addSwitchOption(
+            icon=Logo.PIZZA.icon(),
+            title=self.tr("Image Segments"),
+            content=self.tr("Preserve the original files after converting subtitles to images"),
+            command=None,
+            configItem=cfg.keepImageSegments
+        )
         self.addSwitchOption(
             icon=Logo.ALEMBIC.icon(),
             title=self.tr("Auto Select"),
