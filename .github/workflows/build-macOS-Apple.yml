@@ -6,6 +6,7 @@ on:
 jobs:
   build-macos-14-arm:
     strategy:
+      fail-fast: false
       matrix:
         architecture: [arm64]
     runs-on: macos-14
