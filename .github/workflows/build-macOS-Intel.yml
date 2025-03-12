@@ -43,7 +43,7 @@ jobs:
         run: |
           # Setup variables
           ZIP_URL="https://github.com/zhiyiYo/Fluent-M3U8-Tools/releases/download/v0.2.0/macOS-${{ matrix.architecture }}.zip"
-          DEST_DIR="dist/Fluent-M3U8.app/Contents/MacOS"
+          DEST_DIR="dist/Fluent-M3U8.app/Contents/MacOS/tools"
 
           # Download tools
           echo "Downloading package from $ZIP_URL..."
