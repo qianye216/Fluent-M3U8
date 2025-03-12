@@ -31,7 +31,7 @@ jobs:
       - name: Download and extract tools
         run: |
           # Setup variables
-          ZIP_URL="https://github.com/zhiyiYo/Fluent-M3U8-Tools/releases/download/v0.1.0/Linux-${{ matrix.architecture }}.zip"
+          ZIP_URL="https://github.com/zhiyiYo/Fluent-M3U8-Tools/releases/download/v0.2.0/Linux-${{ matrix.architecture }}.zip"
           DEST_DIR="dist/Fluent-M3U8.dist"
 
           # Download tools
