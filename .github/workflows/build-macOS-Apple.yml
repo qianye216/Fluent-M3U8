@@ -52,7 +52,23 @@ jobs:
       - name: Create DMG
         run: |
           ln -s /Applications dist/Applications
-          hdiutil create -srcfolder "dist/" -volname "Fluent-M3U8" -fs HFS+ -fsargs "-c c=64,a=16,e=16" -format UDZO -size 400m "Fluent-M3U8-v${{ env.VERSION }}-macOS-${{ matrix.architecture }}.dmg"
+
+          attempt=0
+          max_attempts=10
+          while [ $attempt -lt $max_attempts ]; do
+              hdiutil create -srcfolder "dist/" -volname "Fluent-M3U8" -fs HFS+ \
+                  -fsargs "-c c=64,a=16,e=16" -format UDZO -size 400m \
+                  "Fluent-M3U8-v${{ env.VERSION }}-macOS-${{ matrix.architecture }}.dmg" && break
+
+              attempt=$((attempt + 1))
+              echo "Attempt $attempt failed, retrying..."
+              sleep 5  # 等待 5 秒后重试
+          done
+
+          if [ $attempt -eq $max_attempts ]; then
+              echo "Failed to create DMG after $max_attempts attempts"
+              exit 1
+          fi
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
