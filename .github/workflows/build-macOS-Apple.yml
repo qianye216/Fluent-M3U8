@@ -62,7 +62,7 @@ jobs:
 
               attempt=$((attempt + 1))
               echo "Attempt $attempt failed, retrying..."
-              sleep 5  # 等待 5 秒后重试
+              sleep 1  # 等待 1 秒后重试
           done
 
           if [ $attempt -eq $max_attempts ]; then
