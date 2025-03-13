@@ -6,6 +6,7 @@ import m3u8
 from m3u8 import M3U8
 from mpegdash.parser import MPEGDASHParser, MPEGDASH
 from mpegdash.nodes import Period, AdaptationSet, Representation
+from PySide6.QtCore import QUrl
 
 from ..common.exception_handler import exceptionTracebackHandler
 from ..common.logger import Logger
@@ -35,7 +36,7 @@ class MediaParser:
     @classmethod
     def canParse(cls, url: str) -> bool:
         """ determine whether song information of the file can be read """
-        return url.lower().endswith(tuple(cls.formats))
+        return QUrl(url).fileName().lower().endswith(tuple(cls.formats))
 
     def getStreamInfos(self) -> List[StreamInfo]:
         raise NotImplementedError
