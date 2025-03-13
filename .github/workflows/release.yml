@@ -234,7 +234,7 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-      - name: Build with Nuitka
+      - name: Build with PyInstaller
         run: |
           VERSION=$(python3 -c "from app.common.setting import VERSION; print(VERSION)")
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
@@ -244,7 +244,7 @@ jobs:
         run: |
           # Setup variables
           ZIP_URL="https://github.com/zhiyiYo/Fluent-M3U8-Tools/releases/download/v0.2.0/Linux-${{ matrix.architecture }}.zip"
-          DEST_DIR="dist/Fluent-M3U8.dist/tools"
+          DEST_DIR="dist/Fluent-M3U8/_internal/tools"
 
           # Download tools
           echo "Downloading package from $ZIP_URL..."
@@ -259,10 +259,10 @@ jobs:
 
           echo "Download and extraction complete!"
 
-      - name: Zip the contents of Fluent-M3U8.dist
+      - name: Zip the contents of Fluent-M3U8
         shell: pwsh
         run: |
-          $distPath = "dist/Fluent-M3U8.dist"
+          $distPath = "dist/Fluent-M3U8"
           $zipFile = "Fluent-M3U8-v${{ env.VERSION }}-Linux-${{ matrix.architecture }}.zip"
 
           # Create a zip file containing the contents of Fluent-M3U8.dist, without the folder itself

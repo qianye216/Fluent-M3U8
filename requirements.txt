@@ -5,3 +5,4 @@ requests
 mpegdash==0.4.0
 ffmpeg-python==0.2.0
 nuitka==2.6.4
+pyinstaller; sys_platform=="linux"
