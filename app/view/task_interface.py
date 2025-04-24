@@ -12,11 +12,13 @@ from ..common.database import sqlRequest
 from ..common.database.entity import TaskStatus
 from ..common.signal_bus import signalBus
 from ..service.download_task_service import downloadTaskService
+from ..service.speed_service import speedService
 from ..service.m3u8dl_service import m3u8Service, VODDownloadProgressInfo, LiveDownloadProgressInfo
 from ..components.interface import Interface
 from ..components.task_card import (VODDownloadingTaskCard, Task, SuccessTaskCard, TaskCardBase, FailedTaskCard,
                                     LiveDownloadingTaskCard, DeleteTaskDialog)
 from ..components.empty_status_widget import EmptyStatusWidget
+from ..common.speed_badge import SpeedBadge
 
 
 class TaskInterface(Interface):
@@ -32,6 +34,7 @@ class TaskInterface(Interface):
         self.successTaskView = SuccessTaskView(self)
         self.failedTaskView = FailedTaskView(self)
         self.emptyStatusWidget = EmptyStatusWidget(Logo.SMILEFACE, self.tr("Currently no download tasks"), self)
+        self.speedBadge = SpeedBadge(self)
 
         self._initWidgets()
 
@@ -75,6 +78,9 @@ class TaskInterface(Interface):
         if card:
             card.setInfo(info)
 
+        speedService.update(task, info.speed)
+        self.speedBadge.setSpeed(speedService.totalSpeed())
+
     def _onCoverSaved(self, task: Task):
         card = self.successTaskView.findCard(task)
         if card:
@@ -99,14 +105,17 @@ class TaskInterface(Interface):
         signalBus.redownloadTask.connect(self._redownload)
 
         m3u8Service.downloadCreated.connect(self._onTaskCreated)
-        m3u8Service.downloadProcessChanged[Task, VODDownloadProgressInfo].connect(self._onDownloadProgressChanged)
-        m3u8Service.downloadProcessChanged[Task, LiveDownloadProgressInfo].connect(self._onDownloadProgressChanged)
+        m3u8Service.downloadProgressChanged[Task, VODDownloadProgressInfo].connect(self._onDownloadProgressChanged)
+        m3u8Service.downloadProgressChanged[Task, LiveDownloadProgressInfo].connect(self._onDownloadProgressChanged)
         m3u8Service.downloadFinished.connect(self._onDownloadFinished)
         m3u8Service.coverSaved.connect(self._onCoverSaved)
 
     def _updateEmptyStatus(self):
         visible = self.stackedWidget.currentWidget().count() == 0
         self.emptyStatusWidget.setVisible(visible)
+
+        if self.downloadingTaskView.count() == 0:
+            self.speedBadge.hide()
 
     def _redownload(self, task: Task):
         if not m3u8Service.isAvailable():

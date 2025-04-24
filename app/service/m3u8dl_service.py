@@ -178,7 +178,7 @@ class M3U8DLCommandLineParser(QObject):
 class M3U8DLService(QObject):
 
     downloadCreated = Signal(Task)
-    downloadProcessChanged = Signal((Task, VODDownloadProgressInfo), (Task, LiveDownloadProgressInfo))
+    downloadProgressChanged = Signal((Task, VODDownloadProgressInfo), (Task, LiveDownloadProgressInfo))
     downloadFinished = Signal(Task, bool, str)   # task, isSuccess, message
 
     coverSaved = Signal(Task)
@@ -275,7 +275,7 @@ class M3U8DLService(QObject):
             )
             task.size = info.totalSize
             info.speed = info.speed.replace("KBps", "KB/s").replace("MBps", "MB/s").replace("GBps", "GB/s")
-            self.downloadProcessChanged.emit(task, info)
+            self.downloadProgressChanged.emit(task, info)
         else:
             regex = r"(\d{2}m\d{2}s)/(\d{2}m\d{2}s)\s(\d+/\d+)\s(Recording|Waiting)\s+(\d+)%\s(-|(\d+\.\d+)(GBps|MBps|KBps|Bps))"
             match = re.search(regex, message)
@@ -291,7 +291,7 @@ class M3U8DLService(QObject):
                 speed=match[6],
             )
             info.speed = info.speed.replace("KBps", "KB/s").replace("MBps", "MB/s").replace("GBps", "GB/s")
-            self.downloadProcessChanged.emit(task, info)
+            self.downloadProgressChanged.emit(task, info)
 
     def _onDownloadFinished(self, process: QProcess, task: Task, code, status: QProcess.ExitStatus):
         if task.pid not in self.processMap:

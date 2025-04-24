@@ -25,6 +25,10 @@ if cfg.get(cfg.dpiScale) != "Auto":
 app = SingletonApplication(sys.argv, "Fluent-M3U8")
 app.setAttribute(Qt.AA_DontCreateNativeWidgetSiblings)
 
+if sys.platform == "darwin":
+    from AppKit import NSApplication
+    NSApplication.sharedApplication()
+
 # internationalization
 locale = cfg.get(cfg.language).value
 translator = FluentTranslator(locale)
